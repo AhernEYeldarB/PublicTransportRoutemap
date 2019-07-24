@@ -50,13 +50,13 @@ class DrawRoute {
     initMap() {
         var baseMap = L.map('map').setView([51.8983, -8.4726], 12);
 
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Limited to 75,000  free mapviews a mont ****
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
         OpenStreetMap_Mapnik.addTo(baseMap);
-        // var line = makeLine(coords);
-        // line.addTo(baseMap);
         return baseMap
     }
 
@@ -66,15 +66,33 @@ class DrawRoute {
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);
         coords = coords.split(',');
- 
-        for (let i = 0; i < coords.length; i++) {
-            coords[i] = coords[i].substr(1).split(/[ ]+/).map(Number).reverse();
-        };
-        // console.log(coords);
+        console.log(coords);
 
-        var line = L.polyline(coords).addTo(this.baseMap);
+
+        coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
+        // Remove trailing whitespace
+        for (let i = 1; i < coords.length; i++) {
+            coords[i] = coords[i].substr(1).split(/[ ]+/).map(Number).reverse();
+            // console.log(coords[0])
+        };
+
+        var line = L.polyline(coords, {
+            color: 'cyan',
+            width: 0.5,
+            opacity: 0.2,
+        }).addTo(this.baseMap);
 
         return line
         // line.addTo(map);
+    }
+
+    makePoint(coordLat, coordLon) {
+        coordLat = Number(coordLat);
+        coordLon = Number(coordLon);
+
+        // console.log(coordLat, coordLon);
+        var point = L.circle([coordLat, coordLon], { radius: 10 }).addTo(this.baseMap);
+
+        return point
     }
 }

@@ -55,18 +55,6 @@ A <strong>Shape</strong> is the path a vehicle travels, on the road or on a trac
     integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
     crossorigin="">
     </script>
-<!-- <script>
-
-    var map = L.map('map').setView([51.8983, -8.4726], 12);
-
-    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    OpenStreetMap_Mapnik.addTo(map)
-
-</script> -->
 {% if object.geometry %}
 <!-- <script defer="defer" type="text/javascript">
 explore.mapLine('map', '{{object.geometry.wkt}}');
@@ -75,9 +63,6 @@ explore.mapLine('map', '{{object.geometry.wkt}}');
     var coords = '{{ object.geometry.wkt}}'
     var route = new DrawRoute();
     route.baseMap.fitBounds(route.makeLine(coords).getBounds());
-// // console.log(coords);
-// // typeof coords;
-// // addLine(coords);
-// </script>
+//</script>
 {% endif %}
 {% endblock %}

@@ -2,27 +2,52 @@
 {% load staticfiles %}
 {% block head_title %}{{ block.super }} - ShapePoint {{object}}{% endblock %}
 {% block head_extra %}
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
-<script src="{% static 'js/explore.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="">
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endblock %}
 {% block page_title %}ShapePoint {{object}}{% endblock %}
 {% block page_top_content_elem %}
 A <strong>ShapePoint</strong> is a point of a shape
 {% endblock %}
 {% block page_middle_content %}
-<div class="row" style="height:300px" id="map"></div>
+<p class="text-center">
+    <div id="map" style="width: 100em; height: 50em;">
+    </div>
+</p>
 <h2>Attributes</h2>
 <dl>
-    <dt>shape</dt><dd><a href="{% url 'shape_detail' feed_id=object.shape.feed_id pk=object.shape_id %}">Shape {{object.shape}}</a></dd>
-    <dt>id</dt><dd>{{object.id}}</dd>
-    <dt>point</dt><dd>{{object.point}}</dd>
-    <dt>sequence</dt><dd>{{object.sequence}}</dd>
-    <dt>traveled</dt><dd>{{object.traveled}}</dd>
+    <dt>shape</dt>
+    <dd><a href="{% url 'shape_detail' feed_id=object.shape.feed_id pk=object.shape_id %}">Shape {{object.shape}}</a>
+    </dd>
+    <dt>id</dt>
+    <dd>{{object.id}}</dd>
+    <dt>point</dt>
+    <dd>{{object.point}}</dd>
+    <dt>sequence</dt>
+    <dd>{{object.sequence}}</dd>
+    <dt>traveled</dt>
+    <dd>{{object.traveled}}</dd>
 </dl>
 {% include "multigtfs/extra_data.html" %}
 {% endblock %}
 {% block body_script %}
-<script defer="defer" type="text/javascript">
-  explore.mapPoint('map', {{object.point.x}}, {{object.point.y}}, 16);
+<!-- <script defer="defer" type="text/javascript">
+    explore.mapPoint('map', {{ object.point.x }}, {{ object.point.y }}, 16);
+</script> -->
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin="">
+    </script>
+<script>
+    var coordLat = '{{ object.point.y }}';
+    var coordLon = '{{ object.point.x }}';
+    var route = new DrawRoute();
+
+    var point = (route.makePoint(coordLat, coordLon)._latlng );
+
+    route.baseMap.flyTo([point.lat, point.lng], 15) ;
+
 </script>
 {% endblock %}
