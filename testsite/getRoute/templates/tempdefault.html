@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="">
+{% endblock %}
+
+{% block page_title%}Default Map{%endblock%}
+
+{% block nav_home_active_class %} class="active"{% endblock %}
+
+{% block page_top_content_elem %}
+Test to include a Leaflet.js map into a django project
+{% endblock %}
+
+{% block page_middle_content %}
+<p class="text-center">
+    <div id="map" style="width: 100em; height: 50em;">
+        <!-- {{map|safe}} -->
+    </div>
+</p>
+<p class="text-center">
+        <a href="{% url 'feed_list' %}"   class="btn btn-primary" role="button">Feed List</a>
+        <a href="{% url 'admin:index' %}" class="btn btn-primary" role="button">Admin</a>
+    </p>
+{% endblock %}
+
+{% block body_script %}
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+<script>
+
+    var map = L.map('map').setView([51.8983, -8.4726], 12);
+
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    OpenStreetMap_Mapnik.addTo(map)
+
+</script>
+{% endblock %} 
