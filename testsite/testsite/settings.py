@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     #Custom Middleware
-    # 'getRoute.middleware.GetRouteMiddleware',
+    'getRoute.middleware.GetRouteMiddleware',
 ]
 
 ROOT_URLCONF = 'testsite.urls'

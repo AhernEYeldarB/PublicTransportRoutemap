@@ -2,39 +2,128 @@
 {% load staticfiles %}
 {% block head_title %}{{ block.super }} - Stop {{object}}{% endblock %}
 {% block head_extra %}
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
-<script src="{% static 'js/explore.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="">
+<!-- <link rel="stylesheet" href="{% static 'css/testTable.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endblock %}
 {% block page_title %}Stop {{object}}{% endblock %}
 {% block page_top_content_elem %}
 A <strong>Stop</strong> is a stop or station in the schedule.
 {% endblock %}
 {% block page_middle_content %}
-<div class="row" style="height:300px" id="map"></div>
+<p class="text-center">
+    <div id="map">
+    </div>
+</p>
+<!-- <section>
+    <h2>Attributes</h2>
+    <!--for demo wrap
+    <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th>feed</th>
+                    <th>id</th>
+                    <th>stop_id</th>
+                    <th>code</th>
+                    <th>name</th>
+                    <th>desc</th>
+                    <th>point</th>
+                    <th>zone</th>
+                    <th>url</th>
+                    <th>loctype</th>
+                    <th>station</th>
+                    <th>timezone</th>
+                    <th>wheelch</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+                <tr>
+                    <td data-th="feed"> <a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a>
+                    </td>
+                    <td data-th="id">{{object.id}}</dd>
+                    <td data-th="stop_id">{{object.stop_id|default:'<em>Not set</em>'}}</dd>
+                    <td data-th="code">{{object.code|default:'<em>Not set</em>'}}</dd>
+                    <td data-th="name">{{object.name}}</dd>
+                    <td data-th="desc">{{object.desc|default:'<em>Not set</em>'}}</dd>
+                    <td data-th="point">{{object.point}}</dd>
+                    <td data-th="zone">{% if object.zone_id %}<a
+                            href="{% url 'zone_detail' feed_id=object.id pk=object.zone_id %}">Zone
+                            {{object.zone}}</a>{% else %}<em>No Zone</em>{% endif %}</dd>
+                    <td data-th="url">{% if object.url %}<a href="{{object.url}}">{{object.url}}</a>{% else %}<em>Not
+                            set</em>{% endif %}</dd>
+                    <td data-th="loctype">{{object.get_location_type_display|default:'<em>Not set</em>'}}</dd>
+                        <tdd ata-th="staion">{% if object.parent_station_id %}<a
+                                href="{% url 'stop_detail' feed_id=object.id pk=object.parent_station_id %}">Parent
+                                Station
+                                {{object.name}}</a>{% else %}<em>No Parent Station</em>{% endif %}</dd>
+                    <td data-th="timezone">{{object.timezone|default:'<em>Not set</em>'}}</dd>
+                    <td data-th="wheelch">{{object.get_wheelchair_boarding_type_display|default:'<em>Not set</em>'}}
+                        </dd>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section> -->
 <h2>Attributes</h2>
 <dl>
-    <dt>feed</dt><dd><a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a></dd>
-    <dt>id</dt><dd>{{object.id}}</dd>
-    <dt>stop_id</dt><dd>{{object.stop_id|default:'<em>Not set</em>'}}</dd>
-    <dt>code</dt><dd>{{object.code|default:'<em>Not set</em>'}}</dd>
-    <dt>name</dt><dd>{{object.name}}</dd>
-    <dt>desc</dt><dd>{{object.desc|default:'<em>Not set</em>'}}</dd>
-    <dt>point</dt><dd>{{object.point}}</dd>
-    <dt>zone</dt><dd>{% if object.zone_id %}<a href="{% url 'zone_detail' feed_id=object.id pk=object.zone_id %}">Zone {{object.zone}}</a>{% else %}<em>No Zone</em>{% endif %}</dd>
-    <dt>url</dt><dd>{% if object.url %}<a href="{{object.url}}">{{object.url}}</a>{% else %}<em>Not set</em>{% endif %}</dd>
-    <dt>location_type</dt><dd>{{object.get_location_type_display|default:'<em>Not set</em>'}}</dd>
-    <dt>parent_station</dt><dd>{% if object.parent_station_id %}<a href="{% url 'stop_detail' feed_id=object.id pk=object.parent_station_id %}">Parent Station {{object.name}}</a>{% else %}<em>No Parent Station</em>{% endif %}</dd>
-    <dt>timezone</dt><dd>{{object.timezone|default:'<em>Not set</em>'}}</dd>
-    <dt>wheelchair_boarding</dt><dd>{{object.get_wheelchair_boarding_type_display|default:'<em>Not set</em>'}}</dd>
+    <dt>feed</dt>
+    <dd><a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a></dd>
+    <dt>id</dt>
+    <dd>{{object.id}}</dd>
+    <dt>stop_id</dt>
+    <dd>{{object.stop_id|default:'<em>Not set</em>'}}</dd>
+    <dt>code</dt>
+    <dd>{{object.code|default:'<em>Not set</em>'}}</dd>
+    <dt>name</dt>
+    <dd>{{object.name}}</dd>
+    <dt>desc</dt>
+    <dd>{{object.desc|default:'<em>Not set</em>'}}</dd>
+    <dt>point</dt>
+    <dd>{{object.point}}</dd>
+    <dt>zone</dt>
+    <dd>{% if object.zone_id %}<a href="{% url 'zone_detail' feed_id=object.id pk=object.zone_id %}">Zone
+            {{object.zone}}</a>{% else %}<em>No Zone</em>{% endif %}</dd>
+    <dt>url</dt>
+    <dd>{% if object.url %}<a href="{{object.url}}">{{object.url}}</a>{% else %}<em>Not set</em>{% endif %}</dd>
+    <dt>location_type</dt>
+    <dd>{{object.get_location_type_display|default:'<em>Not set</em>'}}</dd>
+    <dt>parent_station</dt>
+    <dd>{% if object.parent_station_id %}<a
+            href="{% url 'stop_detail' feed_id=object.id pk=object.parent_station_id %}">Parent Station
+            {{object.name}}</a>{% else %}<em>No Parent Station</em>{% endif %}</dd>
+    <dt>timezone</dt>
+    <dd>{{object.timezone|default:'<em>Not set</em>'}}</dd>
+    <dt>wheelchair_boarding</dt>
+    <dd>{{object.get_wheelchair_boarding_type_display|default:'<em>Not set</em>'}}</dd>
 </dl>
 {% include "multigtfs/extra_data.html" %}
 <h2>Related Objects</h2>
 <ul>
-    <li><a href="{% url 'stoptime_by_stop_list' feed_id=object.id stop_id=object.id %}">{{object.stoptime_set.count}} StopTime{{ object.stoptime_set.count|pluralize }}</a></li>
+    <li><a href="{% url 'stoptime_by_stop_list' feed_id=object.id stop_id=object.id %}">{{object.stoptime_set.count}}
+            StopTime{{ object.stoptime_set.count|pluralize }}</a></li>
 </ul>
 {% endblock %}
 {% block body_script %}
-<script defer="defer" type="text/javascript">
-  explore.mapPoint('map', {{object.point.x}}, {{object.point.y}}, 16);
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin="">
+    </script>
+<script>
+    var coordLat = '{{ object.point.y }}';
+    var coordLon = '{{ object.point.x }}';
+    var route = new DrawRoute();
+
+    var point = (route.makePoint(coordLat, coordLon)._latlng);
+
+    route.baseMap.flyTo([point.lat, point.lng], 15);
+
 </script>
 {% endblock %}

@@ -4,8 +4,11 @@
 
 {% block head_extra %}
 {% if object.geometry %}
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
-<script src="{% static 'js/explore.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="">
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endif %}
 {% endblock %}
 
@@ -17,41 +20,88 @@ A <strong>Route</strong> is a named route in the schedule
 
 {% block page_middle_content %}
 {% if object.geometry %}
-<div class="row" style="height:300px" id="map"></div>
+<p class="text-center">
+    <div id="map">
+    </div>
+</p>
 {% else %}
 <h2>Map</h2>
 <p><em>
-    This route does not have a populated geometry.  A route must have at least
-    one related Trip, and update_geometry() must be run on the Route.
-</em></p>
+        This route does not have a populated geometry. A route must have at least
+        one related Trip, and update_geometry() must be run on the Route.
+    </em></p>
 {% endif %}
 <h2>Attributes</h2>
 <dl>
-    <dt>feed</dt><dd><a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a></dd>
-    <dt>id</dt><dd>{{object.id}}</dd>
-    <dt>route_id</dt><dd>{{object.route_id}}</dd>
-    <dt>agency</dt><dd>{% if object.agency_id %}<a href="{% url 'agency_detail' feed_id=object.feed_id pk=object.agency_id %}">Agency {{object.agency}}</a>{% else %}<em>Not set</em>{% endif %}</dd>
-    <dt>short_name</dt><dd>{{object.short_name}}</dd>
-    <dt>long_name</dt><dd>{{object.long_name}}</dd>
-    <dt>desc</dt><dd>{{object.desc|default:'<em>Not set</em>'}}</dd>
-    <dt>rtype</dt>{{object.get_rtype_display|default:'<em>Not set</em>'}}</dd>
-    <dt>url</dt><dd>{% if object.url %}<a href="{{object.url}}">{{object.url}}</a>{% else %}<em>Not set</em>{% endif %}</dd>
-    <dt>color</dt><dd>{{object.color|default:'<em>Not set</em>'}}</dd>
-    <dt>text_color</dt><dd>{{object.text_color|default:'<em>Not set</em>'}}</dd>
-    {% if object.color and object.text_color %}<dt><em>(Sample Coloring)</em></dt><dd><span style="color:#{{object.text_color}}; background-color:#{{object.color}};">{{object.short_name}} {{object.long_name}}</span></dd>{% endif %}
+    <dt>feed</dt>
+    <dd><a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a></dd>
+    <dt>id</dt>
+    <dd>{{object.id}}</dd>
+    <dt>route_id</dt>
+    <dd>{{object.route_id}}</dd>
+    <dt>agency</dt>
+    <dd>{% if object.agency_id %}<a href="{% url 'agency_detail' feed_id=object.feed_id pk=object.agency_id %}">Agency
+            {{object.agency}}</a>{% else %}<em>Not set</em>{% endif %}</dd>
+    <dt>short_name</dt>
+    <dd>{{object.short_name}}</dd>
+    <dt>long_name</dt>
+    <dd>{{object.long_name}}</dd>
+    <dt>desc</dt>
+    <dd>{{object.desc|default:'<em>Not set</em>'}}</dd>
+    <dt>rtype</dt>
+    <dd>{{object.get_rtype_display|default:'<em>Not set</em>'}}</dd>
+    <dt>url</dt>
+    <dd>
+        {% if object.url %}
+        <a href="{{object.url}}">{{object.url}}</a>
+        {% else %}
+        <em>Not set</em>
+        {% endif %}
+    </dd>
+    <dt>color</dt>
+    <dd>{{object.color|default:'<em>Not set</em>'}}</dd>
+    <dt>text_color</dt>
+    <dd>{{object.text_color|default:'<em>Not set</em>'}}</dd>
+    {% if object.color and object.text_color %}
+    <dt><em>(Sample Coloring)</em></dt>
+    <dd>
+        <span style="color:#{{object.text_color}}; background-color:#{{object.color}};">
+            {{object.short_name}}
+            {{object.long_name}}</span>
+    </dd>
+    {% endif %}
 </dl>
 {% include "multigtfs/extra_data.html" %}
 <h2>Related Objects</h2>
 <ul>
-    <li><a href="{% url 'farerule_by_route_list' feed_id=object.id route_id=object.id %}">{{object.farerule_set.count}} FareRule{{ object.FareRule_set.count|pluralize }}</a></li>
-    <li><a href="{% url 'trip_by_route_list' feed_id=object.id route_id=object.id %}">{{object.trip_set.count}} Trip{{ object.trip_set.count|pluralize }}</a></li>
+    <li><a href="{% url 'farerule_by_route_list' feed_id=object.id route_id=object.id %}">{{object.farerule_set.count}}
+            FareRule{{ object.FareRule_set.count|pluralize }}</a></li>
+    <li><a href="{% url 'trip_by_route_list' feed_id=object.id route_id=object.id %}">{{object.trip_set.count}}
+            Trip{{ object.trip_set.count|pluralize }}</a></li>
 </ul>
 {% endblock %}
 
 {% block body_script %}
+
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin="">
+    </script>
+
 {% if object.geometry %}
-<script defer="defer" type="text/javascript">
-explore.mapLine('map', '{{object.geometry.wkt}}');
+<script>
+    var coords = '{{object.geometry.wkt}}'
+    coords = coords.slice(17, -2);
+    coords = coords.split(')');
+
+    function color() { return String(parseInt(Math.random() * (+255 - 0) + 0)) };
+    function getColor() {
+        return "rgb(" + color() + "," + color() + "," + color() + ")"
+    }
+    var route = new DrawRoute();
+    for (let i = 0; i < coords.length; i++) {
+        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 0.6, getColor()).getBounds());
+    }
 </script>
 {% endif %}
 {% endblock %}

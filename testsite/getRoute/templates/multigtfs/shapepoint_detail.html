@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin="">
+<link rel="stylesheet" href="{% static 'css/testTable.css' %}" />
 <script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endblock %}
 {% block page_title %}ShapePoint {{object}}{% endblock %}
@@ -13,10 +14,43 @@ A <strong>ShapePoint</strong> is a point of a shape
 {% endblock %}
 {% block page_middle_content %}
 <p class="text-center">
-    <div id="map" style="width: 100em; height: 50em;">
+    <div id="map">
     </div>
 </p>
-<h2>Attributes</h2>
+<section>
+    <h2>Attributes</h2>
+    <!--for demo wrap-->
+    <div class="tbl-header">
+        <table cellpatding="0" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th>shape</th>
+                    <th>id</th>
+                    <th>point</th>
+                    <th>sequence</th>
+                    <th>traveled</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="tbl-content">
+        <table cellpatding="0" cellspacing="0" border="0">
+            <tbody>
+                <tr>
+                    <td data-th='shape'><a
+                            href="{% url 'shape_detail' feed_id=object.shape.feed_id pk=object.shape_id %}">Shape
+                            {{object.shape}}</a>
+                    </td>
+                    <td data-th='id'>{{object.id}}</td>
+                    <td data-th='point'>{{object.point}}</td>
+                    <td data-th='sequence'>{{object.sequence}}</td>
+                    <td data-th='traveled'>{{object.traveled}} m</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<!-- <h2>Attributes</h2>
 <dl>
     <dt>shape</dt>
     <dd><a href="{% url 'shape_detail' feed_id=object.shape.feed_id pk=object.shape_id %}">Shape {{object.shape}}</a>
@@ -29,7 +63,7 @@ A <strong>ShapePoint</strong> is a point of a shape
     <dd>{{object.sequence}}</dd>
     <dt>traveled</dt>
     <dd>{{object.traveled}}</dd>
-</dl>
+</dl> -->
 {% include "multigtfs/extra_data.html" %}
 {% endblock %}
 {% block body_script %}
@@ -43,11 +77,17 @@ A <strong>ShapePoint</strong> is a point of a shape
 <script>
     var coordLat = '{{ object.point.y }}';
     var coordLon = '{{ object.point.x }}';
+    var coords = '{{ object.shape.geometry.wkt }}';
+    console.log(coords);
+
+    console.log();
     var route = new DrawRoute();
 
-    var point = (route.makePoint(coordLat, coordLon)._latlng );
+    var point = (route.makePoint(coordLat, coordLon)._latlng);
+    
+    route.makeLine(coords, 0.1).getBounds();
 
-    route.baseMap.flyTo([point.lat, point.lng], 15) ;
+    route.baseMap.flyTo([point.lat, point.lng], 15);
 
 </script>
 {% endblock %}

@@ -9,7 +9,7 @@ class GetRouteMiddleware(object):
 
     def __call__(self, request):
         # Before view
-
+        print(request)
         response = self.get_response(request)
         response['coords'] = 120
         print(response)

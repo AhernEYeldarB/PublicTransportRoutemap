@@ -1,8 +1,26 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
 body {
     padding-top: 20px;
-  }
-  
-  .body-top {
+    font-family: 'Roboto', sans-serif;
+}
+
+.body-top {
     padding: 40px 15px;
     text-align: center;
   }
+
+ h1, h2{
+    font-size: 30px;
+    /* color: #fff; */
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+
+#map {
+    height: 50em;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}

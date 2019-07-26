@@ -1,11 +1,61 @@
+<!-- Head -->
 {% extends "multigtfs/base.html" %}
+{% load staticfiles %}
 {% block head_title %}{{ block.super }} - Agency {{object}}{% endblock %}
+
+{% block head_extra %}
+<!-- <link rel="stylesheet" href="{% static 'css/testTable.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
+{% endblock %}
+
+<!-- Body -->
 {% block page_title %}Agency {{object}}{% endblock %}
 {% block page_top_content_elem %}
 An <strong>Agency</strong> represents a transit agency.
 {% endblock %}
 {% block page_middle_content %}
-<h2>Attributes</h2>
+<!-- <section>
+    <h2>Attributes</h2>
+    <!--for demo wrap
+    <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th>Feed</th>
+                    <th>id</th>
+                    <th>agency</th>
+                    <th>name</th>
+                    <th>url</th>
+                    <th>timezone</th>
+                    <th>Language</th>
+                    <th>phone</th>
+                    <th>fare_url</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+                <tr>
+                    <td data-th="Feed">
+                        <a href="{% url 'feed_detail' pk=object.feed_id %}">{{object.feed}}</a>
+                    </td>
+                    <td data-th="id">{{object.id}}
+                    </td>
+                    <td data-th="agency">{{object.agency_id|default:'<em>Not set</em>'}} </td>
+                    <td data-th="name">{{object.name}} </td>
+                    <td data-th="url">{% if object.url %}<a href="{{object.url}}">Click Here</a>{% else %}<em>Not
+                            set</em>{% endif %}</td>
+                    <td data-th="timezone">{{object.timezone}}</td>
+                    <td data-th="Language">{{object.lang|default:'<em>Not set</em>'}} </td>
+                    <td data-th="phone">{{object.phone|default:'<em>Not set</em>'}} </td>
+                    <td data-th="fare_url">{% if object.fare_url %}<a href="{{object.fare_url}}">{{object.fare_url}}</a>{% else %}<em>Not set</em>{% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section> -->
 <dl>
     <dt>feed</dt><dd><a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a></dd>
     <dt>id</dt><dd>{{object.id}}</dd>

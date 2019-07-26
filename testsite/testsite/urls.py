@@ -21,12 +21,9 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView, RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', RedirectView.as_view(url='/getRoute/', permanent=True)),
-    # path('getRoute/templates',
-    #      TemplateView.as_view(template_name='base.html'),
-    #      name='home')
-    url(r'^$', TemplateView.as_view(template_name="getRoute/default.html"),
-        name='home'),
+    path('getRoute/', RedirectView.as_view(url='/home', permanent=True)),
+    # url(r'', TemplateView.as_view(template_name="default.html"),
+    #     name='home'),
 ]
 
 # Use include() to add paths from the getRoute app

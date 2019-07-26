@@ -6,9 +6,10 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin="">
+<!-- <link rel="stylesheet" href="{% static 'css/testTable.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
 {% if object.geometry %}
-<!-- <script src="http://openlayers.org/api/OpenLayers.js"></script> -->
-<script src="{% static 'javascript//getRoute.js' %}"></script>
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endif %}
 {% endblock %}
 
@@ -21,7 +22,7 @@ A <strong>Shape</strong> is the path a vehicle travels, on the road or on a trac
 {% block page_middle_content %}
 {% if object.geometry %}
 <p class="text-center">
-    <div id="map" style="width: 100em; height: 50em;">
+    <div id="map">
     </div>
 </p>
 {% else %}
@@ -31,6 +32,34 @@ A <strong>Shape</strong> is the path a vehicle travels, on the road or on a trac
         least 2 ShapePoints, and update_geometry() must be run on the shape.
     </em></p>
 {% endif %}
+<!-- <section>
+    <h2>Attributes</h2>
+    <!-- for demo wrap 
+    <div class="tbl-header">
+        <table cellpatding="0" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th>feed</th>
+                    <th>id</th>
+                    <th>shape id</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="tbl-content">
+        <table cellpatding="0" cellspacing="0" border="0">
+            <tbody>
+                <tr>
+                    <td data-th='feed'>
+                        <a href="{% url 'feed_detail' pk=object.feed_id %}">Feed {{object.feed}}</a>
+                    </td>
+                    <td data-th='id'>{{object.id}}</td>
+                    <td data-th='shape id'>{{object.shape_id|default:'<em>Not set</em>'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>  -->
 <h2>Attributes</h2>
 <dl>
     <dt>feed</dt>
@@ -56,13 +85,11 @@ A <strong>Shape</strong> is the path a vehicle travels, on the road or on a trac
     crossorigin="">
     </script>
 {% if object.geometry %}
-<!-- <script defer="defer" type="text/javascript">
-explore.mapLine('map', '{{object.geometry.wkt}}');
-</script> -->
+
 <script>
     var coords = '{{ object.geometry.wkt}}'
     var route = new DrawRoute();
     route.baseMap.fitBounds(route.makeLine(coords).getBounds());
-//</script>
+</script>
 {% endif %}
 {% endblock %}

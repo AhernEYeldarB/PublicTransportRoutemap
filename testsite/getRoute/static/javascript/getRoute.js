@@ -61,29 +61,28 @@ class DrawRoute {
     }
 
 
-    makeLine(coords) {
+    makeLine(coords, opacity='0.6', color='cyan') {
         // get coords from string input
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);
         coords = coords.split(',');
-        console.log(coords);
 
 
         coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
         // Remove trailing whitespace
         for (let i = 1; i < coords.length; i++) {
             coords[i] = coords[i].substr(1).split(/[ ]+/).map(Number).reverse();
-            // console.log(coords[0])
         };
 
+
         var line = L.polyline(coords, {
-            color: 'cyan',
+            color: color,
             width: 0.5,
-            opacity: 0.2,
+            opacity: opacity,
+            smoothFactor: 2,
         }).addTo(this.baseMap);
 
         return line
-        // line.addTo(map);
     }
 
     makePoint(coordLat, coordLon) {
@@ -91,8 +90,8 @@ class DrawRoute {
         coordLon = Number(coordLon);
 
         // console.log(coordLat, coordLon);
-        var point = L.circle([coordLat, coordLon], { radius: 10 }).addTo(this.baseMap);
-
-        return point
+        var pointCirc = L.circleMarker([coordLat, coordLon], { radius: 10, color: 'white' }).addTo(this.baseMap);
+        // var pointMarker = L.marker([coordLat, coordLon]).addTo(this.baseMap);
+        return pointCirc
     }
 }

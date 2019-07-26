@@ -1,5 +1,12 @@
+<!-- Head -->
 {% extends "multigtfs/base.html" %}
+{% load staticfiles %}
 {% block head_title %}{{ block.super }} - Service {{object}}{% endblock %}
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
+{% endblock %}
+
+<!-- Body -->
 {% block page_title %}Service {{object}}{% endblock %}
 {% block page_top_content_elem %}
 A <strong>Service</strong> is one or more days with the same schedule.

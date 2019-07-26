@@ -16,7 +16,7 @@ Test to include a Leaflet.js map into a django project
 
 {% block page_middle_content %}
 <p class="text-center">
-    <div id="map" style="width: 100em; height: 50em;">
+    <div id="map">
     </div>
 </p>
 <p class="text-center">
@@ -29,17 +29,49 @@ Test to include a Leaflet.js map into a django project
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
     integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
     crossorigin="">
-</script>
+    </script>
 <script>
+    var startCoords = [51.8983, -8.4726]
 
-    var map = L.map('map').setView([51.8983, -8.4726], 12);
+    window.addEventListener('DOMContentLoaded', getLocation(), false);
 
-    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    function getLocation() {
+        if (navigator.geolocation) {
+            return navigator.geolocation.getCurrentPosition(setViewPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            main();
+        }
+    };
 
-    OpenStreetMap_Mapnik.addTo(map)
+    function setViewPosition(position) {
+        startCoords = [position.coords.latitude, position.coords.longitude];
+        main();
+    };
 
+    function main() {
+        var baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 15);
+
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        OpenStreetMap_Mapnik.addTo(baseMap)
+    }
 </script>
+<!-- <script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function setPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+            "<br>Longitude: " + position.coords.longitude;
+    }
+</script> -->
 {% endblock %}
