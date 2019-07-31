@@ -56,12 +56,16 @@ class DrawRoute {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
+        // var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     maxZoom: 19,
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // });
         OpenStreetMap_Mapnik.addTo(baseMap);
         return baseMap
     }
 
 
-    makeLine(coords, opacity='0.6', color='cyan') {
+    makeLine(coords, opacity='0.6', color='purple') {
         // get coords from string input
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);

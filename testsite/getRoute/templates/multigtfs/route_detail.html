@@ -91,6 +91,7 @@ A <strong>Route</strong> is a named route in the schedule
 {% if object.geometry %}
 <script>
     var coords = '{{object.geometry.wkt}}'
+
     coords = coords.slice(17, -2);
     coords = coords.split(')');
 
@@ -100,7 +101,7 @@ A <strong>Route</strong> is a named route in the schedule
     }
     var route = new DrawRoute();
     for (let i = 0; i < coords.length; i++) {
-        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 0.6, getColor()).getBounds());
+        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 0.2, getColor()).getBounds());
     }
 </script>
 {% endif %}

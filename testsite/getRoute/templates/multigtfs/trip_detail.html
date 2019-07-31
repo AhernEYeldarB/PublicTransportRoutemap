@@ -4,8 +4,12 @@
 
 {% block head_extra %}
 {% if object.geometry %}
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
-<script src="{% static 'js/explore.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="">
+<!-- <link rel="stylesheet" href="{% static 'css/testTable.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endif %}
 {% endblock %}
 
@@ -17,7 +21,10 @@ A <strong>Trip</strong> is a single run of a Route
 
 {% block page_middle_content %}
 {% if object.geometry %}
-<div class="row" style="height:300px" id="map"></div>
+<p class="text-center">
+    <div id="map">
+    </div>
+</p>
 {% else %}
 <h2>Map</h2>
 <p><em>
@@ -49,9 +56,15 @@ A <strong>Trip</strong> is a single run of a Route
 {% endblock %}
 
 {% block body_script %}
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin="">
+    </script>
 {% if object.geometry %}
-<script defer="defer" type="text/javascript">
-explore.mapLine('map', '{{object.geometry.wkt}}');
+<script>
+    var coords = '{{ object.geometry.wkt}}'
+    var route = new DrawRoute();
+    route.baseMap.fitBounds(route.makeLine(coords).getBounds());
 </script>
 {% endif %}
 {% endblock %}

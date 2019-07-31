@@ -1,9 +1,19 @@
 {% extends "multigtfs/base.html" %}
-
+{% load staticfiles %}
 {% block head_extra %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin="">
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin="">
+    </script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+<script src="{% static 'javascript/validatecsrf.js' %}"></script>
+<script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endblock %}
 
 {% block page_title%}Default Map{%endblock%}
@@ -22,20 +32,32 @@ Test to include a Leaflet.js map into a django project
 <p class="text-center">
     <a href="{% url 'feed_list' %}" class="btn btn-primary" role="button">Feed List</a>
     <a href="{% url 'admin:index' %}" class="btn btn-primary" role="button">Admin</a>
+
+    <form action="{% url 'getlocation' %} " method="POST" id="post-form">
+        {% csrf_token %}
+        <div class="fieldWrapper" id="the_post">
+            {{ form.text }}
+        </div>
+        <div id="results"></div> <!-- Shape data printed here-->
+        <input type="submit" value="Post" class="tiny button">
+    </form>
 </p>
 {% endblock %}
 
 {% block body_script %}
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-    crossorigin="">
-    </script>
-<script>
-    var startCoords = [51.8983, -8.4726]
 
+<script>
+    // Initialise Leaflet Map
+    var startCoords = [51.8983, -8.4726] // Cork City Centre
+    var typeString;
+    var coords; // Coords passed in ewkd type
+    var baseMap;
+
+    // Load map after page
     window.addEventListener('DOMContentLoaded', getLocation(), false);
 
     function getLocation() {
+        // Attempts to get the location of the user
         if (navigator.geolocation) {
             return navigator.geolocation.getCurrentPosition(setViewPosition);
         } else {
@@ -50,28 +72,151 @@ Test to include a Leaflet.js map into a django project
     };
 
     function main() {
-        var baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 15);
+        baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 15);
 
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Initialise Tiles
+        // var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     maxZoom: 19,
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // });
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
 
         OpenStreetMap_Mapnik.addTo(baseMap)
+
+
+        // Initialise the FeatureGroup to store editable layers
+        var editableLayers = new L.FeatureGroup();
+        baseMap.addLayer(editableLayers);
+
+        var drawControlOptions = {
+            position: 'topright',
+            draw: {
+                polygon: {
+                    allowIntersection: false, // Restricts shapes to simple polygons
+                    drawError: {
+                        color: '#e1e100', // Color the shape will turn when intersects
+                        message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                    },
+                    shapeOptions: {
+                        color: '#97009c'
+                    }
+                },
+                // disable toolbar item by setting it to false
+                polyline: true,
+
+                marker: true,
+                circle: false, // Turns off this drawing tool
+                rectangle: false,
+                marker: false,
+                circlemarker: false,
+            },
+            edit: {
+                featureGroup: editableLayers, //REQUIRED!!
+                remove: true
+            }
+        };
+
+        // Initialise the draw control and pass it the FeatureGroup of editable layers
+        var drawControl = new L.Control.Draw(drawControlOptions);
+        baseMap.addControl(drawControl);
+
+        var editableLayers = new L.FeatureGroup();
+        baseMap.addLayer(editableLayers);
+
+        baseMap.on('draw:created', function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+
+            // var coords; // Coord data
+            // var typeString; // Shape type
+            // var radius = null; 
+
+            if (type === 'polygon') {
+                // console.log(e.layer._latlngs);
+                typeString = 'POLYGON'
+            }
+
+            // else if (type === 'marker') {
+            //     // layer.bindPopup('A popup!');
+            //     typeString = 'Point'
+            // }
+
+            // else if (type === 'polyline') {
+            //     typeString = 'POLYLINE'
+            // }
+
+
+            coords = e.layer.getLatLngs()
+            console.log(typeString);
+            console.log(coords);
+
+            editableLayers.addLayer(layer);
+
+            var par = document.createElement('p');
+            var node = document.createTextNode(typeString + '\nBounds: ' + coords);
+            par.appendChild(node);
+
+            var element = document.getElementById('results');
+            element.appendChild(par);
+        });
     }
 </script>
-<!-- <script>
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
+
+<script>
+
+    // Validate User and send Ajax
+    mainVali()
+
+    // Submit event caller
+    $('#post-form').on('submit', function (event) {
+        event.preventDefault();
+        // console.log("form submitted!")  // sanity check
+        create_post();
+    });
+
+    // Event handler to create POST request
+    function create_post() {
+        $.ajax({
+            url: "{% url 'getlocation' %}", // the endpoint
+            type: "POST", // http method
+            data: { type: typeString, latlng: JSON.stringify(coords) }, // data sent with the post request
+
+            // handle a successful response
+            success: function (json) {
+                $('#post-text').val(''); // remove the value from the input
+                var response = json;
+                console.log("success"); // another sanity check
+                add_markers(response);
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                //     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+    function add_markers(response) {
+        if (response) {
+            if (response.count > 100) {
+                // $(results).html("<div class='alert-box alert radius' data-alert> Too Many Stops in this area!</div>")
+                console.log('Too Many Stops');
+            }
+            else {
+                console.log(response.count); // log the returned json to the console
+                console.log(response.geom); // log the returned json to the console
+                console.log(response.shape); // log the returned json to the console
+                for (let i = 0; i < response.count; i++) {
+                    let currentStopCoords = response.geom[i]
+                    L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2] }, { riseOnHover: true }).addTo(baseMap)
+                }
+            }
         }
     }
-
-    function setPosition(position) {
-        x.innerHTML = "Latitude: " + position.coords.latitude +
-            "<br>Longitude: " + position.coords.longitude;
-    }
-</script> -->
+</script>
 {% endblock %}

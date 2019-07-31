@@ -6,7 +6,7 @@ from multigtfs.models import (Agency, Block, Fare, FareRule, Feed, FeedInfo,
                               Route, Service, ServiceDate, Shape, ShapePoint,
                               Stop, StopTime, Trip, Zone)
 
-from getRoute.views import (
+from getRoute.views import (ContainedPoints,
     getDefaultMap, ByFeedListView, FareRuleByFareListView,
     FareRuleByRouteListView, FrequencyByTripListView,
     ServiceDateByServiceListView, ShapePointByShapeListView,
@@ -122,4 +122,9 @@ urlpatterns = [
     url(r'feed/(?P<feed_id>\d+)/block/(?P<block_id>\d+)/trip/$',
         TripByBlockListView.as_view(),
         name='trip_by_block_list'),
+]
+
+
+urlpatterns += [
+    url(r'^getlocation', ContainedPoints.test, name='getlocation'),
 ]

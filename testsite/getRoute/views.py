@@ -1,11 +1,19 @@
-from django.shortcuts import render
+# Database imports
+from django.db import connection
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.measure import D
-
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from multigtfs.models import *
-import folium
 
+# Wepage imports
+from django.shortcuts import render
+from django.template import RequestContext
+from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+from getRoute.forms import PostForm
+from json import dumps, loads
+
+from functools import reduce
 # Create your views here.
 from django.views.generic import ListView
 from multigtfs.models import (Block, Fare, FareRule, Feed, Frequency, Route,
@@ -13,6 +21,7 @@ from multigtfs.models import (Block, Fare, FareRule, Feed, Frequency, Route,
                               StopTime, Trip)
 
 
+# Return List View of Feeds
 class ByFeedListView(ListView):
     by_col = 'feed_id'
     by_kwarg = 'feed_id'
@@ -32,6 +41,7 @@ class ByFeedListView(ListView):
         return qset.filter(**q_filter)
 
 
+# Return Fare information from Fare List
 class FareRuleByFareListView(ListView):
     model = FareRule
 
@@ -46,6 +56,7 @@ class FareRuleByFareListView(ListView):
         return FareRule.objects.filter(fare_id=self.kwargs['fare_id'])
 
 
+# Return Fare Information from Route List
 class FareRuleByRouteListView(ListView):
     model = FareRule
 
@@ -60,6 +71,7 @@ class FareRuleByRouteListView(ListView):
         return FareRule.objects.filter(route_id=self.kwargs['route_id'])
 
 
+# Return trip Frequency from Trip List View
 class FrequencyByTripListView(ListView):
     model = Frequency
 
@@ -73,6 +85,7 @@ class FrequencyByTripListView(ListView):
         return Frequency.objects.filter(trip=self.kwargs['trip_id'])
 
 
+# Returns Service Date from Service List
 class ServiceDateByServiceListView(ListView):
     model = ServiceDate
 
@@ -86,6 +99,7 @@ class ServiceDateByServiceListView(ListView):
         return ServiceDate.objects.filter(service=self.kwargs['service_id'])
 
 
+# Returns Shape Point from Shape List
 class ShapePointByShapeListView(ListView):
     model = ShapePoint
 
@@ -100,6 +114,7 @@ class ShapePointByShapeListView(ListView):
         return ShapePoint.objects.filter(shape=self.kwargs['shape_id'])
 
 
+# Returns Stop Time from Stop List
 class StopTimeByStopListView(ListView):
     model = StopTime
 
@@ -114,6 +129,7 @@ class StopTimeByStopListView(ListView):
         return StopTime.objects.filter(stop_id=self.kwargs['stop_id'])
 
 
+# Returns Stop Time from Trip List
 class StopTimeByTripListView(ListView):
     model = StopTime
 
@@ -128,6 +144,7 @@ class StopTimeByTripListView(ListView):
         return StopTime.objects.filter(trip=self.kwargs['trip_id'])
 
 
+# Refurns Trip from Block List
 class TripByBlockListView(ListView):
     model = Trip
 
@@ -141,6 +158,7 @@ class TripByBlockListView(ListView):
         return Trip.objects.filter(block_id=self.kwargs['block_id'])
 
 
+# Returns Trip from Route List
 class TripByRouteListView(ListView):
     model = Trip
 
@@ -154,6 +172,7 @@ class TripByRouteListView(ListView):
         return Trip.objects.filter(route_id=self.kwargs['route_id'])
 
 
+# Returns Trip from Service List
 class TripByServiceListView(ListView):
     model = Trip
 
@@ -167,6 +186,7 @@ class TripByServiceListView(ListView):
         return Trip.objects.filter(service=self.kwargs['service_id'])
 
 
+# Returns Trip from Shape List
 class TripByShapeListView(ListView):
     model = ShapePoint
 
@@ -180,9 +200,80 @@ class TripByShapeListView(ListView):
         return Trip.objects.filter(shape=self.kwargs['shape_id'])
 
 
+# class AllRoutesInPolygon(ListVIew):
+#     model =
+
+
 class getDefaultMap(object):
     def index_map(request):
+        if request.POST:
+            print('asdf')
+            # return render('default.html',RequestContext(request))
+
         CORK_COORDINATES = (51.8983, -8.4726)
 
         context = {}
         return render(request, 'default.html', context)
+
+
+class ContainedPoints(object):
+    def test(request):
+        if request.method == 'POST':
+            response_data = {}
+            def makeGeomStr(geom):
+                # Format latitude and longitude
+                geom = geom.translate({ord(i): None for i in '\{\}[]'}).split(',')
+                geom = [i[6:] for i in geom]
+
+                # Create POLYGON geometry string
+                geomString = ''
+                geomClosePoint = geom[1] + ' ' + geom[0]
+                geomString += geomClosePoint
+                # First and last coordinate must match 
+                for i in range(2, len(geom)-1,2):
+                    point = ',' + str(geom[i+1]) + ' ' + str(geom[i])
+                    geomString += point
+                geomString += ',' + geomClosePoint
+                queryGeom = '%s((%s))'%(shape, geomString)
+
+                return queryGeom
+
+            def getData(table):
+
+                query = "SELECT ST_Contains(ST_GeomFromText('SRID=4326;%s'), point), name , ST_X(point), ST_Y(point) FROM %s;"%(queryGeom, table)
+                cursor = connection.cursor()
+                cursor.execute(query)
+
+                # Get all Stops
+                stops = cursor.fetchall()
+                stops =  [(x,y,n) for i,n,x,y in list(filter(lambda x: x[0] == True, stops))]
+
+                return stops
+            # Find all points inside the polygon
+            # SELECT ST_CONTAINS(ST_GEOMFROMTEXT('SRID=4326;POLYGON((-9.232910089194776 55.677584411089526 ,-11.307128705084326 50.83647280350753,-4.5219720527529725 50.58044602533059,-4.9614251777529725 55.3591315224922,-9.232910089194776 55.677584411089526))'), shape_point.point), shape_point.point FROM shape_point ;
+            # SELECT ST_Contains(ST_GEOMFROMTEXT('SRID=4326;POLYGON((52.36620837113711 -9.263671925291419,52.204913551431154 -7.562988130375745,51.54291871811506 -7.993652326986195,51.646657472959326 -9.303222605958581,  52.36620837113711 -9.263671925291419))'), stop.point) , stop.point FROM stop ;
+            # SELECT ST_Contains(ST_GEOMFROMTEXT('SRID=4326;POLYGON((-9.263671925291419 52.36620837113711,-7.562988130375745 52.204913551431154,-7.993652326986195 51.54291871811506,-9.303222605958581 51.646657472959326,-9.263671925291419 52.36620837113711))'), stop.point)  , stop.point FROM stop ;
+            
+            # Get shape and geom data
+            shape = request.POST.get('type')
+            geom = request.POST.get('latlng')
+
+            queryGeom = makeGeomStr(geom)
+            data = getData('stop')            
+            # Find all stops within polygon bounds
+
+
+            response_data['shape'] = shape
+            response_data['geom'] = data
+            response_data['count'] = len(data)
+
+            return HttpResponse(dumps(response_data),
+                                content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {'form': form})
+

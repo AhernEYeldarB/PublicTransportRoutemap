@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin="">
-<link rel="stylesheet" href="{% static 'css/testTable.css' %}" />
+<!-- <link rel="stylesheet" href="{% static 'css/testTable.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/testFlex.css' %}" />
 <script src="{% static 'javascript/getRoute.js' %}"></script>
 {% endblock %}
 {% block page_title %}ShapePoint {{object}}{% endblock %}
@@ -17,9 +18,8 @@ A <strong>ShapePoint</strong> is a point of a shape
     <div id="map">
     </div>
 </p>
-<section>
+<!-- <section>
     <h2>Attributes</h2>
-    <!--for demo wrap-->
     <div class="tbl-header">
         <table cellpatding="0" cellspacing="0" border="0">
             <thead>
@@ -49,8 +49,8 @@ A <strong>ShapePoint</strong> is a point of a shape
             </tbody>
         </table>
     </div>
-</section>
-<!-- <h2>Attributes</h2>
+</section> -->
+<h2>Attributes</h2>
 <dl>
     <dt>shape</dt>
     <dd><a href="{% url 'shape_detail' feed_id=object.shape.feed_id pk=object.shape_id %}">Shape {{object.shape}}</a>
@@ -63,13 +63,10 @@ A <strong>ShapePoint</strong> is a point of a shape
     <dd>{{object.sequence}}</dd>
     <dt>traveled</dt>
     <dd>{{object.traveled}}</dd>
-</dl> -->
+</dl>
 {% include "multigtfs/extra_data.html" %}
 {% endblock %}
 {% block body_script %}
-<!-- <script defer="defer" type="text/javascript">
-    explore.mapPoint('map', {{ object.point.x }}, {{ object.point.y }}, 16);
-</script> -->
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
     integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
     crossorigin="">
@@ -84,8 +81,8 @@ A <strong>ShapePoint</strong> is a point of a shape
     var route = new DrawRoute();
 
     var point = (route.makePoint(coordLat, coordLon)._latlng);
-    
-    route.makeLine(coords, 0.1).getBounds();
+
+    route.makeLine(coords, 0.3).getBounds();
 
     route.baseMap.flyTo([point.lat, point.lng], 15);
 
