@@ -1,3 +1,6 @@
+// AJAX code adapted from https://github.com/realpython/django-form-fun
+// https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
+
 function mainVali() {
     // CSRF token validation with javascript ajax request
     function getCookie(name) {

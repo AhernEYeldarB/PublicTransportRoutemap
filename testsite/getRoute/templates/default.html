@@ -35,11 +35,15 @@ Test to include a Leaflet.js map into a django project
 
     <form action="{% url 'getlocation' %} " method="POST" id="post-form">
         {% csrf_token %}
-        <div class="fieldWrapper" id="the_post">
+        <!-- <div class="fieldWrapper" id="the_post">
             {{ form.text }}
-        </div>
-        <div id="results"></div> <!-- Shape data printed here-->
+        </div> -->
+        <select name="toFind">
+            <option value="stop">stop</option>
+            <option value="shape">shape</option>
+        </select>
         <input type="submit" value="Post" class="tiny button">
+        <div id="results"></div> <!-- Shape data printed here-->
     </form>
 </p>
 {% endblock %}
@@ -51,7 +55,11 @@ Test to include a Leaflet.js map into a django project
     var startCoords = [51.8983, -8.4726] // Cork City Centre
     var typeString;
     var coords; // Coords passed in ewkd type
-    var baseMap;
+    var markers = [];
+    var layers = [];
+    var editableLayers;
+    var toFind;
+    var route;
 
     // Load map after page
     window.addEventListener('DOMContentLoaded', getLocation(), false);
@@ -72,13 +80,15 @@ Test to include a Leaflet.js map into a django project
     };
 
     function main() {
-        baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 15);
+        // Initialise Map with Tiles and controls
+        baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 14);
 
         // Initialise Tiles
         // var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         //     maxZoom: 19,
         //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         // });
+
         var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
             // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -89,7 +99,7 @@ Test to include a Leaflet.js map into a django project
 
 
         // Initialise the FeatureGroup to store editable layers
-        var editableLayers = new L.FeatureGroup();
+        editableLayers = new L.FeatureGroup();
         baseMap.addLayer(editableLayers);
 
         var drawControlOptions = {
@@ -98,7 +108,7 @@ Test to include a Leaflet.js map into a django project
                 polygon: {
                     allowIntersection: false, // Restricts shapes to simple polygons
                     drawError: {
-                        color: '#e1e100', // Color the shape will turn when intersects
+                        color: 'red', // Color the shape will turn when intersects
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     shapeOptions: {
@@ -108,7 +118,6 @@ Test to include a Leaflet.js map into a django project
                 // disable toolbar item by setting it to false
                 polyline: true,
 
-                marker: true,
                 circle: false, // Turns off this drawing tool
                 rectangle: false,
                 marker: false,
@@ -116,7 +125,8 @@ Test to include a Leaflet.js map into a django project
             },
             edit: {
                 featureGroup: editableLayers, //REQUIRED!!
-                remove: true
+                remove: true,
+                edit: false,
             }
         };
 
@@ -124,56 +134,55 @@ Test to include a Leaflet.js map into a django project
         var drawControl = new L.Control.Draw(drawControlOptions);
         baseMap.addControl(drawControl);
 
-        var editableLayers = new L.FeatureGroup();
-        baseMap.addLayer(editableLayers);
-
         baseMap.on('draw:created', function (e) {
             var type = e.layerType,
                 layer = e.layer;
-
-            // var coords; // Coord data
-            // var typeString; // Shape type
-            // var radius = null; 
 
             if (type === 'polygon') {
                 // console.log(e.layer._latlngs);
                 typeString = 'POLYGON'
             }
 
-            // else if (type === 'marker') {
-            //     // layer.bindPopup('A popup!');
-            //     typeString = 'Point'
-            // }
-
-            // else if (type === 'polyline') {
-            //     typeString = 'POLYLINE'
-            // }
-
-
-            coords = e.layer.getLatLngs()
-            console.log(typeString);
-            console.log(coords);
-
             editableLayers.addLayer(layer);
+            coords = e.layer.getLatLngs()
+
+            // console.log(e);
+            // console.log(e.layer);
+            // console.log(typeString);
+            // console.log(coords);
+
 
             var par = document.createElement('p');
-            var node = document.createTextNode(typeString + '\nBounds: ' + coords);
+            var node = document.createTextNode(typeString + '\n: ' + JSON.stringify(coords));
             par.appendChild(node);
 
             var element = document.getElementById('results');
             element.appendChild(par);
+            layers.push(e);
         });
+
+        // baseMap.on('draw:edited', function (f) {
+        //     // Clear all the markers and redraw the ones inside the oayer editted
+        //     for (let i = 0; i < markers.length; i++) {
+        //         let marker = markers[i];
+        //         baseMap.removeLayer(marker);
+        //         // basemap.removeLayer(markerLayer);
+        //     };
+        //     markers=[];
+        //     coords = f.layers.getLayers()[0].getLatLngs();
+        //     create_post();
+        // });
     }
 </script>
 
 <script>
-
     // Validate User and send Ajax
     mainVali()
 
     // Submit event caller
     $('#post-form').on('submit', function (event) {
         event.preventDefault();
+        toFind = $('#post-form').serializeArray()[1].value;
         // console.log("form submitted!")  // sanity check
         create_post();
     });
@@ -183,14 +192,19 @@ Test to include a Leaflet.js map into a django project
         $.ajax({
             url: "{% url 'getlocation' %}", // the endpoint
             type: "POST", // http method
-            data: { type: typeString, latlng: JSON.stringify(coords) }, // data sent with the post request
+            data: { type: typeString, latlng: JSON.stringify(coords), toFind: toFind }, // data sent with the post request
 
             // handle a successful response
             success: function (json) {
-                $('#post-text').val(''); // remove the value from the input
+                // Response Fields shape, toFind, geom,count
                 var response = json;
                 console.log("success"); // another sanity check
-                add_markers(response);
+                if (response.toFind === 'stop') {
+                    add_markers(response);
+                }
+                else if (response.toFind === 'shape') {
+                    add_shape(response);
+                }
             },
 
             // handle a non-successful response
@@ -201,21 +215,37 @@ Test to include a Leaflet.js map into a django project
             }
         });
     };
+    function add_shape(response) {
+        if (response.count > 500){
+            console.log('Over 500 shapes to render!');
+        }
+        for (let i = 0; i < response.count; i++){
+            let route = new DrawRoute(baseMap);
+            // as WKD
+            editableLayers.addLayer(route.makeLine(response.geom[i][1], 'wkd', 0.7, route.getColour()));
+
+            //AS GEOJSON
+            // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
+        }
+    }
     function add_markers(response) {
-        if (response) {
-            if (response.count > 100) {
-                // $(results).html("<div class='alert-box alert radius' data-alert> Too Many Stops in this area!</div>")
-                console.log('Too Many Stops');
-            }
-            else {
-                console.log(response.count); // log the returned json to the console
-                console.log(response.geom); // log the returned json to the console
-                console.log(response.shape); // log the returned json to the console
-                for (let i = 0; i < response.count; i++) {
-                    let currentStopCoords = response.geom[i]
-                    L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2] }, { riseOnHover: true }).addTo(baseMap)
-                }
-            }
+        if (response.count > 100) {
+            // $(results).html("<div class='alert-box alert radius' data-alert> Too Many Stops in this area!</div>")
+            console.log('Over 100 Stops');
+        }
+        // log the returned json to the console
+
+        // console.log(response.count);
+        // console.log(response.geom);
+        // console.log(response.shape);
+
+        // Add all stops to the map
+        for (let i = 0; i < response.count; i++) {
+            let currentStopCoords = response.geom[i];
+            let marker = L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2] }, { riseOnHover: true });
+            // marker.addTo(markerLayer);
+            editableLayers.addLayer(marker);
+            markers.push(marker);
         }
     }
 </script>

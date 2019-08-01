@@ -43,8 +43,13 @@
 //     }
 // }
 class DrawRoute {
-    constructor() {
-        this.baseMap = this.initMap();
+    constructor(base) {
+        if (typeof base != "undefined") {
+            this.baseMap = base
+        }
+        else {
+            this.baseMap = this.initMap();
+        }
     }
 
     initMap() {
@@ -64,30 +69,76 @@ class DrawRoute {
         return baseMap
     }
 
+    fixCoordsWKD(coords) {
+        // get coords from LINESTRING ewkd input 
+        // Sometimes puts trailing space between coords sometimes doesnt???
+        var x = 1
 
-    makeLine(coords, opacity='0.6', color='purple') {
-        // get coords from string input
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);
         coords = coords.split(',');
 
 
         coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
+        if (coords[1][0] === '-') {
+            x = 0
+        }
         // Remove trailing whitespace
         for (let i = 1; i < coords.length; i++) {
-            coords[i] = coords[i].substr(1).split(/[ ]+/).map(Number).reverse();
+            coords[i] = coords[i].substr(x).split(/[ ]+/).map(Number).reverse();
         };
+        return coords
+    }
 
+    fixCoordsGEOJSON(coords){
+        // xreates coordinate string from GeoJSON format
+        coords = JSON.parse(coords[1]).coordinates;
+        for(let i=0; i< coords.length; i++){
+            coords[i] = coords[i].reverse();
+        };
+        return coords
+    }
+
+    makeLine(coords, fix='wkd', opacity = '0.7', color = 'purple') {
+        if (fix === 'wkd') {
+            coords = this.fixCoordsWKD(coords);
+        }
+        else if(fix ==='geojson'){
+            coords = this.fixCoordsGEOJSON(coords);
+        }
 
         var line = L.polyline(coords, {
             color: color,
             width: 0.5,
             opacity: opacity,
             smoothFactor: 2,
-        }).addTo(this.baseMap);
+        });
 
+        line.on('mouseover', function (e) {
+            var layer = e.target;
+            layer.setStyle({
+                color: 'purple',
+                opacity: 1,
+                weight: 5,
+            });
+            layer.bringToFront();
+        });
+
+        line.on('mouseout', function (e) {
+            var layer = e.target
+            layer.setStyle(
+                {
+                    color: color,
+                    width: 0.5,
+                    opacity: opacity,
+                    smoothFactor: 2,
+                    weight: 3,
+                });
+            layer.bringToBack();
+        });
         return line
     }
+
 
     makePoint(coordLat, coordLon) {
         coordLat = Number(coordLat);
@@ -97,5 +148,15 @@ class DrawRoute {
         var pointCirc = L.circleMarker([coordLat, coordLon], { radius: 10, color: 'white' }).addTo(this.baseMap);
         // var pointMarker = L.marker([coordLat, coordLon]).addTo(this.baseMap);
         return pointCirc
+    }
+
+    getColour() {
+        function colour() {
+            return String(parseInt(Math.random() * (+255 - 0) + 0))
+        };
+        function getColor() {
+            return "rgb(" + colour() + "," + colour() + "," + colour() + ")"
+        }
+        return getColor()
     }
 }

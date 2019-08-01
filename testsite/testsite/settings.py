@@ -93,8 +93,8 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'HOST' : 'localhost', 
         'NAME' : 'routemap_baa1' ,
-        'USER' :  'postgres',
-        'PASSWORD' :'armyarmy1998' ,
+        'USER' :  'baa1',
+        'PASSWORD' :'baa1baa1' ,
     }
 }
 

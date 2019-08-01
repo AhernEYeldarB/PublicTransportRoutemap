@@ -239,31 +239,47 @@ class ContainedPoints(object):
                 return queryGeom
 
             def getData(table):
-
-                query = "SELECT ST_Contains(ST_GeomFromText('SRID=4326;%s'), point), name , ST_X(point), ST_Y(point) FROM %s;"%(queryGeom, table)
+                # Can instead SELECT x FROM x where contains is true for imporved performance
                 cursor = connection.cursor()
-                cursor.execute(query)
+                if table =='stop':
+                    query = "SELECT ST_Contains(ST_GeomFromText('SRID=4326;%s'), point), name , ST_X(point), ST_Y(point) FROM %s;"%(queryGeom, table)
+                    cursor.execute(query)
 
-                # Get all Stops
-                stops = cursor.fetchall()
-                stops =  [(x,y,n) for i,n,x,y in list(filter(lambda x: x[0] == True, stops))]
+                    # Get all Stops
+                    stops = cursor.fetchall()
+                    stops =  [(x,y,n) for i,n,x,y in list(filter(lambda x: x[0] == True, stops))]
 
-                return stops
-            # Find all points inside the polygon
+                    return stops
+
+                elif table == 'shape':
+                    query = "SELECT shape_id, (ST_AsText(shape.geometry)) FROM %s WHERE ST_Intersects(ST_GeomFromText('SRID=4326;%s'), shape.geometry)"%(table, queryGeom)
+                    # query = "SELECT shape_id, (ST_AsGEOJSON(shape.geometry)) FROM %s WHERE ST_Intersects(ST_GeomFromText('SRID=4326;%s'), shape.geometry)"%(table, queryGeom)
+                    cursor.execute(query)
+
+                    shapes = cursor.fetchall()
+                    print(shapes)
+                    return shapes
+
+            # Find all stops inside the polygon
             # SELECT ST_CONTAINS(ST_GEOMFROMTEXT('SRID=4326;POLYGON((-9.232910089194776 55.677584411089526 ,-11.307128705084326 50.83647280350753,-4.5219720527529725 50.58044602533059,-4.9614251777529725 55.3591315224922,-9.232910089194776 55.677584411089526))'), shape_point.point), shape_point.point FROM shape_point ;
             # SELECT ST_Contains(ST_GEOMFROMTEXT('SRID=4326;POLYGON((52.36620837113711 -9.263671925291419,52.204913551431154 -7.562988130375745,51.54291871811506 -7.993652326986195,51.646657472959326 -9.303222605958581,  52.36620837113711 -9.263671925291419))'), stop.point) , stop.point FROM stop ;
             # SELECT ST_Contains(ST_GEOMFROMTEXT('SRID=4326;POLYGON((-9.263671925291419 52.36620837113711,-7.562988130375745 52.204913551431154,-7.993652326986195 51.54291871811506,-9.303222605958581 51.646657472959326,-9.263671925291419 52.36620837113711))'), stop.point)  , stop.point FROM stop ;
             
+            # Find all shapes inside polygon
+            # SELECT shape_id FROM shape WHERE ST_Contains(ST_GeomFromText('SRID=4326;POLYGON((-9.263671925291419 52.36620837113711,-7.562988130375745 52.204913551431154,-7.993652326986195 51.54291871811506,-9.303222605958581 51.646657472959326,-9.263671925291419 52.36620837113711))'), shape.geometry) ;
+
             # Get shape and geom data
             shape = request.POST.get('type')
             geom = request.POST.get('latlng')
+            toFind = request.POST.get('toFind')
 
             queryGeom = makeGeomStr(geom)
-            data = getData('stop')            
+            data = getData(toFind)            
             # Find all stops within polygon bounds
 
 
             response_data['shape'] = shape
+            response_data['toFind'] = toFind
             response_data['geom'] = data
             response_data['count'] = len(data)
 

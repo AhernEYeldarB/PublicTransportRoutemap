@@ -95,13 +95,9 @@ A <strong>Route</strong> is a named route in the schedule
     coords = coords.slice(17, -2);
     coords = coords.split(')');
 
-    function color() { return String(parseInt(Math.random() * (+255 - 0) + 0)) };
-    function getColor() {
-        return "rgb(" + color() + "," + color() + "," + color() + ")"
-    }
     var route = new DrawRoute();
     for (let i = 0; i < coords.length; i++) {
-        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 0.2, getColor()).getBounds());
+        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], true, 0.2, route.getColour()).getBounds());
     }
 </script>
 {% endif %}
