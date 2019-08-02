@@ -69,18 +69,18 @@ class DrawRoute {
         return baseMap
     }
 
-    fixCoordsWKD(coords) {
+    fixCoordsWKT(coords) {
         // get coords from LINESTRING ewkd input 
         // Sometimes puts trailing space between coords sometimes doesnt???
         var x = 1
-
+        
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);
         coords = coords.split(',');
-
+        
 
         coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
-        if (coords[1][0] === '-') {
+        if (coords.length > 1 && coords[1][0] === '-') {
             x = 0
         }
         // Remove trailing whitespace
@@ -99,9 +99,9 @@ class DrawRoute {
         return coords
     }
 
-    makeLine(coords, fix='wkd', opacity = '0.7', color = 'purple') {
-        if (fix === 'wkd') {
-            coords = this.fixCoordsWKD(coords);
+    makeLine(coords, fix='wkt', opacity = '0.7', color = 'purple') {
+        if (fix === 'wkt') {
+            coords = this.fixCoordsWKT(coords);
         }
         else if(fix ==='geojson'){
             coords = this.fixCoordsGEOJSON(coords);

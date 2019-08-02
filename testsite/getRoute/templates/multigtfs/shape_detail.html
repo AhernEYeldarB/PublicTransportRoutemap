@@ -96,7 +96,7 @@ A <strong>Shape</strong> is the path a vehicle travels, on the road or on a trac
 <script>
     var coords = '{{ object.geometry.wkt}}'
     var route = new DrawRoute();
-    route.baseMap.fitBounds(route.makeLine(coords).getBounds());
+    route.baseMap.fitBounds(route.makeLine(coords).addTo(route.baseMap).getBounds());
 </script>
 {% endif %}
 {% endblock %}

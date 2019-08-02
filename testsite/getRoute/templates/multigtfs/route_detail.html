@@ -97,7 +97,8 @@ A <strong>Route</strong> is a named route in the schedule
 
     var route = new DrawRoute();
     for (let i = 0; i < coords.length; i++) {
-        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], true, 0.2, route.getColour()).getBounds());
+        // Creates a Line, adds it to map, gets its bounds, sets views bounds
+        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 'wkd' , 0.35, route.getColour()).addTo(route.baseMap).getBounds());
     }
 </script>
 {% endif %}

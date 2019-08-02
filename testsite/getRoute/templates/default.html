@@ -39,8 +39,9 @@ Test to include a Leaflet.js map into a django project
             {{ form.text }}
         </div> -->
         <select name="toFind">
-            <option value="stop">stop</option>
-            <option value="shape">shape</option>
+            <option value="stop">stops</option>
+            <option value="shape">shapes</option>
+            <option value="trip">trips</option>
         </select>
         <input type="submit" value="Post" class="tiny button">
         <div id="results"></div> <!-- Shape data printed here-->
@@ -146,12 +147,6 @@ Test to include a Leaflet.js map into a django project
             editableLayers.addLayer(layer);
             coords = e.layer.getLatLngs()
 
-            // console.log(e);
-            // console.log(e.layer);
-            // console.log(typeString);
-            // console.log(coords);
-
-
             var par = document.createElement('p');
             var node = document.createTextNode(typeString + '\n: ' + JSON.stringify(coords));
             par.appendChild(node);
@@ -182,8 +177,10 @@ Test to include a Leaflet.js map into a django project
     // Submit event caller
     $('#post-form').on('submit', function (event) {
         event.preventDefault();
+
+        // Name of the data we want back
         toFind = $('#post-form').serializeArray()[1].value;
-        // console.log("form submitted!")  // sanity check
+
         create_post();
     });
 
@@ -199,12 +196,28 @@ Test to include a Leaflet.js map into a django project
                 // Response Fields shape, toFind, geom,count
                 var response = json;
                 console.log("success"); // another sanity check
-                if (response.toFind === 'stop') {
-                    add_markers(response);
+                switch (response.toFind) {
+                    case 'stop':
+                        add_markers(response);
+                        break;
+                        // console.log(response);
+                    case 'shape':
+                        add_shape(response);
+                        break;
+                    case 'trip':
+                        console.log(response);
+                        break;
                 }
-                else if (response.toFind === 'shape') {
-                    add_shape(response);
-                }
+                // if (response.toFind === 'stop') {
+                //     add_markers(response);
+                // }
+                // else if (response.toFind === 'shape') {
+                //     add_shape(response);
+                // }
+                // else if (response.toFind === 'trip') {
+                //     console.log(response)
+                // }
+                // else if
             },
 
             // handle a non-successful response
@@ -216,13 +229,13 @@ Test to include a Leaflet.js map into a django project
         });
     };
     function add_shape(response) {
-        if (response.count > 500){
+        if (response.count > 500) {
             console.log('Over 500 shapes to render!');
         }
-        for (let i = 0; i < response.count; i++){
+        for (let i = 0; i < response.count; i++) {
             let route = new DrawRoute(baseMap);
-            // as WKD
-            editableLayers.addLayer(route.makeLine(response.geom[i][1], 'wkd', 0.7, route.getColour()));
+            // as WKT
+            editableLayers.addLayer(route.makeLine(response.geom[i][1], 'wkt', 0.7, route.getColour()));
 
             //AS GEOJSON
             // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
@@ -241,11 +254,22 @@ Test to include a Leaflet.js map into a django project
 
         // Add all stops to the map
         for (let i = 0; i < response.count; i++) {
-            let currentStopCoords = response.geom[i];
-            let marker = L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2] }, { riseOnHover: true });
+
+            let route = new DrawRoute(baseMap);
+            let currentStopCoords = response.geom[i][1];
+            let currentStopTitle = response.geom[i][0]
+
+            currentStopCoords = route.fixCoordsWKT(currentStopCoords);
+            
+            var marker = L.marker(currentStopCoords[0], { title: currentStopTitle, riseOnHover: true });
+            // var marker = L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2], riseOnHover: true });
+            marker.on('click', function (e) {
+                var layer = e.target;
+                console.log(layer.options);
+            });
             // marker.addTo(markerLayer);
             editableLayers.addLayer(marker);
-            markers.push(marker);
+            // markers.push(marker);
         }
     }
 </script>
