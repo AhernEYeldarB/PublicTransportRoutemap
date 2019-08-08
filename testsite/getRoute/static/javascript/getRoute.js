@@ -73,14 +73,13 @@ class DrawRoute {
         // get coords from LINESTRING ewkd input 
         // Sometimes puts trailing space between coords sometimes doesnt???
         var x = 1
-        
         coords = coords.split('(');
         coords = coords[1].slice(0, -1);
         coords = coords.split(',');
-        
+
 
         coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
-        if (coords.length > 1 && coords[1][0] === '-') {
+        if (coords.length > 1 && (coords[1][0] != ' ') ) {
             x = 0
         }
         // Remove trailing whitespace
@@ -90,22 +89,23 @@ class DrawRoute {
         return coords
     }
 
-    fixCoordsGEOJSON(coords){
-        // xreates coordinate string from GeoJSON format
+    fixCoordsGEOJSON(coords) {
+        // Creates coordinate string from GeoJSON format
         coords = JSON.parse(coords[1]).coordinates;
-        for(let i=0; i< coords.length; i++){
+        for (let i = 0; i < coords.length; i++) {
             coords[i] = coords[i].reverse();
         };
         return coords
     }
 
-    makeLine(coords, fix='wkt', opacity = '0.7', color = 'purple') {
+    makeLine(coords, fix = 'wkt', opacity = '0.7', color = 'purple') {
         if (fix === 'wkt') {
             coords = this.fixCoordsWKT(coords);
         }
-        else if(fix ==='geojson'){
+        else if (fix === 'geojson') {
             coords = this.fixCoordsGEOJSON(coords);
         }
+
 
         var line = L.polyline(coords, {
             color: color,

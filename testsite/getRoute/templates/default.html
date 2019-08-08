@@ -29,11 +29,11 @@ Test to include a Leaflet.js map into a django project
     <div id="map">
     </div>
 </p>
-<p class="text-center">
-    <a href="{% url 'feed_list' %}" class="btn btn-primary" role="button">Feed List</a>
-    <a href="{% url 'admin:index' %}" class="btn btn-primary" role="button">Admin</a>
+<section class="text-center">
+    <!-- <a href="{% url 'feed_list' %}" class="btn btn-primary" role="button">Feed List</a>
+    <a href="{% url 'admin:index' %}" class="btn btn-primary" role="button">Admin</a> -->
 
-    <form action="{% url 'getlocation' %} " method="POST" id="post-form">
+    <form action="{% url 'getlocation' %}" method="POST" id="post-form">
         {% csrf_token %}
         <!-- <div class="fieldWrapper" id="the_post">
             {{ form.text }}
@@ -42,11 +42,21 @@ Test to include a Leaflet.js map into a django project
             <option value="stop">stops</option>
             <option value="shape">shapes</option>
             <option value="trip">trips</option>
+            <option value="route">routes</option>
         </select>
-        <input type="submit" value="Post" class="tiny button">
+        <input type="submit" value="Display" class="tiny button">
         <div id="results"></div> <!-- Shape data printed here-->
     </form>
-</p>
+
+    <form action="{% url 'getshortest' %}" method="POST" id="path-form">
+        {% csrf_token %}
+        From<input id='alat' type="text" placeholder="latitude">
+        <input id='alon' type="text" placeholder="longitude"><br />
+        To <input id='blat' type="text" placeholder="latitude">
+        <input id='blon' type="text" placeholder="longitude">
+        <input type="submit" value="Get Path" class="tiny button">
+    </form>
+</section>
 {% endblock %}
 
 {% block body_script %}
@@ -56,11 +66,17 @@ Test to include a Leaflet.js map into a django project
     var startCoords = [51.8983, -8.4726] // Cork City Centre
     var typeString;
     var coords; // Coords passed in ewkd type
-    var markers = [];
+    // var markers = [];
+    var start;
+    var end;
     var layers = [];
     var editableLayers;
     var toFind;
     var route;
+    var alat;
+    var alon;
+    var blat;
+    var blon;
 
     // Load map after page
     window.addEventListener('DOMContentLoaded', getLocation(), false);
@@ -118,8 +134,7 @@ Test to include a Leaflet.js map into a django project
                 },
                 // disable toolbar item by setting it to false
                 polyline: true,
-
-                circle: false, // Turns off this drawing tool
+                circle: false,
                 rectangle: false,
                 marker: false,
                 circlemarker: false,
@@ -141,11 +156,33 @@ Test to include a Leaflet.js map into a django project
 
             if (type === 'polygon') {
                 // console.log(e.layer._latlngs);
-                typeString = 'POLYGON'
+                typeString = 'POLYGON';
+            }
+            if (type === 'polyline') {
+                typeString = 'POLYLINE';
+            }
+
+            coords = e.layer.getLatLngs();
+
+            if (typeString === 'POLYLINE') {
+                alat = coords[0].lat
+                alon = coords[0].lng
+                blat = coords[1].lat
+                blon = coords[1].lng
+
+                start = L.marker([alat, alon], { title: 'start' })
+                end = L.marker([blat, blon], { title: 'end' })
+
+                editableLayers.addLayer(start)
+                editableLayers.addLayer(end)
+
+                document.getElementById("alat").value = alat;
+                document.getElementById("alon").value = alon;
+                document.getElementById("blat").value = blat;
+                document.getElementById("blon").value = blon;
             }
 
             editableLayers.addLayer(layer);
-            coords = e.layer.getLatLngs()
 
             var par = document.createElement('p');
             var node = document.createTextNode(typeString + '\n: ' + JSON.stringify(coords));
@@ -155,18 +192,6 @@ Test to include a Leaflet.js map into a django project
             element.appendChild(par);
             layers.push(e);
         });
-
-        // baseMap.on('draw:edited', function (f) {
-        //     // Clear all the markers and redraw the ones inside the oayer editted
-        //     for (let i = 0; i < markers.length; i++) {
-        //         let marker = markers[i];
-        //         baseMap.removeLayer(marker);
-        //         // basemap.removeLayer(markerLayer);
-        //     };
-        //     markers=[];
-        //     coords = f.layers.getLayers()[0].getLatLngs();
-        //     create_post();
-        // });
     }
 </script>
 
@@ -175,17 +200,65 @@ Test to include a Leaflet.js map into a django project
     mainVali()
 
     // Submit event caller
-    $('#post-form').on('submit', function (event) {
+    $('#path-form').on('submit', function (event) {
         event.preventDefault();
 
+        alat = document.getElementById("alat").value;
+        alon = document.getElementById("alon").value;
+        blat = document.getElementById("blat").value;
+        blon = document.getElementById("blon").value;
+
+        console.log(alat, alon, blat, blon);
+        getPath();
+    });
+
+    // Event Handler to find shortest path
+    function getPath() {
+        // var vertexA = 534442374;
+        // var vertexB = 534442397;
+
+        $.ajax({
+            url: "{% url 'getshortest' %}", // the endpoint
+            type: "POST", // http method
+            data: { alat: alat, alon: alon, blat: blat, blon: blon }, // data sent with the post request
+
+            // handle a successful response
+            success: function (json) {
+                var response = json;
+                console.log(response);
+                showShortestPath(response)
+            },
+
+            error: function (xhr, errmsg, err) {
+                // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                //     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+    function showShortestPath(response) {
+        for (let i = 0; i < response.count; i++) {
+            let route = new DrawRoute(baseMap);
+            // as WKT
+            editableLayers.addLayer(route.makeLine(response.geom, false, 0.7, route.getColour()).bindPopup());
+
+            //AS GEOJSON
+            // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
+        }
+    };
+
+    // Submit event caller
+    $('#post-form').on('submit', function (event) {
+        event.preventDefault();
         // Name of the data we want back
         toFind = $('#post-form').serializeArray()[1].value;
 
-        create_post();
+        createPost();
     });
 
+
     // Event handler to create POST request
-    function create_post() {
+    function createPost() {
         $.ajax({
             url: "{% url 'getlocation' %}", // the endpoint
             type: "POST", // http method
@@ -196,16 +269,19 @@ Test to include a Leaflet.js map into a django project
                 // Response Fields shape, toFind, geom,count
                 var response = json;
                 console.log("success"); // another sanity check
+                console.log(response);
                 switch (response.toFind) {
                     case 'stop':
                         add_markers(response);
                         break;
-                        // console.log(response);
+                    // console.log(response);
                     case 'shape':
                         add_shape(response);
                         break;
                     case 'trip':
-                        console.log(response);
+                        // Returns duplicate shapes as some routes have the same shape !!! 
+                        // Do not use 
+                        add_shape(response);
                         break;
                 }
                 // if (response.toFind === 'stop') {
@@ -217,7 +293,6 @@ Test to include a Leaflet.js map into a django project
                 // else if (response.toFind === 'trip') {
                 //     console.log(response)
                 // }
-                // else if
             },
 
             // handle a non-successful response
@@ -235,13 +310,15 @@ Test to include a Leaflet.js map into a django project
         for (let i = 0; i < response.count; i++) {
             let route = new DrawRoute(baseMap);
             // as WKT
-            editableLayers.addLayer(route.makeLine(response.geom[i][1], 'wkt', 0.7, route.getColour()));
+            editableLayers.addLayer(route.makeLine(response.geom[i][1], 'wkt', 0.7, route.getColour()).bindPopup(response.geom[i][0]));
 
             //AS GEOJSON
             // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
         }
     }
     function add_markers(response) {
+
+
         if (response.count > 100) {
             // $(results).html("<div class='alert-box alert radius' data-alert> Too Many Stops in this area!</div>")
             console.log('Over 100 Stops');
@@ -254,13 +331,12 @@ Test to include a Leaflet.js map into a django project
 
         // Add all stops to the map
         for (let i = 0; i < response.count; i++) {
-
             let route = new DrawRoute(baseMap);
             let currentStopCoords = response.geom[i][1];
             let currentStopTitle = response.geom[i][0]
 
             currentStopCoords = route.fixCoordsWKT(currentStopCoords);
-            
+
             var marker = L.marker(currentStopCoords[0], { title: currentStopTitle, riseOnHover: true });
             // var marker = L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2], riseOnHover: true });
             marker.on('click', function (e) {

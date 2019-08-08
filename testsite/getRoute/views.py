@@ -5,7 +5,7 @@ from django.contrib.gis.measure import D
 from django.views.generic import ListView, DetailView
 from multigtfs.models import *
 
-# Wepage imports
+# Webpage imports
 from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -13,7 +13,11 @@ from django.http import HttpResponse
 from getRoute.forms import PostForm
 from json import dumps, loads
 
+#calculation tools
 from functools import reduce
+from os import getcwd
+from pyroutelib3 import Router
+
 # Create your views here.
 from django.views.generic import ListView
 from multigtfs.models import (Block, Fare, FareRule, Feed, Frequency, Route,
@@ -273,13 +277,16 @@ class ContainedPoints(object):
 
                 elif table == 'trip':
                     # Find all trips inside polygon
-                    query = "SELECT trip_id, (ST_AsText(trip.geometry)), shape_id FROM %s WHERE ST_Intersects(ST_GeomFromEWKT('SRID=4326;%s'), trip.geometry)"%(table, queryGeom)
+                    query = "SELECT DISTINCT headsign, (ST_AsText(trip.geometry)) FROM %s WHERE ST_Intersects(ST_GeomFromEWKT('SRID=4326;%s'), trip.geometry)"%(table, queryGeom)
                     cursor.execute(query)
 
                     trips = cursor.fetchall()
-                    print(len(trips) )
 
                     return trips
+
+                elif table == 'route':
+                    # to implement routes
+                    pass
 
 
             # Get shape and geom data
@@ -290,7 +297,6 @@ class ContainedPoints(object):
             queryGeom = makeGeomStr(geom)
             data = getData(toFind)            
             # Find all stops within polygon bounds
-
 
             response_data['shape'] = shape
             response_data['toFind'] = toFind
@@ -307,3 +313,57 @@ class ContainedPoints(object):
 
         return render(request, 'default.html', {'form': form})
 
+class Path(object):
+    def path(request):
+        if request.method == 'POST':
+            response_data = {}
+            
+            alat = request.POST.get('alat') # end/destination
+            alon = request.POST.get('alon') # end/destination
+            blat = request.POST.get('blat') # start/source
+            blon = request.POST.get('blon') # start/source
+
+
+
+            router = Router("foot") # Initialise it
+
+            start = router.findNode(float(alat), float(alon)) # Find start and end nodes
+            end = router.findNode(float(blat), float(blon))
+
+            status, route = router.doRoute(start, end) # Find the route - a list of OSM nodes
+
+            if status == 'success':
+                geom = list(map(router.nodeLatLon, route)) # Get actual route coordinates
+            else:
+                geom = []
+
+            # print(vertexA, vertexB)
+            # with open(getcwd() + '\\getRoute\\graph\\shortestPath.txt') as pathfile:
+            #     geom = 'LINESTRING ('
+            #     count = 0
+            #     line = pathfile.readline()
+            #     geom += line.strip()
+            #     line = pathfile.readline()
+            #     while line:
+            #         geom += ','
+            #         geom += line.strip()
+            #         line = pathfile.readline()
+            #     geom += ')'
+            #     count += 1
+
+            # Work with graph data to get shortest path
+            response_data['shape'] = 'Shortest Route'
+            response_data['geom'] = geom
+            response_data['count'] = len(geom)
+            response_data['source'] = start
+            response_data['destination'] = end
+
+            return HttpResponse(dumps(response_data),
+                        content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {'form': form})

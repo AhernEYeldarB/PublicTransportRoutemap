@@ -6,7 +6,7 @@ from multigtfs.models import (Agency, Block, Fare, FareRule, Feed, FeedInfo,
                               Route, Service, ServiceDate, Shape, ShapePoint,
                               Stop, StopTime, Trip, Zone)
 
-from getRoute.views import (ContainedPoints,
+from getRoute.views import (ContainedPoints,Path,
     getDefaultMap, ByFeedListView, FareRuleByFareListView,
     FareRuleByRouteListView, FrequencyByTripListView,
     ServiceDateByServiceListView, ShapePointByShapeListView,
@@ -126,5 +126,6 @@ urlpatterns = [
 
 
 urlpatterns += [
-    url(r'^getlocation', ContainedPoints.test, name='getlocation'),
+    url(r'^getLoc', ContainedPoints.test, name='getlocation'),
+    url(r'^getShortest', Path.path, name='getshortest'),
 ]

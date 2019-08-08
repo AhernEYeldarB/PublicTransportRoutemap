@@ -1,0 +1,1244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="CGImap 0.7.5 (6494 thorn-03.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="52.4493141" minlon="-7.2399902" maxlat="52.4560094" maxlon="-7.2290039"/>
+ <node id="377907596" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4130608" lon="-7.2163592"/>
+ <node id="377907612" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4166608" lon="-7.2204247"/>
+ <node id="377907625" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4233857" lon="-7.2259134"/>
+ <node id="377907633" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4273597" lon="-7.2288910"/>
+ <node id="377907641" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4295121" lon="-7.2303661"/>
+ <node id="377907653" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4399392" lon="-7.2347434"/>
+ <node id="377907669" visible="true" version="3" changeset="3795301" timestamp="2010-02-05T02:03:55Z" user="Polarbear" uid="114161" lat="52.4510314" lon="-7.2362197"/>
+ <node id="377907677" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4669497" lon="-7.2382195"/>
+ <node id="377907684" visible="true" version="5" changeset="4276549" timestamp="2010-03-30T13:19:33Z" user="Groundspeak" uid="9580" lat="52.4833576" lon="-7.2406091"/>
+ <node id="377908500" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4615854" lon="-7.2376578"/>
+ <node id="377908705" visible="true" version="5" changeset="10688160" timestamp="2012-02-14T22:56:02Z" user="Polarbear" uid="114161" lat="52.4399355" lon="-7.2349024"/>
+ <node id="377908774" visible="true" version="8" changeset="13715481" timestamp="2012-11-01T20:42:15Z" user="Polarbear" uid="114161" lat="52.4805937" lon="-7.2406958">
+  <tag k="highway" v="motorway_junction"/>
+  <tag k="name" v="Knocktopher"/>
+  <tag k="ref" v="10"/>
+ </node>
+ <node id="377909035" visible="true" version="6" changeset="36036420" timestamp="2015-12-18T21:40:09Z" user="VictorIE" uid="2008037" lat="52.4090648" lon="-7.2094187"/>
+ <node id="377909071" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4165984" lon="-7.2206514"/>
+ <node id="377909254" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4179051" lon="-7.2217350"/>
+ <node id="377909368" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4456310" lon="-7.2357479"/>
+ <node id="377909450" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4233490" lon="-7.2261431"/>
+ <node id="377909501" visible="true" version="3" changeset="4242840" timestamp="2010-03-26T23:10:44Z" user="Polarbear" uid="114161" lat="52.4129997" lon="-7.2165940"/>
+ <node id="377909538" visible="true" version="4" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4272902" lon="-7.2290847"/>
+ <node id="426618777" visible="true" version="3" changeset="4276312" timestamp="2010-03-30T12:44:04Z" user="Groundspeak" uid="9580" lat="52.4854050" lon="-7.2405622"/>
+ <node id="426618785" visible="true" version="2" changeset="4276312" timestamp="2010-03-30T12:44:04Z" user="Groundspeak" uid="9580" lat="52.4849614" lon="-7.2405686"/>
+ <node id="630008238" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:50Z" user="Polarbear" uid="114161" lat="52.4153035" lon="-7.2190852"/>
+ <node id="630008240" visible="true" version="2" changeset="4242840" timestamp="2010-03-26T23:10:44Z" user="Polarbear" uid="114161" lat="52.4152316" lon="-7.2192654"/>
+ <node id="630008244" visible="true" version="4" changeset="36036420" timestamp="2015-12-18T21:40:09Z" user="VictorIE" uid="2008037" lat="52.4091672" lon="-7.2093760"/>
+ <node id="630008246" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:50Z" user="Polarbear" uid="114161" lat="52.4107459" lon="-7.2126327"/>
+ <node id="630008248" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:50Z" user="Polarbear" uid="114161" lat="52.4117587" lon="-7.2144403"/>
+ <node id="630008251" visible="true" version="2" changeset="4242840" timestamp="2010-03-26T23:10:44Z" user="Polarbear" uid="114161" lat="52.4116909" lon="-7.2146390"/>
+ <node id="630008253" visible="true" version="2" changeset="4242840" timestamp="2010-03-26T23:10:44Z" user="Polarbear" uid="114161" lat="52.4106370" lon="-7.2127953"/>
+ <node id="630008266" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4179571" lon="-7.2215128"/>
+ <node id="630008268" visible="true" version="2" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4346632" lon="-7.2330673"/>
+ <node id="630008271" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4319465" lon="-7.2317696"/>
+ <node id="630008272" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4374053" lon="-7.2340815"/>
+ <node id="630008273" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4346350" lon="-7.2333076"/>
+ <node id="630008275" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4373814" lon="-7.2342808"/>
+ <node id="630008276" visible="true" version="2" changeset="4242840" timestamp="2010-03-26T23:10:44Z" user="Polarbear" uid="114161" lat="52.4319310" lon="-7.2320493"/>
+ <node id="630008278" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4294659" lon="-7.2305776"/>
+ <node id="630008280" visible="true" version="3" changeset="10688160" timestamp="2012-02-14T22:56:20Z" user="Polarbear" uid="114161" lat="52.4411852" lon="-7.2349898"/>
+ <node id="630008281" visible="true" version="2" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4456425" lon="-7.2355624"/>
+ <node id="630008283" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4410801" lon="-7.2351590"/>
+ <node id="630008285" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4563070" lon="-7.2368559"/>
+ <node id="630008287" visible="true" version="2" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4615851" lon="-7.2375025"/>
+ <node id="630008290" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4563036" lon="-7.2370279"/>
+ <node id="630008292" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:54Z" user="Groundspeak" uid="9580" lat="52.4669526" lon="-7.2383842"/>
+ <node id="630008294" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:55Z" user="Groundspeak" uid="9580" lat="52.4510249" lon="-7.2363810"/>
+ <node id="630008296" visible="true" version="1" changeset="3795301" timestamp="2010-02-05T02:03:51Z" user="Polarbear" uid="114161" lat="52.4716606" lon="-7.2389787"/>
+ <node id="630008298" visible="true" version="2" changeset="4276362" timestamp="2010-03-30T12:53:55Z" user="Groundspeak" uid="9580" lat="52.4769415" lon="-7.2399791"/>
+ <node id="630008301" visible="true" version="3" changeset="4392151" timestamp="2010-04-11T11:35:22Z" user="Polarbear" uid="114161" lat="52.4795540" lon="-7.2403680"/>
+ <node id="630008303" visible="true" version="3" changeset="4392151" timestamp="2010-04-11T11:35:23Z" user="Polarbear" uid="114161" lat="52.4798407" lon="-7.2404178"/>
+ <node id="630008306" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:55Z" user="Groundspeak" uid="9580" lat="52.4769514" lon="-7.2401842"/>
+ <node id="630008308" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:55Z" user="Groundspeak" uid="9580" lat="52.4801826" lon="-7.2406501"/>
+ <node id="630008311" visible="true" version="3" changeset="4276362" timestamp="2010-03-30T12:53:56Z" user="Groundspeak" uid="9580" lat="52.4716575" lon="-7.2391535"/>
+ <node id="675264605" visible="true" version="2" changeset="4276362" timestamp="2010-03-30T12:53:55Z" user="Groundspeak" uid="9580" lat="52.4536671" lon="-7.2366986"/>
+ <node id="675264606" visible="true" version="2" changeset="5068934" timestamp="2010-06-24T19:58:23Z" user="Polarbear" uid="114161" lat="52.4534827" lon="-7.2361528"/>
+ <node id="675264607" visible="true" version="2" changeset="5068934" timestamp="2010-06-24T19:58:26Z" user="Polarbear" uid="114161" lat="52.4534478" lon="-7.2370572"/>
+ <node id="678469670" visible="true" version="1" changeset="4276362" timestamp="2010-03-30T12:53:53Z" user="Groundspeak" uid="9580" lat="52.4139848" lon="-7.2178400"/>
+ <node id="678469671" visible="true" version="1" changeset="4276362" timestamp="2010-03-30T12:53:53Z" user="Groundspeak" uid="9580" lat="52.4140452" lon="-7.2176209"/>
+ <node id="678469672" visible="true" version="1" changeset="4276362" timestamp="2010-03-30T12:53:53Z" user="Groundspeak" uid="9580" lat="52.4536750" lon="-7.2365385"/>
+ <node id="692950305" visible="true" version="1" changeset="4392151" timestamp="2010-04-11T11:35:16Z" user="Polarbear" uid="114161" lat="52.4816527" lon="-7.2405576"/>
+ <node id="756777254" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:27Z" user="Polarbear" uid="114161" lat="52.4403742" lon="-7.2350178"/>
+ <node id="788276289" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:51Z" user="Polarbear" uid="114161" lat="52.4571346" lon="-7.2365411"/>
+ <node id="788276299" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:51Z" user="Polarbear" uid="114161" lat="52.4516599" lon="-7.2368741"/>
+ <node id="788276317" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:51Z" user="Polarbear" uid="114161" lat="52.4478462" lon="-7.2387085"/>
+ <node id="788276355" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:36Z" user="Polarbear" uid="114161" lat="52.4533227" lon="-7.2393736"/>
+ <node id="788276373" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:51Z" user="Polarbear" uid="114161" lat="52.4535311" lon="-7.2355346"/>
+ <node id="788276379" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:51Z" user="Polarbear" uid="114161" lat="52.4540240" lon="-7.2358568"/>
+ <node id="788276407" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:52Z" user="Polarbear" uid="114161" lat="52.4511184" lon="-7.2369048"/>
+ <node id="788276462" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:52Z" user="Polarbear" uid="114161" lat="52.4539584" lon="-7.2356175"/>
+ <node id="788276472" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:52Z" user="Polarbear" uid="114161" lat="52.4524254" lon="-7.2372111"/>
+ <node id="788276479" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:36Z" user="Polarbear" uid="114161" lat="52.4604034" lon="-7.2370111">
+  <tag k="barrier" v="gate"/>
+ </node>
+ <node id="788276489" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:37Z" user="Polarbear" uid="114161" lat="52.4488283" lon="-7.2387964"/>
+ <node id="788276500" visible="true" version="2" changeset="63256823" timestamp="2018-10-06T13:12:50Z" user="b-unicycling" uid="1713634" lat="52.4471891" lon="-7.2388287"/>
+ <node id="788276509" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:37Z" user="Polarbear" uid="114161" lat="52.4530852" lon="-7.2401982"/>
+ <node id="788276581" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:53Z" user="Polarbear" uid="114161" lat="52.4543267" lon="-7.2360423"/>
+ <node id="788276585" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:37Z" user="Polarbear" uid="114161" lat="52.4527571" lon="-7.2374300"/>
+ <node id="788276594" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:54Z" user="Polarbear" uid="114161" lat="52.4485067" lon="-7.2388655"/>
+ <node id="788276617" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:37Z" user="Polarbear" uid="114161" lat="52.4530494" lon="-7.2404078"/>
+ <node id="788276629" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:37Z" user="Polarbear" uid="114161" lat="52.4534012" lon="-7.2385325"/>
+ <node id="788276635" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:54Z" user="Polarbear" uid="114161" lat="52.4536481" lon="-7.2350752"/>
+ <node id="788276661" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:54Z" user="Polarbear" uid="114161" lat="52.4519329" lon="-7.2369431"/>
+ <node id="788276683" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:38Z" user="Polarbear" uid="114161" lat="52.4486014" lon="-7.2388813"/>
+ <node id="788276701" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:38Z" user="Polarbear" uid="114161" lat="52.4532758" lon="-7.2395761"/>
+ <node id="788276754" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:38Z" user="Polarbear" uid="114161" lat="52.4503315" lon="-7.2373783"/>
+ <node id="788276779" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:55Z" user="Polarbear" uid="114161" lat="52.4479909" lon="-7.2387315"/>
+ <node id="788276808" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:56Z" user="Polarbear" uid="114161" lat="52.4539110" lon="-7.2354140"/>
+ <node id="788276854" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:38Z" user="Polarbear" uid="114161" lat="52.4532659" lon="-7.2376737"/>
+ <node id="788276868" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:56Z" user="Polarbear" uid="114161" lat="52.4493516" lon="-7.2383332"/>
+ <node id="788276919" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:40Z" user="Polarbear" uid="114161" lat="52.4568081" lon="-7.2365052"/>
+ <node id="788276925" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:41Z" user="Polarbear" uid="114161" lat="52.4529937" lon="-7.2375601"/>
+ <node id="788276966" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:57Z" user="Polarbear" uid="114161" lat="52.4535061" lon="-7.2357338"/>
+ <node id="788276998" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:58Z" user="Polarbear" uid="114161" lat="52.4514055" lon="-7.2368588"/>
+ <node id="788277018" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:41Z" user="Polarbear" uid="114161" lat="52.4486642" lon="-7.2388900"/>
+ <node id="788277038" visible="true" version="2" changeset="32082970" timestamp="2015-06-19T19:51:44Z" user="Teester" uid="259792" lat="52.4465025" lon="-7.2390137"/>
+ <node id="788277041" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:41Z" user="Polarbear" uid="114161" lat="52.4533814" lon="-7.2388420"/>
+ <node id="788277058" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:58Z" user="Polarbear" uid="114161" lat="52.4535668" lon="-7.2353475"/>
+ <node id="788277092" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:41Z" user="Polarbear" uid="114161" lat="52.4505899" lon="-7.2371689"/>
+ <node id="788277106" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:59Z" user="Polarbear" uid="114161" lat="52.4537101" lon="-7.2351140">
+  <tag k="barrier" v="gate"/>
+ </node>
+ <node id="788277110" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:59Z" user="Polarbear" uid="114161" lat="52.4477295" lon="-7.2387123"/>
+ <node id="788277153" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4541086" lon="-7.2359882"/>
+ <node id="788277168" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:57:59Z" user="Polarbear" uid="114161" lat="52.4534126" lon="-7.2377358"/>
+ <node id="788277184" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:00Z" user="Polarbear" uid="114161" lat="52.4508220" lon="-7.2370120"/>
+ <node id="788277197" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4535161" lon="-7.2353163">
+  <tag k="barrier" v="gate"/>
+ </node>
+ <node id="788277202" visible="true" version="2" changeset="63256823" timestamp="2018-10-06T13:12:50Z" user="b-unicycling" uid="1713634" lat="52.4466386" lon="-7.2389841"/>
+ <node id="788277233" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:00Z" user="Polarbear" uid="114161" lat="52.4536804" lon="-7.2349917"/>
+ <node id="788277244" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4565039" lon="-7.2363413"/>
+ <node id="788277253" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:00Z" user="Polarbear" uid="114161" lat="52.4521290" lon="-7.2370311"/>
+ <node id="788277274" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4487335" lon="-7.2392568"/>
+ <node id="788277277" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:00Z" user="Polarbear" uid="114161" lat="52.4500471" lon="-7.2376209"/>
+ <node id="788277289" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4534458" lon="-7.2353024"/>
+ <node id="788277293" visible="true" version="2" changeset="63256823" timestamp="2018-10-06T13:12:50Z" user="b-unicycling" uid="1713634" lat="52.4468242" lon="-7.2389504"/>
+ <node id="788277300" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:42Z" user="Polarbear" uid="114161" lat="52.4531798" lon="-7.2399460"/>
+ <node id="788277350" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:01Z" user="Polarbear" uid="114161" lat="52.4483760" lon="-7.2388540"/>
+ <node id="788277374" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:56:43Z" user="Polarbear" uid="114161" lat="52.4533580" lon="-7.2391398"/>
+ <node id="788277401" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:01Z" user="Polarbear" uid="114161" lat="52.4538089" lon="-7.2352166"/>
+ <node id="1633322662" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:37Z" user="Polarbear" uid="114161" lat="52.4486703" lon="-7.2391602"/>
+ <node id="1633322666" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:37Z" user="Polarbear" uid="114161" lat="52.4487938" lon="-7.2393027"/>
+ <node id="1633322667" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:37Z" user="Polarbear" uid="114161" lat="52.4490736" lon="-7.2393945"/>
+ <node id="1633322670" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:37Z" user="Polarbear" uid="114161" lat="52.4491855" lon="-7.2394451"/>
+ <node id="1633322675" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:37Z" user="Polarbear" uid="114161" lat="52.4493514" lon="-7.2394515"/>
+ <node id="1633322699" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:38Z" user="Polarbear" uid="114161" lat="52.4496698" lon="-7.2395654"/>
+ <node id="1633322742" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:38Z" user="Polarbear" uid="114161" lat="52.4503163" lon="-7.2399612"/>
+ <node id="1633322747" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:39Z" user="Polarbear" uid="114161" lat="52.4503915" lon="-7.2400847"/>
+ <node id="1633322757" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:39Z" user="Polarbear" uid="114161" lat="52.4506192" lon="-7.2403063"/>
+ <node id="1633322800" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:39Z" user="Polarbear" uid="114161" lat="52.4511016" lon="-7.2406673"/>
+ <node id="1633322817" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:40Z" user="Polarbear" uid="114161" lat="52.4513409" lon="-7.2410282"/>
+ <node id="1633322824" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:40Z" user="Polarbear" uid="114161" lat="52.4514413" lon="-7.2410979"/>
+ <node id="1633322830" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:40Z" user="Polarbear" uid="114161" lat="52.4516535" lon="-7.2411169"/>
+ <node id="1633322882" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:41Z" user="Polarbear" uid="114161" lat="52.4520820" lon="-7.2360139"/>
+ <node id="1633322945" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:43Z" user="Polarbear" uid="114161" lat="52.4523289" lon="-7.2359822"/>
+ <node id="1633322980" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:44Z" user="Polarbear" uid="114161" lat="52.4526415" lon="-7.2358302"/>
+ <node id="1633323014" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:45Z" user="Polarbear" uid="114161" lat="52.4530313" lon="-7.2354566"/>
+ <node id="1633323023" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:45Z" user="Polarbear" uid="114161" lat="52.4531741" lon="-7.2353490"/>
+ <node id="1633323048" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4534425" lon="-7.2394291"/>
+ <node id="1633323052" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4535489" lon="-7.2393933"/>
+ <node id="1633323055" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4536090" lon="-7.2392814"/>
+ <node id="1633323057" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4536308" lon="-7.2391426"/>
+ <node id="1633323073" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4537781" lon="-7.2386948"/>
+ <node id="1633323075" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4538159" lon="-7.2347328"/>
+ <node id="1633323081" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:46Z" user="Polarbear" uid="114161" lat="52.4538627" lon="-7.2385829"/>
+ <node id="1633323083" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:47Z" user="Polarbear" uid="114161" lat="52.4539391" lon="-7.2380814"/>
+ <node id="1633323093" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:47Z" user="Polarbear" uid="114161" lat="52.4539664" lon="-7.2383545"/>
+ <node id="1633323094" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:47Z" user="Polarbear" uid="114161" lat="52.4539686" lon="-7.2344958"/>
+ <node id="1633323104" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:47Z" user="Polarbear" uid="114161" lat="52.4541915" lon="-7.2342417"/>
+ <node id="1633323125" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4544702" lon="-7.2339505"/>
+ <node id="1633323139" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4548437" lon="-7.2337371"/>
+ <node id="1633323142" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4550666" lon="-7.2335271"/>
+ <node id="1633323145" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4552668" lon="-7.2332798"/>
+ <node id="1633323153" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4553989" lon="-7.2330868"/>
+ <node id="1633323156" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4555579" lon="-7.2327887"/>
+ <node id="1633323157" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4556221" lon="-7.2263495"/>
+ <node id="1633323159" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:48Z" user="Polarbear" uid="114161" lat="52.4557023" lon="-7.2323789"/>
+ <node id="1633323191" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:49Z" user="Polarbear" uid="114161" lat="52.4562575" lon="-7.2306854"/>
+ <node id="1633323280" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4566476" lon="-7.2295102"/>
+ <node id="1633323284" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4567529" lon="-7.2293069"/>
+ <node id="1633323285" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4569159" lon="-7.2291579"/>
+ <node id="1633323291" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4571140" lon="-7.2290123"/>
+ <node id="1633323309" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4574092" lon="-7.2288395"/>
+ <node id="1633323313" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4574793" lon="-7.2287684"/>
+ <node id="1633323317" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4575206" lon="-7.2285618"/>
+ <node id="1633323324" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:52Z" user="Polarbear" uid="114161" lat="52.4575701" lon="-7.2276947"/>
+ <node id="1633323326" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:53Z" user="Polarbear" uid="114161" lat="52.4575805" lon="-7.2270885"/>
+ <node id="1633323328" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:53Z" user="Polarbear" uid="114161" lat="52.4575887" lon="-7.2267125"/>
+ <node id="1633323329" visible="true" version="1" changeset="10688160" timestamp="2012-02-14T22:51:53Z" user="Polarbear" uid="114161" lat="52.4575990" lon="-7.2267938"/>
+ <node id="3586887262" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4487924" lon="-7.2344198"/>
+ <node id="3586887265" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4493930" lon="-7.2335961"/>
+ <node id="3586887269" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4507108" lon="-7.2322282"/>
+ <node id="3586887273" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4519093" lon="-7.2398715"/>
+ <node id="3586887274" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4520170" lon="-7.2391331"/>
+ <node id="3586887275" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:43Z" user="Teester" uid="259792" lat="52.4524290" lon="-7.2393411"/>
+ <node id="3586887279" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4534358" lon="-7.2303749"/>
+ <node id="3586887281" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4539378" lon="-7.2298012"/>
+ <node id="3586887283" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4541087" lon="-7.2376146"/>
+ <node id="3586887284" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4542784" lon="-7.2298012"/>
+ <node id="3586887285" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4542963" lon="-7.2289040"/>
+ <node id="3586887287" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4545384" lon="-7.2275949"/>
+ <node id="3586887288" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4547488" lon="-7.2378746"/>
+ <node id="3586887289" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4552285" lon="-7.2268742"/>
+ <node id="3586887290" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4553092" lon="-7.2265653"/>
+ <node id="3586887291" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4553573" lon="-7.2375626"/>
+ <node id="3586887293" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4562129" lon="-7.2366993"/>
+ <node id="3586887301" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:44Z" user="Teester" uid="259792" lat="52.4575121" lon="-7.2355864"/>
+ <node id="3590780053" visible="true" version="2" changeset="32082970" timestamp="2015-06-19T19:51:43Z" user="Teester" uid="259792" lat="52.4487066" lon="-7.2347195"/>
+ <node id="6501751614" visible="true" version="1" changeset="70628718" timestamp="2019-05-26T10:02:01Z" user="b-unicycling" uid="1713634" lat="52.4560146" lon="-7.2314263"/>
+ <way id="49550344" visible="true" version="10" changeset="71349284" timestamp="2019-06-18T02:45:41Z" user="TheFreshChief" uid="1963796">
+  <nd ref="377909035"/>
+  <nd ref="630008253"/>
+  <nd ref="630008251"/>
+  <nd ref="377909501"/>
+  <nd ref="678469670"/>
+  <nd ref="630008240"/>
+  <nd ref="377909071"/>
+  <nd ref="377909254"/>
+  <nd ref="377909450"/>
+  <nd ref="377909538"/>
+  <nd ref="630008278"/>
+  <nd ref="630008276"/>
+  <nd ref="630008273"/>
+  <nd ref="630008275"/>
+  <nd ref="377908705"/>
+  <nd ref="756777254"/>
+  <nd ref="630008283"/>
+  <nd ref="377909368"/>
+  <nd ref="630008294"/>
+  <nd ref="675264605"/>
+  <nd ref="630008290"/>
+  <nd ref="377908500"/>
+  <nd ref="630008292"/>
+  <nd ref="630008311"/>
+  <nd ref="630008306"/>
+  <nd ref="630008308"/>
+  <nd ref="377908774"/>
+  <tag k="highway" v="motorway"/>
+  <tag k="lanes" v="2"/>
+  <tag k="maxspeed" v="120"/>
+  <tag k="name" v="Waterford to Knocktopher Motorway"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="ref" v="M9"/>
+  <tag k="smoothness" v="excellent"/>
+  <tag k="source" v="GPS"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="53410921" visible="true" version="3" changeset="5068934" timestamp="2010-06-24T19:58:31Z" user="Polarbear" uid="114161">
+  <nd ref="788277168"/>
+  <nd ref="788276854"/>
+  <nd ref="788276925"/>
+  <nd ref="788276585"/>
+  <nd ref="788276472"/>
+  <nd ref="788277253"/>
+  <nd ref="788276661"/>
+  <nd ref="788276299"/>
+  <nd ref="788276998"/>
+  <nd ref="788276407"/>
+  <nd ref="788277184"/>
+  <nd ref="788277092"/>
+  <nd ref="788276754"/>
+  <nd ref="788277277"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="note" v="new section built to tertiary standard"/>
+  <tag k="source" v="GPS"/>
+ </way>
+ <way id="53410925" visible="true" version="4" changeset="33605267" timestamp="2015-08-26T20:10:24Z" user="VictorIE" uid="2008037">
+  <nd ref="675264607"/>
+  <nd ref="675264606"/>
+  <tag k="bridge" v="yes"/>
+  <tag k="bridge:ref" v="KK-M09-035.00"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="lanes" v="2"/>
+  <tag k="layer" v="1"/>
+  <tag k="maxspeed" v="80"/>
+  <tag k="ref" v="L8255"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="53746760" visible="true" version="8" changeset="71349284" timestamp="2019-06-18T02:45:41Z" user="TheFreshChief" uid="1963796">
+  <nd ref="426618777"/>
+  <nd ref="426618785"/>
+  <nd ref="377907684"/>
+  <nd ref="692950305"/>
+  <nd ref="630008303"/>
+  <nd ref="630008301"/>
+  <nd ref="630008298"/>
+  <nd ref="630008296"/>
+  <nd ref="377907677"/>
+  <nd ref="630008287"/>
+  <nd ref="630008285"/>
+  <nd ref="678469672"/>
+  <nd ref="377907669"/>
+  <nd ref="630008281"/>
+  <nd ref="630008280"/>
+  <nd ref="377907653"/>
+  <nd ref="630008272"/>
+  <nd ref="630008268"/>
+  <nd ref="630008271"/>
+  <nd ref="377907641"/>
+  <nd ref="377907633"/>
+  <nd ref="377907625"/>
+  <nd ref="630008266"/>
+  <nd ref="377907612"/>
+  <nd ref="630008238"/>
+  <nd ref="678469671"/>
+  <nd ref="377907596"/>
+  <nd ref="630008248"/>
+  <nd ref="630008246"/>
+  <nd ref="630008244"/>
+  <tag k="highway" v="motorway"/>
+  <tag k="lanes" v="2"/>
+  <tag k="maxspeed" v="120"/>
+  <tag k="name" v="Waterford to Knocktopher Motorway"/>
+  <tag k="oneway" v="yes"/>
+  <tag k="ref" v="M9"/>
+  <tag k="smoothness" v="excellent"/>
+  <tag k="source" v="GPS"/>
+  <tag k="surface" v="asphalt"/>
+ </way>
+ <way id="63752998" visible="true" version="2" changeset="10688160" timestamp="2012-02-14T22:55:35Z" user="Polarbear" uid="114161">
+  <nd ref="788277058"/>
+  <nd ref="788277197"/>
+  <nd ref="788277289"/>
+  <nd ref="1633323023"/>
+  <nd ref="1633323014"/>
+  <nd ref="1633322980"/>
+  <nd ref="1633322945"/>
+  <nd ref="1633322882"/>
+  <tag k="highway" v="track"/>
+ </way>
+ <way id="63753006" visible="true" version="3" changeset="31885025" timestamp="2015-06-10T23:12:33Z" user="Teester" uid="259792">
+  <nd ref="788277277"/>
+  <nd ref="788276868"/>
+  <nd ref="788276489"/>
+  <nd ref="788277018"/>
+  <nd ref="788276683"/>
+  <nd ref="788276594"/>
+  <nd ref="788277350"/>
+  <nd ref="788276779"/>
+  <nd ref="788276317"/>
+  <nd ref="788277110"/>
+  <nd ref="788276500"/>
+  <nd ref="788277293"/>
+  <nd ref="788277202"/>
+  <nd ref="788277038"/>
+  <tag k="highway" v="unclassified"/>
+  <tag k="source" v="GPS"/>
+ </way>
+ <way id="63753021" visible="true" version="1" changeset="5068934" timestamp="2010-06-24T19:58:04Z" user="Polarbear" uid="114161">
+  <nd ref="788276479"/>
+  <nd ref="788276289"/>
+  <nd ref="788276919"/>
+  <nd ref="788277244"/>
+  <nd ref="788276581"/>
+  <nd ref="788277153"/>
+  <nd ref="788276379"/>
+  <nd ref="788276462"/>
+  <nd ref="788276808"/>
+  <nd ref="788277401"/>
+  <nd ref="788277106"/>
+  <nd ref="788276635"/>
+  <tag k="highway" v="track"/>
+  <tag k="surface" v="paved"/>
+ </way>
+ <way id="63753033" visible="true" version="3" changeset="31885025" timestamp="2015-06-10T23:12:33Z" user="Teester" uid="259792">
+  <nd ref="788277018"/>
+  <nd ref="1633322662"/>
+  <nd ref="788277274"/>
+  <nd ref="1633322666"/>
+  <nd ref="1633322667"/>
+  <nd ref="1633322670"/>
+  <nd ref="1633322675"/>
+  <nd ref="1633322699"/>
+  <nd ref="1633322742"/>
+  <nd ref="1633322747"/>
+  <nd ref="1633322757"/>
+  <nd ref="1633322800"/>
+  <nd ref="1633322817"/>
+  <nd ref="1633322824"/>
+  <nd ref="1633322830"/>
+  <tag k="highway" v="unclassified"/>
+ </way>
+ <way id="63753131" visible="true" version="4" changeset="70628718" timestamp="2019-05-26T10:02:03Z" user="b-unicycling" uid="1713634">
+  <nd ref="675264606"/>
+  <nd ref="788276966"/>
+  <nd ref="788276373"/>
+  <nd ref="788277058"/>
+  <nd ref="788276635"/>
+  <nd ref="788277233"/>
+  <nd ref="1633323075"/>
+  <nd ref="1633323094"/>
+  <nd ref="1633323104"/>
+  <nd ref="1633323125"/>
+  <nd ref="1633323139"/>
+  <nd ref="1633323142"/>
+  <nd ref="1633323145"/>
+  <nd ref="1633323153"/>
+  <nd ref="1633323156"/>
+  <nd ref="1633323159"/>
+  <nd ref="6501751614"/>
+  <nd ref="1633323191"/>
+  <nd ref="1633323280"/>
+  <nd ref="1633323284"/>
+  <nd ref="1633323285"/>
+  <nd ref="1633323291"/>
+  <nd ref="1633323309"/>
+  <nd ref="1633323313"/>
+  <nd ref="1633323317"/>
+  <nd ref="1633323324"/>
+  <nd ref="1633323326"/>
+  <nd ref="1633323329"/>
+  <nd ref="1633323328"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="maxspeed" v="80"/>
+  <tag k="ref" v="L8255"/>
+ </way>
+ <way id="150412589" visible="true" version="2" changeset="31885025" timestamp="2015-06-10T23:12:34Z" user="Teester" uid="259792">
+  <nd ref="788276355"/>
+  <nd ref="1633323048"/>
+  <nd ref="1633323052"/>
+  <nd ref="1633323055"/>
+  <nd ref="1633323057"/>
+  <nd ref="1633323073"/>
+  <tag k="highway" v="track"/>
+ </way>
+ <way id="352900897" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:56Z" user="Teester" uid="259792">
+  <nd ref="3586887301"/>
+  <nd ref="3586887293"/>
+  <nd ref="3586887291"/>
+  <nd ref="3586887288"/>
+  <nd ref="3586887283"/>
+  <nd ref="1633323083"/>
+ </way>
+ <way id="352900900" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:56Z" user="Teester" uid="259792">
+  <nd ref="1633322830"/>
+  <nd ref="3586887273"/>
+  <nd ref="3586887274"/>
+  <nd ref="3586887275"/>
+  <nd ref="788276355"/>
+  <nd ref="1633323073"/>
+ </way>
+ <way id="352900958" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:11:59Z" user="Teester" uid="259792">
+  <nd ref="788276617"/>
+  <nd ref="788276509"/>
+  <nd ref="788277300"/>
+  <nd ref="788276701"/>
+  <nd ref="788276355"/>
+  <nd ref="788277374"/>
+  <nd ref="788277041"/>
+  <nd ref="788276629"/>
+  <nd ref="788277168"/>
+  <nd ref="675264607"/>
+  <tag k="highway" v="tertiary"/>
+  <tag k="maxspeed" v="80"/>
+  <tag k="ref" v="L8255"/>
+ </way>
+ <way id="352901033" visible="true" version="1" changeset="31885025" timestamp="2015-06-10T23:12:05Z" user="Teester" uid="259792">
+  <nd ref="1633323073"/>
+  <nd ref="1633323081"/>
+  <nd ref="1633323093"/>
+  <nd ref="1633323083"/>
+  <tag k="highway" v="track"/>
+ </way>
+ <way id="353299099" visible="true" version="1" changeset="31933437" timestamp="2015-06-12T22:20:37Z" user="Teester" uid="259792">
+  <nd ref="3590780053"/>
+  <nd ref="3586887262"/>
+  <nd ref="3586887265"/>
+  <nd ref="3586887269"/>
+  <nd ref="3586887279"/>
+  <nd ref="3586887281"/>
+  <nd ref="3586887284"/>
+  <nd ref="3586887285"/>
+  <nd ref="3586887287"/>
+  <nd ref="3586887289"/>
+  <nd ref="3586887290"/>
+  <nd ref="1633323157"/>
+ </way>
+ <relation id="5265775" visible="true" version="3" changeset="43301218" timestamp="2016-10-31T11:36:56Z" user="rorym_import_logainm" uid="3661142">
+  <member type="way" ref="352900900" role="outer"/>
+  <member type="way" ref="352901033" role="outer"/>
+  <member type="way" ref="352900897" role="outer"/>
+  <member type="way" ref="352900823" role="outer"/>
+  <member type="way" ref="352901018" role="outer"/>
+  <member type="way" ref="352900870" role="outer"/>
+  <member type="way" ref="352900962" role="outer"/>
+  <member type="way" ref="352901037" role="outer"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="locality" v="townland"/>
+  <tag k="logainm:ref" v="27284"/>
+  <tag k="logainm:url" v="http://www.logainm.ie/27284.aspx"/>
+  <tag k="name" v="Carrickshock Commons"/>
+  <tag k="name:en" v="Carrickshock Commons"/>
+  <tag k="name:ga" v="Carraig Seac"/>
+  <tag k="place" v="locality"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="5265778" visible="true" version="5" changeset="52940720" timestamp="2017-10-14T22:02:06Z" user="Dafo43" uid="114051">
+  <member type="way" ref="352900976" role="outer"/>
+  <member type="way" ref="352900899" role="outer"/>
+  <member type="way" ref="352900912" role="outer"/>
+  <member type="way" ref="352900903" role="outer"/>
+  <member type="way" ref="352900897" role="outer"/>
+  <member type="way" ref="352901033" role="outer"/>
+  <member type="way" ref="352900900" role="outer"/>
+  <member type="way" ref="352900893" role="outer"/>
+  <member type="way" ref="352900898" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900905" role="outer"/>
+  <member type="way" ref="150412528" role="outer"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="locality" v="townland"/>
+  <tag k="logainm:ref" v="27125"/>
+  <tag k="logainm:url" v="http://www.logainm.ie/27125.aspx"/>
+  <tag k="name" v="Coolmore"/>
+  <tag k="name:en" v="Coolmore"/>
+  <tag k="name:ga" v="An Chúil Mhór"/>
+  <tag k="place" v="locality"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="5273065" visible="true" version="5" changeset="52940720" timestamp="2017-10-14T22:02:06Z" user="Dafo43" uid="114051">
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="354934206" role="outer"/>
+  <member type="way" ref="353299128" role="outer"/>
+  <member type="way" ref="353299153" role="outer"/>
+  <member type="way" ref="352900906" role="outer"/>
+  <member type="way" ref="352900830" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <tag k="admin_level" v="10"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="locality" v="townland"/>
+  <tag k="logainm:ref" v="27124"/>
+  <tag k="logainm:url" v="http://www.logainm.ie/27124.aspx"/>
+  <tag k="name" v="Ballybray"/>
+  <tag k="name:en" v="Ballybray"/>
+  <tag k="name:ga" v="Bealach Bréagán"/>
+  <tag k="place" v="locality"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="5382841" visible="true" version="6" changeset="64320978" timestamp="2018-11-09T10:55:43Z" user="b-unicycling" uid="1713634">
+  <member type="way" ref="355493166" role="outer"/>
+  <member type="way" ref="355493105" role="outer"/>
+  <member type="way" ref="355493133" role="outer"/>
+  <member type="way" ref="642539126" role="outer"/>
+  <member type="way" ref="642539125" role="outer"/>
+  <member type="way" ref="355493100" role="outer"/>
+  <member type="way" ref="354934203" role="outer"/>
+  <member type="way" ref="352900824" role="outer"/>
+  <member type="way" ref="352901022" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900830" role="outer"/>
+  <member type="way" ref="352900906" role="outer"/>
+  <member type="way" ref="353299153" role="outer"/>
+  <member type="way" ref="353299128" role="outer"/>
+  <member type="way" ref="354934200" role="outer"/>
+  <member type="way" ref="354934212" role="outer"/>
+  <member type="way" ref="355493115" role="outer"/>
+  <member type="way" ref="355493143" role="outer"/>
+  <member type="way" ref="355493167" role="outer"/>
+  <member type="way" ref="355493108" role="outer"/>
+  <member type="way" ref="355493160" role="outer"/>
+  <member type="way" ref="355493146" role="outer"/>
+  <member type="way" ref="361816126" role="outer"/>
+  <tag k="boundary" v="civil_parish"/>
+  <tag k="logainm:ref" v="1318"/>
+  <tag k="logainm:url" v="http://www.logainm.ie/1318.aspx"/>
+  <tag k="name" v="Kilkeasy"/>
+  <tag k="name:en" v="Kilkeasy"/>
+  <tag k="name:ga" v="Cill Chéise"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="5383234" visible="true" version="8" changeset="70620118" timestamp="2019-05-25T21:44:46Z" user="b-unicycling" uid="1713634">
+  <member type="way" ref="352900898" role="outer"/>
+  <member type="way" ref="352900866" role="outer"/>
+  <member type="way" ref="352900885" role="outer"/>
+  <member type="way" ref="352900935" role="outer"/>
+  <member type="way" ref="197544264" role="outer"/>
+  <member type="way" ref="352900940" role="outer"/>
+  <member type="way" ref="352900859" role="outer"/>
+  <member type="way" ref="352900814" role="outer"/>
+  <member type="way" ref="63752981" role="outer"/>
+  <member type="way" ref="63753030" role="outer"/>
+  <member type="way" ref="352900993" role="outer"/>
+  <member type="way" ref="70574063" role="outer"/>
+  <member type="way" ref="352123277" role="outer"/>
+  <member type="way" ref="63753116" role="outer"/>
+  <member type="way" ref="351978373" role="outer"/>
+  <member type="way" ref="351978366" role="outer"/>
+  <member type="way" ref="351978289" role="outer"/>
+  <member type="way" ref="351978302" role="outer"/>
+  <member type="way" ref="351978356" role="outer"/>
+  <member type="way" ref="150412488" role="outer"/>
+  <member type="way" ref="438912545" role="outer"/>
+  <member type="way" ref="351978343" role="outer"/>
+  <member type="way" ref="352900924" role="outer"/>
+  <member type="way" ref="351978290" role="outer"/>
+  <member type="way" ref="351978330" role="outer"/>
+  <member type="way" ref="351978369" role="outer"/>
+  <member type="way" ref="361801851" role="outer"/>
+  <member type="way" ref="352900915" role="outer"/>
+  <member type="way" ref="352900847" role="outer"/>
+  <member type="way" ref="692489816" role="outer"/>
+  <member type="way" ref="692489815" role="outer"/>
+  <member type="way" ref="352900909" role="outer"/>
+  <member type="way" ref="352900997" role="outer"/>
+  <member type="way" ref="352900858" role="outer"/>
+  <member type="way" ref="353299138" role="outer"/>
+  <member type="way" ref="662845782" role="outer"/>
+  <member type="way" ref="662845783" role="outer"/>
+  <member type="way" ref="126629393" role="outer"/>
+  <member type="way" ref="353299173" role="outer"/>
+  <member type="way" ref="353299167" role="outer"/>
+  <member type="way" ref="353299103" role="outer"/>
+  <member type="way" ref="353299142" role="outer"/>
+  <member type="way" ref="353299125" role="outer"/>
+  <member type="way" ref="353299111" role="outer"/>
+  <member type="way" ref="353299094" role="outer"/>
+  <member type="way" ref="353299106" role="outer"/>
+  <member type="way" ref="353299145" role="outer"/>
+  <member type="way" ref="353299131" role="outer"/>
+  <member type="way" ref="353299144" role="outer"/>
+  <member type="way" ref="353299114" role="outer"/>
+  <member type="way" ref="354934190" role="outer"/>
+  <member type="way" ref="353299160" role="outer"/>
+  <member type="way" ref="353299143" role="outer"/>
+  <member type="way" ref="353299165" role="outer"/>
+  <member type="way" ref="352900869" role="outer"/>
+  <member type="way" ref="352900829" role="outer"/>
+  <member type="way" ref="352900868" role="outer"/>
+  <member type="way" ref="352900871" role="outer"/>
+  <member type="way" ref="352900851" role="outer"/>
+  <member type="way" ref="352900830" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <tag k="boundary" v="civil_parish"/>
+  <tag k="logainm:ref" v="1333"/>
+  <tag k="logainm:url" v="http://www.logainm.ie/1333.aspx"/>
+  <tag k="name" v="Knocktopher"/>
+  <tag k="name:en" v="Knocktopher"/>
+  <tag k="name:ga" v="Cnoc an Tóchair"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="5644581" visible="true" version="6" changeset="71421561" timestamp="2019-06-20T02:18:42Z" user="TheFreshChief" uid="1963796">
+  <member type="way" ref="203589059" role="backward"/>
+  <member type="way" ref="5496290" role="backward"/>
+  <member type="way" ref="5496291" role="backward"/>
+  <member type="way" ref="5496292" role="backward"/>
+  <member type="way" ref="5496296" role="backward"/>
+  <member type="way" ref="43332191" role="backward"/>
+  <member type="way" ref="124107264" role="backward"/>
+  <member type="way" ref="53768908" role="backward"/>
+  <member type="way" ref="53768907" role="backward"/>
+  <member type="way" ref="62045740" role="backward"/>
+  <member type="way" ref="62045737" role="backward"/>
+  <member type="way" ref="128497556" role="backward"/>
+  <member type="way" ref="36716844" role="backward"/>
+  <member type="way" ref="697902776" role="backward"/>
+  <member type="way" ref="170568494" role="backward"/>
+  <member type="way" ref="170568493" role="backward"/>
+  <member type="way" ref="24616833" role="backward"/>
+  <member type="way" ref="90659635" role="backward"/>
+  <member type="way" ref="90659656" role="backward"/>
+  <member type="way" ref="24616948" role="backward"/>
+  <member type="way" ref="697902778" role="backward"/>
+  <member type="way" ref="63501488" role="backward"/>
+  <member type="way" ref="63501504" role="backward"/>
+  <member type="way" ref="63501501" role="backward"/>
+  <member type="way" ref="63501499" role="backward"/>
+  <member type="way" ref="63451562" role="backward"/>
+  <member type="way" ref="63451543" role="backward"/>
+  <member type="way" ref="53417744" role="backward"/>
+  <member type="way" ref="430663181" role="backward"/>
+  <member type="way" ref="54171308" role="backward"/>
+  <member type="way" ref="54171323" role="backward"/>
+  <member type="way" ref="63501497" role="backward"/>
+  <member type="way" ref="63501491" role="backward"/>
+  <member type="way" ref="54171322" role="backward"/>
+  <member type="way" ref="68282927" role="backward"/>
+  <member type="way" ref="53410938" role="backward"/>
+  <member type="way" ref="35145707" role="backward"/>
+  <member type="way" ref="36700264" role="backward"/>
+  <member type="way" ref="697902779" role="backward"/>
+  <member type="way" ref="49550344" role="backward"/>
+  <member type="way" ref="49550348" role="backward"/>
+  <member type="way" ref="36700270" role="backward"/>
+  <member type="way" ref="35144575" role="backward"/>
+  <member type="way" ref="42329289" role="backward"/>
+  <member type="way" ref="42329380" role="backward"/>
+  <member type="way" ref="42329378" role="backward"/>
+  <member type="way" ref="42329390" role="backward"/>
+  <member type="way" ref="42329392" role="backward"/>
+  <member type="way" ref="42329394" role="backward"/>
+  <member type="way" ref="698410198" role="backward"/>
+  <member type="way" ref="35333011" role="backward"/>
+  <member type="way" ref="124105649" role="backward"/>
+  <member type="way" ref="124105346" role="backward"/>
+  <member type="way" ref="35333012" role="backward"/>
+  <member type="way" ref="35333020" role="backward"/>
+  <member type="way" ref="35333019" role="backward"/>
+  <member type="way" ref="124105467" role="backward"/>
+  <member type="way" ref="35333021" role="backward"/>
+  <member type="way" ref="124105165" role="backward"/>
+  <member type="way" ref="10905087" role="forward"/>
+  <member type="way" ref="203589058" role="forward"/>
+  <member type="way" ref="26384944" role="forward"/>
+  <member type="way" ref="43332187" role="forward"/>
+  <member type="way" ref="124107167" role="forward"/>
+  <member type="way" ref="697750462" role="forward"/>
+  <member type="way" ref="46859184" role="forward"/>
+  <member type="way" ref="53768909" role="forward"/>
+  <member type="way" ref="53768910" role="forward"/>
+  <member type="way" ref="62045736" role="forward"/>
+  <member type="way" ref="62045739" role="forward"/>
+  <member type="way" ref="697902777" role="forward"/>
+  <member type="way" ref="36716846" role="forward"/>
+  <member type="way" ref="24616946" role="forward"/>
+  <member type="way" ref="170568492" role="forward"/>
+  <member type="way" ref="170568496" role="forward"/>
+  <member type="way" ref="24616999" role="forward"/>
+  <member type="way" ref="90659643" role="forward"/>
+  <member type="way" ref="24616838" role="forward"/>
+  <member type="way" ref="124106376" role="forward"/>
+  <member type="way" ref="63451490" role="forward"/>
+  <member type="way" ref="63451509" role="forward"/>
+  <member type="way" ref="63451559" role="forward"/>
+  <member type="way" ref="55717841" role="forward"/>
+  <member type="way" ref="63451493" role="forward"/>
+  <member type="way" ref="63451517" role="forward"/>
+  <member type="way" ref="53417746" role="forward"/>
+  <member type="way" ref="430663182" role="forward"/>
+  <member type="way" ref="54171324" role="forward"/>
+  <member type="way" ref="54171318" role="forward"/>
+  <member type="way" ref="63451553" role="forward"/>
+  <member type="way" ref="50900113" role="forward"/>
+  <member type="way" ref="68282919" role="forward"/>
+  <member type="way" ref="53759315" role="forward"/>
+  <member type="way" ref="53410927" role="forward"/>
+  <member type="way" ref="697902780" role="forward"/>
+  <member type="way" ref="36700260" role="forward"/>
+  <member type="way" ref="53746760" role="forward"/>
+  <member type="way" ref="49550346" role="forward"/>
+  <member type="way" ref="49550342" role="forward"/>
+  <member type="way" ref="128497462" role="forward"/>
+  <member type="way" ref="42329325" role="forward"/>
+  <member type="way" ref="42329373" role="forward"/>
+  <member type="way" ref="42329367" role="forward"/>
+  <member type="way" ref="42329343" role="forward"/>
+  <member type="way" ref="42329344" role="forward"/>
+  <member type="way" ref="42329341" role="forward"/>
+  <member type="way" ref="42329342" role="forward"/>
+  <member type="way" ref="698410197" role="forward"/>
+  <member type="way" ref="35333008" role="forward"/>
+  <member type="way" ref="35333009" role="forward"/>
+  <member type="way" ref="35333014" role="forward"/>
+  <member type="way" ref="35333015" role="forward"/>
+  <member type="way" ref="35333017" role="forward"/>
+  <member type="way" ref="35333018" role="forward"/>
+  <member type="way" ref="35333023" role="forward"/>
+  <member type="way" ref="35333024" role="forward"/>
+  <tag k="operator" v="National Roads Authority"/>
+  <tag k="ref" v="M9"/>
+  <tag k="route" v="road"/>
+  <tag k="type" v="route"/>
+ </relation>
+ <relation id="6523099" visible="true" version="1" changeset="41627165" timestamp="2016-08-23T00:31:44Z" user="Teester" uid="259792">
+  <member type="way" ref="352901033" role="outer"/>
+  <member type="way" ref="352900900" role="outer"/>
+  <member type="way" ref="352900893" role="outer"/>
+  <member type="way" ref="352900898" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <member type="way" ref="354934206" role="outer"/>
+  <member type="way" ref="354934200" role="outer"/>
+  <member type="way" ref="354934209" role="outer"/>
+  <member type="way" ref="354934224" role="outer"/>
+  <member type="way" ref="354934230" role="outer"/>
+  <member type="way" ref="354934215" role="outer"/>
+  <member type="way" ref="354934227" role="outer"/>
+  <member type="way" ref="354934196" role="outer"/>
+  <member type="way" ref="354934232" role="outer"/>
+  <member type="way" ref="354934188" role="outer"/>
+  <member type="way" ref="354934225" role="outer"/>
+  <member type="way" ref="352900980" role="outer"/>
+  <member type="way" ref="352900857" role="outer"/>
+  <member type="way" ref="352901040" role="outer"/>
+  <member type="way" ref="126629377" role="outer"/>
+  <member type="way" ref="109656274" role="outer"/>
+  <member type="way" ref="352900983" role="outer"/>
+  <member type="way" ref="61241038" role="outer"/>
+  <member type="way" ref="130011792" role="outer"/>
+  <member type="way" ref="353299165" role="outer"/>
+  <member type="way" ref="352900869" role="outer"/>
+  <member type="way" ref="352900829" role="outer"/>
+  <member type="way" ref="352900868" role="outer"/>
+  <member type="way" ref="352900871" role="outer"/>
+  <member type="way" ref="352900922" role="outer"/>
+  <member type="way" ref="352900974" role="outer"/>
+  <member type="way" ref="352900966" role="outer"/>
+  <member type="way" ref="352900899" role="outer"/>
+  <member type="way" ref="352900912" role="outer"/>
+  <member type="way" ref="352900903" role="outer"/>
+  <member type="way" ref="352900897" role="outer"/>
+  <tag k="admin_level" v="9"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="Ballyhale"/>
+  <tag k="ref" v="07062"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="6527641" visible="true" version="4" changeset="70620118" timestamp="2019-05-25T21:44:46Z" user="b-unicycling" uid="1713634">
+  <member type="way" ref="352900935" role="outer"/>
+  <member type="way" ref="352900885" role="outer"/>
+  <member type="way" ref="352900866" role="outer"/>
+  <member type="way" ref="352900893" role="outer"/>
+  <member type="way" ref="352900900" role="outer"/>
+  <member type="way" ref="352901033" role="outer"/>
+  <member type="way" ref="352900897" role="outer"/>
+  <member type="way" ref="352900903" role="outer"/>
+  <member type="way" ref="352900912" role="outer"/>
+  <member type="way" ref="352900899" role="outer"/>
+  <member type="way" ref="352900966" role="outer"/>
+  <member type="way" ref="352900974" role="outer"/>
+  <member type="way" ref="352900922" role="outer"/>
+  <member type="way" ref="352900871" role="outer"/>
+  <member type="way" ref="352900868" role="outer"/>
+  <member type="way" ref="352900829" role="outer"/>
+  <member type="way" ref="352900869" role="outer"/>
+  <member type="way" ref="353299165" role="outer"/>
+  <member type="way" ref="353299143" role="outer"/>
+  <member type="way" ref="353299160" role="outer"/>
+  <member type="way" ref="354934190" role="outer"/>
+  <member type="way" ref="353299114" role="outer"/>
+  <member type="way" ref="353299144" role="outer"/>
+  <member type="way" ref="353299101" role="outer"/>
+  <member type="way" ref="353299135" role="outer"/>
+  <member type="way" ref="353299145" role="outer"/>
+  <member type="way" ref="353299102" role="outer"/>
+  <member type="way" ref="353299097" role="outer"/>
+  <member type="way" ref="353299173" role="outer"/>
+  <member type="way" ref="126629393" role="outer"/>
+  <member type="way" ref="662845783" role="outer"/>
+  <member type="way" ref="662845782" role="outer"/>
+  <member type="way" ref="353299138" role="outer"/>
+  <member type="way" ref="352900858" role="outer"/>
+  <member type="way" ref="352900997" role="outer"/>
+  <member type="way" ref="352900909" role="outer"/>
+  <member type="way" ref="692489815" role="outer"/>
+  <member type="way" ref="692489816" role="outer"/>
+  <member type="way" ref="352900847" role="outer"/>
+  <member type="way" ref="352900915" role="outer"/>
+  <member type="way" ref="361801851" role="outer"/>
+  <member type="way" ref="351978369" role="outer"/>
+  <member type="way" ref="351978330" role="outer"/>
+  <member type="way" ref="438912543" role="outer"/>
+  <member type="way" ref="438912539" role="outer"/>
+  <member type="way" ref="692333989" role="outer"/>
+  <member type="way" ref="692333988" role="outer"/>
+  <member type="way" ref="150412488" role="outer"/>
+  <member type="way" ref="351978356" role="outer"/>
+  <member type="way" ref="351978302" role="outer"/>
+  <member type="way" ref="351978289" role="outer"/>
+  <member type="way" ref="351978366" role="outer"/>
+  <member type="way" ref="351978373" role="outer"/>
+  <member type="way" ref="63753116" role="outer"/>
+  <member type="way" ref="352123277" role="outer"/>
+  <member type="way" ref="70574063" role="outer"/>
+  <member type="way" ref="352900993" role="outer"/>
+  <member type="way" ref="63753030" role="outer"/>
+  <member type="way" ref="63752981" role="outer"/>
+  <member type="way" ref="352900814" role="outer"/>
+  <member type="way" ref="352900859" role="outer"/>
+  <member type="way" ref="352900940" role="outer"/>
+  <member type="way" ref="197544264" role="outer"/>
+  <tag k="admin_level" v="9"/>
+  <tag k="boundary" v="administrative"/>
+  <tag k="name" v="Knocktopher"/>
+  <tag k="ref" v="07080"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="7118317" visible="true" version="11" changeset="64320978" timestamp="2018-11-09T10:55:44Z" user="b-unicycling" uid="1713634">
+  <member type="way" ref="525787773" role="outer"/>
+  <member type="way" ref="351862233" role="outer"/>
+  <member type="way" ref="350621068" role="outer"/>
+  <member type="way" ref="351874290" role="outer"/>
+  <member type="way" ref="350621075" role="outer"/>
+  <member type="way" ref="350621123" role="outer"/>
+  <member type="way" ref="350621067" role="outer"/>
+  <member type="way" ref="351874319" role="outer"/>
+  <member type="way" ref="351874351" role="outer"/>
+  <member type="way" ref="351874309" role="outer"/>
+  <member type="way" ref="439016634" role="outer"/>
+  <member type="way" ref="532059324" role="outer"/>
+  <member type="way" ref="439016639" role="outer"/>
+  <member type="way" ref="351874411" role="outer"/>
+  <member type="way" ref="361806767" role="outer"/>
+  <member type="way" ref="439016633" role="outer"/>
+  <member type="way" ref="361806766" role="outer"/>
+  <member type="way" ref="361806768" role="outer"/>
+  <member type="way" ref="351978315" role="outer"/>
+  <member type="way" ref="351978336" role="outer"/>
+  <member type="way" ref="351978360" role="outer"/>
+  <member type="way" ref="351978333" role="outer"/>
+  <member type="way" ref="351978363" role="outer"/>
+  <member type="way" ref="351978309" role="outer"/>
+  <member type="way" ref="351978321" role="outer"/>
+  <member type="way" ref="351978371" role="outer"/>
+  <member type="way" ref="351978325" role="outer"/>
+  <member type="way" ref="351978303" role="outer"/>
+  <member type="way" ref="438912543" role="outer"/>
+  <member type="way" ref="351978290" role="outer"/>
+  <member type="way" ref="352900924" role="outer"/>
+  <member type="way" ref="351978343" role="outer"/>
+  <member type="way" ref="438912545" role="outer"/>
+  <member type="way" ref="150412488" role="outer"/>
+  <member type="way" ref="351978356" role="outer"/>
+  <member type="way" ref="351978302" role="outer"/>
+  <member type="way" ref="351978289" role="outer"/>
+  <member type="way" ref="351978366" role="outer"/>
+  <member type="way" ref="351978373" role="outer"/>
+  <member type="way" ref="63753116" role="outer"/>
+  <member type="way" ref="352123277" role="outer"/>
+  <member type="way" ref="70574063" role="outer"/>
+  <member type="way" ref="352900993" role="outer"/>
+  <member type="way" ref="63753030" role="outer"/>
+  <member type="way" ref="63752981" role="outer"/>
+  <member type="way" ref="352900814" role="outer"/>
+  <member type="way" ref="352900859" role="outer"/>
+  <member type="way" ref="352900940" role="outer"/>
+  <member type="way" ref="197544264" role="outer"/>
+  <member type="way" ref="352900935" role="outer"/>
+  <member type="way" ref="352900885" role="outer"/>
+  <member type="way" ref="352900866" role="outer"/>
+  <member type="way" ref="352900898" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900830" role="outer"/>
+  <member type="way" ref="352900906" role="outer"/>
+  <member type="way" ref="353299153" role="outer"/>
+  <member type="way" ref="353299128" role="outer"/>
+  <member type="way" ref="354934200" role="outer"/>
+  <member type="way" ref="354934212" role="outer"/>
+  <member type="way" ref="355493115" role="outer"/>
+  <member type="way" ref="355493143" role="outer"/>
+  <member type="way" ref="355493167" role="outer"/>
+  <member type="way" ref="355493108" role="outer"/>
+  <member type="way" ref="355493160" role="outer"/>
+  <member type="way" ref="355493146" role="outer"/>
+  <member type="way" ref="361816126" role="outer"/>
+  <member type="way" ref="642539125" role="outer"/>
+  <member type="way" ref="642539126" role="outer"/>
+  <member type="way" ref="355493133" role="outer"/>
+  <member type="way" ref="355493105" role="outer"/>
+  <member type="way" ref="355493166" role="outer"/>
+  <member type="way" ref="355493100" role="outer"/>
+  <member type="way" ref="354934203" role="outer"/>
+  <member type="way" ref="354934199" role="outer"/>
+  <member type="way" ref="354934220" role="outer"/>
+  <member type="way" ref="354934238" role="outer"/>
+  <member type="way" ref="354934194" role="outer"/>
+  <member type="way" ref="531702436" role="outer"/>
+  <member type="way" ref="531948757" role="outer"/>
+  <member type="way" ref="355486333" role="outer"/>
+  <member type="way" ref="355486359" role="outer"/>
+  <member type="way" ref="355486302" role="outer"/>
+  <member type="way" ref="355486309" role="outer"/>
+  <member type="way" ref="355486345" role="outer"/>
+  <member type="way" ref="355348735" role="outer"/>
+  <member type="way" ref="623243852" role="outer"/>
+  <member type="way" ref="355348728" role="outer"/>
+  <member type="way" ref="355348731" role="outer"/>
+  <member type="way" ref="624126292" role="outer"/>
+  <member type="way" ref="355330025" role="outer"/>
+  <member type="way" ref="355330038" role="outer"/>
+  <member type="way" ref="355330023" role="outer"/>
+  <member type="way" ref="355330059" role="outer"/>
+  <member type="way" ref="355330047" role="outer"/>
+  <member type="way" ref="355330044" role="outer"/>
+  <member type="way" ref="355330060" role="outer"/>
+  <member type="way" ref="355330062" role="outer"/>
+  <member type="way" ref="355330046" role="outer"/>
+  <member type="way" ref="355330069" role="outer"/>
+  <member type="way" ref="355330026" role="outer"/>
+  <member type="way" ref="355330042" role="outer"/>
+  <member type="way" ref="355330041" role="outer"/>
+  <member type="way" ref="355330070" role="outer"/>
+  <member type="way" ref="355330068" role="outer"/>
+  <member type="way" ref="355330057" role="outer"/>
+  <member type="way" ref="355330080" role="outer"/>
+  <member type="way" ref="355330051" role="outer"/>
+  <member type="way" ref="355330034" role="outer"/>
+  <member type="way" ref="369938405" role="outer"/>
+  <member type="way" ref="355330048" role="outer"/>
+  <member type="way" ref="355330056" role="outer"/>
+  <member type="way" ref="351737231" role="outer"/>
+  <member type="way" ref="351737192" role="outer"/>
+  <member type="way" ref="369938453" role="outer"/>
+  <member type="way" ref="351737206" role="outer"/>
+  <member type="way" ref="369938377" role="outer"/>
+  <member type="way" ref="369765965" role="outer"/>
+  <member type="way" ref="351737214" role="outer"/>
+  <member type="way" ref="351737188" role="outer"/>
+  <member type="way" ref="369765934" role="outer"/>
+  <member type="way" ref="369765960" role="outer"/>
+  <member type="way" ref="351737205" role="outer"/>
+  <member type="way" ref="369765958" role="outer"/>
+  <member type="way" ref="369765924" role="outer"/>
+  <member type="way" ref="369765909" role="outer"/>
+  <member type="way" ref="369765919" role="outer"/>
+  <member type="way" ref="351737215" role="outer"/>
+  <member type="way" ref="369765957" role="outer"/>
+  <member type="way" ref="351737195" role="outer"/>
+  <member type="way" ref="351737207" role="outer"/>
+  <member type="way" ref="351737194" role="outer"/>
+  <member type="way" ref="351737212" role="outer"/>
+  <member type="way" ref="351737189" role="outer"/>
+  <member type="way" ref="351737201" role="outer"/>
+  <member type="way" ref="351737197" role="outer"/>
+  <member type="way" ref="351737232" role="outer"/>
+  <member type="way" ref="351737211" role="outer"/>
+  <member type="way" ref="351737187" role="outer"/>
+  <member type="way" ref="351862211" role="outer"/>
+  <member type="way" ref="351862226" role="outer"/>
+  <member type="way" ref="351862132" role="outer"/>
+  <member type="way" ref="351862116" role="outer"/>
+  <member type="way" ref="351862135" role="outer"/>
+  <member type="way" ref="351862188" role="outer"/>
+  <member type="way" ref="351862196" role="outer"/>
+  <member type="way" ref="351862197" role="outer"/>
+  <member type="way" ref="351862095" role="outer"/>
+  <member type="way" ref="351862152" role="outer"/>
+  <member type="way" ref="351862107" role="outer"/>
+  <member type="way" ref="351862286" role="outer"/>
+  <member type="way" ref="351862167" role="outer"/>
+  <member type="way" ref="351862175" role="outer"/>
+  <member type="way" ref="351862213" role="outer"/>
+  <member type="way" ref="351862104" role="outer"/>
+  <member type="way" ref="351862136" role="outer"/>
+  <member type="way" ref="351862163" role="outer"/>
+  <member type="way" ref="351862223" role="outer"/>
+  <member type="way" ref="351862159" role="outer"/>
+  <member type="way" ref="351862181" role="outer"/>
+  <member type="way" ref="525787774" role="outer"/>
+  <tag k="alt_name" v="Kilmaganny Petty Sessions District"/>
+  <tag k="boundary" v="petty_sessions_district"/>
+  <tag k="end_date" v="1922"/>
+  <tag k="historic" v="yes"/>
+  <tag k="name" v="Kilmaganny District"/>
+  <tag k="source" v="Magistrates meeting 15th Jan. 1828 re 7th &amp; 8th Geo. IV. chap. 67"/>
+  <tag k="start_date" v="1828"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+ <relation id="7121939" visible="true" version="9" changeset="71365783" timestamp="2019-06-18T13:15:20Z" user="b-unicycling" uid="1713634">
+  <member type="way" ref="350621063" role="outer"/>
+  <member type="way" ref="350621081" role="outer"/>
+  <member type="way" ref="350621083" role="outer"/>
+  <member type="way" ref="350621107" role="outer"/>
+  <member type="way" ref="350621059" role="outer"/>
+  <member type="way" ref="350621056" role="outer"/>
+  <member type="way" ref="350621113" role="outer"/>
+  <member type="way" ref="350621047" role="outer"/>
+  <member type="way" ref="350621090" role="outer"/>
+  <member type="way" ref="350621057" role="outer"/>
+  <member type="way" ref="350621104" role="outer"/>
+  <member type="way" ref="350621030" role="outer"/>
+  <member type="way" ref="350621070" role="outer"/>
+  <member type="way" ref="350621053" role="outer"/>
+  <member type="way" ref="350621129" role="outer"/>
+  <member type="way" ref="350621033" role="outer"/>
+  <member type="way" ref="68282923" role="outer"/>
+  <member type="way" ref="349479173" role="outer"/>
+  <member type="way" ref="349479258" role="outer"/>
+  <member type="way" ref="349479171" role="outer"/>
+  <member type="way" ref="349479192" role="outer"/>
+  <member type="way" ref="350692937" role="outer"/>
+  <member type="way" ref="350692928" role="outer"/>
+  <member type="way" ref="350692916" role="outer"/>
+  <member type="way" ref="240166285" role="outer"/>
+  <member type="way" ref="350692922" role="outer"/>
+  <member type="way" ref="350692930" role="outer"/>
+  <member type="way" ref="350692945" role="outer"/>
+  <member type="way" ref="350692946" role="outer"/>
+  <member type="way" ref="350937168" role="outer"/>
+  <member type="way" ref="350937154" role="outer"/>
+  <member type="way" ref="350937198" role="outer"/>
+  <member type="way" ref="350937197" role="outer"/>
+  <member type="way" ref="350937196" role="outer"/>
+  <member type="way" ref="351006381" role="outer"/>
+  <member type="way" ref="239562430" role="outer"/>
+  <member type="way" ref="351006378" role="outer"/>
+  <member type="way" ref="350937184" role="outer"/>
+  <member type="way" ref="351269337" role="outer"/>
+  <member type="way" ref="350937188" role="outer"/>
+  <member type="way" ref="350937187" role="outer"/>
+  <member type="way" ref="350937131" role="outer"/>
+  <member type="way" ref="350937190" role="outer"/>
+  <member type="way" ref="351269332" role="outer"/>
+  <member type="way" ref="351269335" role="outer"/>
+  <member type="way" ref="698014154" role="outer"/>
+  <member type="way" ref="351269319" role="outer"/>
+  <member type="way" ref="351269329" role="outer"/>
+  <member type="way" ref="351269297" role="outer"/>
+  <member type="way" ref="351978320" role="outer"/>
+  <member type="way" ref="351269370" role="outer"/>
+  <member type="way" ref="351978323" role="outer"/>
+  <member type="way" ref="351978306" role="outer"/>
+  <member type="way" ref="351978292" role="outer"/>
+  <member type="way" ref="351978284" role="outer"/>
+  <member type="way" ref="361801850" role="outer"/>
+  <member type="way" ref="361801849" role="outer"/>
+  <member type="way" ref="352900915" role="outer"/>
+  <member type="way" ref="352900847" role="outer"/>
+  <member type="way" ref="692489816" role="outer"/>
+  <member type="way" ref="692489815" role="outer"/>
+  <member type="way" ref="352900909" role="outer"/>
+  <member type="way" ref="352900997" role="outer"/>
+  <member type="way" ref="352900858" role="outer"/>
+  <member type="way" ref="353299138" role="outer"/>
+  <member type="way" ref="662845782" role="outer"/>
+  <member type="way" ref="662845783" role="outer"/>
+  <member type="way" ref="126629393" role="outer"/>
+  <member type="way" ref="353299173" role="outer"/>
+  <member type="way" ref="353299167" role="outer"/>
+  <member type="way" ref="353299103" role="outer"/>
+  <member type="way" ref="353299142" role="outer"/>
+  <member type="way" ref="353299125" role="outer"/>
+  <member type="way" ref="353299111" role="outer"/>
+  <member type="way" ref="353299094" role="outer"/>
+  <member type="way" ref="353299106" role="outer"/>
+  <member type="way" ref="353299145" role="outer"/>
+  <member type="way" ref="353299131" role="outer"/>
+  <member type="way" ref="353299144" role="outer"/>
+  <member type="way" ref="353299114" role="outer"/>
+  <member type="way" ref="354934190" role="outer"/>
+  <member type="way" ref="353299160" role="outer"/>
+  <member type="way" ref="353299143" role="outer"/>
+  <member type="way" ref="353299165" role="outer"/>
+  <member type="way" ref="352900869" role="outer"/>
+  <member type="way" ref="352900829" role="outer"/>
+  <member type="way" ref="352900868" role="outer"/>
+  <member type="way" ref="352900871" role="outer"/>
+  <member type="way" ref="352900851" role="outer"/>
+  <member type="way" ref="352900830" role="outer"/>
+  <member type="way" ref="532612292" role="outer"/>
+  <member type="way" ref="352900855" role="outer"/>
+  <member type="way" ref="352900975" role="outer"/>
+  <member type="way" ref="353299099" role="outer"/>
+  <member type="way" ref="352900833" role="outer"/>
+  <member type="way" ref="352900898" role="outer"/>
+  <member type="way" ref="352900866" role="outer"/>
+  <member type="way" ref="352900885" role="outer"/>
+  <member type="way" ref="352900935" role="outer"/>
+  <member type="way" ref="197544264" role="outer"/>
+  <member type="way" ref="352900940" role="outer"/>
+  <member type="way" ref="352900859" role="outer"/>
+  <member type="way" ref="352900814" role="outer"/>
+  <member type="way" ref="63752981" role="outer"/>
+  <member type="way" ref="63753030" role="outer"/>
+  <member type="way" ref="352900993" role="outer"/>
+  <member type="way" ref="70574063" role="outer"/>
+  <member type="way" ref="352123277" role="outer"/>
+  <member type="way" ref="63753116" role="outer"/>
+  <member type="way" ref="351978373" role="outer"/>
+  <member type="way" ref="351978366" role="outer"/>
+  <member type="way" ref="351978289" role="outer"/>
+  <member type="way" ref="351978302" role="outer"/>
+  <member type="way" ref="351978356" role="outer"/>
+  <member type="way" ref="150412488" role="outer"/>
+  <member type="way" ref="438912545" role="outer"/>
+  <member type="way" ref="351978343" role="outer"/>
+  <member type="way" ref="352900924" role="outer"/>
+  <member type="way" ref="351978290" role="outer"/>
+  <member type="way" ref="438912543" role="outer"/>
+  <member type="way" ref="351978303" role="outer"/>
+  <member type="way" ref="351978325" role="outer"/>
+  <member type="way" ref="351978371" role="outer"/>
+  <member type="way" ref="351978321" role="outer"/>
+  <member type="way" ref="351978309" role="outer"/>
+  <member type="way" ref="351978363" role="outer"/>
+  <member type="way" ref="351978333" role="outer"/>
+  <member type="way" ref="351978360" role="outer"/>
+  <member type="way" ref="351978336" role="outer"/>
+  <member type="way" ref="351978315" role="outer"/>
+  <member type="way" ref="361806768" role="outer"/>
+  <member type="way" ref="361806766" role="outer"/>
+  <member type="way" ref="439016633" role="outer"/>
+  <member type="way" ref="361806767" role="outer"/>
+  <member type="way" ref="351874411" role="outer"/>
+  <member type="way" ref="439016639" role="outer"/>
+  <member type="way" ref="532059324" role="outer"/>
+  <member type="way" ref="439016634" role="outer"/>
+  <member type="way" ref="351874309" role="outer"/>
+  <member type="way" ref="351874351" role="outer"/>
+  <member type="way" ref="351874319" role="outer"/>
+  <member type="way" ref="350621067" role="outer"/>
+  <member type="way" ref="350621123" role="outer"/>
+  <member type="way" ref="350621075" role="outer"/>
+  <member type="way" ref="351874290" role="outer"/>
+  <member type="way" ref="350621051" role="outer"/>
+  <member type="way" ref="350621080" role="outer"/>
+  <member type="way" ref="350621078" role="outer"/>
+  <member type="way" ref="350621046" role="outer"/>
+  <member type="way" ref="350621061" role="outer"/>
+  <member type="way" ref="350621135" role="outer"/>
+  <member type="way" ref="350621041" role="outer"/>
+  <member type="way" ref="350621071" role="outer"/>
+  <member type="way" ref="351006340" role="outer"/>
+  <member type="way" ref="351006317" role="outer"/>
+  <member type="way" ref="351006307" role="outer"/>
+  <member type="way" ref="351006515" role="outer"/>
+  <member type="way" ref="351006497" role="outer"/>
+  <member type="way" ref="351006287" role="outer"/>
+  <member type="way" ref="351006347" role="outer"/>
+  <member type="way" ref="351269304" role="outer"/>
+  <member type="way" ref="351269374" role="outer"/>
+  <member type="way" ref="351269326" role="outer"/>
+  <member type="way" ref="351269348" role="outer"/>
+  <member type="way" ref="351269308" role="outer"/>
+  <member type="way" ref="242733798" role="outer"/>
+  <member type="way" ref="351269314" role="outer"/>
+  <member type="way" ref="242733771" role="outer"/>
+  <member type="way" ref="351269331" role="outer"/>
+  <member type="way" ref="351269360" role="outer"/>
+  <member type="way" ref="351269363" role="outer"/>
+  <member type="way" ref="351269294" role="outer"/>
+  <member type="way" ref="361604296" role="outer"/>
+  <member type="way" ref="351269346" role="outer"/>
+  <member type="way" ref="351269324" role="outer"/>
+  <member type="way" ref="351269345" role="outer"/>
+  <member type="way" ref="351269312" role="outer"/>
+  <member type="way" ref="152921109" role="outer"/>
+  <member type="way" ref="662665450" role="outer"/>
+  <member type="way" ref="242733781" role="outer"/>
+  <tag k="alt_name" v="Stoneyford Petty Sessions District"/>
+  <tag k="alt_name_1" v="Stoneyford Republican Arbitration District 1919-1922"/>
+  <tag k="boundary" v="petty_sessions_district"/>
+  <tag k="end_date" v="1922"/>
+  <tag k="historic" v="yes"/>
+  <tag k="name" v="Stoneyford District"/>
+  <tag k="source" v="Magistrates Meeting 15th January 1828 re 7th &amp; 8th Geo. IV. chap. 67"/>
+  <tag k="start_date" v="1828"/>
+  <tag k="type" v="boundary"/>
+ </relation>
+</osm>
