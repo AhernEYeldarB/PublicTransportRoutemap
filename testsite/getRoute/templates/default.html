@@ -54,6 +54,11 @@ Test to include a Leaflet.js map into a django project
         <input id='alon' type="text" placeholder="longitude"><br />
         To <input id='blat' type="text" placeholder="latitude">
         <input id='blon' type="text" placeholder="longitude">
+        <select id="mode" name="mode">
+            <option value="foot">foot</option>
+            <option value="car">car</option>
+            <option value="cycle">cycle</option>
+        </select>
         <input type="submit" value="Get Path" class="tiny button">
     </form>
 </section>
@@ -72,12 +77,12 @@ Test to include a Leaflet.js map into a django project
     var layers = [];
     var editableLayers;
     var toFind;
+    var mode;
     var route;
     var alat;
     var alon;
     var blat;
     var blon;
-
     // Load map after page
     window.addEventListener('DOMContentLoaded', getLocation(), false);
 
@@ -157,6 +162,7 @@ Test to include a Leaflet.js map into a django project
             if (type === 'polygon') {
                 // console.log(e.layer._latlngs);
                 typeString = 'POLYGON';
+                editableLayers.addLayer(layer);
             }
             if (type === 'polyline') {
                 typeString = 'POLYLINE';
@@ -171,7 +177,7 @@ Test to include a Leaflet.js map into a django project
                 blon = coords[1].lng
 
                 start = L.marker([alat, alon], { title: 'start' })
-                end = L.marker([blat, blon], { title: 'end' })
+                end = L.circle([blat, blon], { title: 'end', radius: 15, color: 'red' })
 
                 editableLayers.addLayer(start)
                 editableLayers.addLayer(end)
@@ -182,7 +188,7 @@ Test to include a Leaflet.js map into a django project
                 document.getElementById("blon").value = blon;
             }
 
-            editableLayers.addLayer(layer);
+            // editableLayers.addLayer(layer);
 
             var par = document.createElement('p');
             var node = document.createTextNode(typeString + '\n: ' + JSON.stringify(coords));
@@ -207,8 +213,9 @@ Test to include a Leaflet.js map into a django project
         alon = document.getElementById("alon").value;
         blat = document.getElementById("blat").value;
         blon = document.getElementById("blon").value;
+        mode = $('#path-form').serializeArray()[1].value;
 
-        console.log(alat, alon, blat, blon);
+        console.log(alat, alon, blat, blon, mode);
         getPath();
     });
 
@@ -220,12 +227,11 @@ Test to include a Leaflet.js map into a django project
         $.ajax({
             url: "{% url 'getshortest' %}", // the endpoint
             type: "POST", // http method
-            data: { alat: alat, alon: alon, blat: blat, blon: blon }, // data sent with the post request
+            data: { alat: alat, alon: alon, blat: blat, blon: blon, mode: mode }, // data sent with the post request
 
             // handle a successful response
             success: function (json) {
                 var response = json;
-                console.log(response);
                 showShortestPath(response)
             },
 
@@ -236,15 +242,25 @@ Test to include a Leaflet.js map into a django project
             }
         });
     }
-    function showShortestPath(response) {
-        for (let i = 0; i < response.count; i++) {
-            let route = new DrawRoute(baseMap);
-            // as WKT
-            editableLayers.addLayer(route.makeLine(response.geom, false, 0.7, route.getColour()).bindPopup());
 
-            //AS GEOJSON
-            // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
+    function showShortestPath(response) {
+        let route = new DrawRoute(baseMap);
+
+        // Bind route details to popup
+        let path = route.makeLine(response.geom, false, 0.7, route.getColour()).bindPopup(mode + '->' + '\nDistance: ' + response.distance + ' km' + '\nDuration: ' + response.duration + 'mins')
+
+        // as WKT
+        editableLayers.addLayer(path);
+        for (let i = 0; i < (response.astops).length; i++) {
+            let marker = L.circle([response.astops[i][1], response.astops[i][2]], {riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3]*149838.673031 + ' m');
+            editableLayers.addLayer(marker);
         }
+        for (let i = 0; i < (response.bstops).length; i++) {
+            let marker = L.circle([response.bstops[i][1], response.bstops[i][2]], {riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3]*149838.673031 + ' m');
+            editableLayers.addLayer(marker);
+        }
+        //AS GEOJSON
+        // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
     };
 
     // Submit event caller
@@ -255,6 +271,7 @@ Test to include a Leaflet.js map into a django project
 
         createPost();
     });
+
 
 
     // Event handler to create POST request
@@ -272,7 +289,7 @@ Test to include a Leaflet.js map into a django project
                 console.log(response);
                 switch (response.toFind) {
                     case 'stop':
-                        add_markers(response);
+                        add_stops(response);
                         break;
                     // console.log(response);
                     case 'shape':
@@ -285,7 +302,7 @@ Test to include a Leaflet.js map into a django project
                         break;
                 }
                 // if (response.toFind === 'stop') {
-                //     add_markers(response);
+                //     add_stops(response);
                 // }
                 // else if (response.toFind === 'shape') {
                 //     add_shape(response);
@@ -316,9 +333,7 @@ Test to include a Leaflet.js map into a django project
             // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
         }
     }
-    function add_markers(response) {
-
-
+    function add_stops(response) {
         if (response.count > 100) {
             // $(results).html("<div class='alert-box alert radius' data-alert> Too Many Stops in this area!</div>")
             console.log('Over 100 Stops');
@@ -332,12 +347,13 @@ Test to include a Leaflet.js map into a django project
         // Add all stops to the map
         for (let i = 0; i < response.count; i++) {
             let route = new DrawRoute(baseMap);
+            let currentStopid = response.geom[i][2];
             let currentStopCoords = response.geom[i][1];
             let currentStopTitle = response.geom[i][0]
 
             currentStopCoords = route.fixCoordsWKT(currentStopCoords);
 
-            var marker = L.marker(currentStopCoords[0], { title: currentStopTitle, riseOnHover: true });
+            var marker = L.marker(currentStopCoords[0], { title: currentStopTitle, riseOnHover: true }).bindPopup(currentStopid);
             // var marker = L.marker([currentStopCoords[1], currentStopCoords[0]], { title: currentStopCoords[2], riseOnHover: true });
             marker.on('click', function (e) {
                 var layer = e.target;

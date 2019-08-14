@@ -64,7 +64,7 @@ A <strong>Trip</strong> is a single run of a Route
 <script>
     var coords = '{{ object.geometry.wkt}}'
     var route = new DrawRoute();
-    route.baseMap.fitBounds(route.makeLine(coords).addTo(route.baseMap).getBounds());
+    route.baseMap.fitBounds(route.makeLine(coords,'wkt').addTo(route.baseMap).getBounds());
 </script>
 {% endif %}
 {% endblock %}

@@ -94,11 +94,12 @@ A <strong>Route</strong> is a named route in the schedule
 
     coords = coords.slice(17, -2);
     coords = coords.split(')');
+    console.log('Linestring' + coords[0]);
 
     var route = new DrawRoute();
     for (let i = 0; i < coords.length; i++) {
         // Creates a Line, adds it to map, gets its bounds, sets views bounds
-        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i], 'wkd' , 0.35, route.getColour()).addTo(route.baseMap).getBounds());
+        route.baseMap.fitBounds(route.makeLine('Linestring' + coords[i] + ')', 'wkt' , 0.35, route.getColour()).addTo(route.baseMap).getBounds());
     }
 </script>
 {% endif %}
