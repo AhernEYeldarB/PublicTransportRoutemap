@@ -1,0 +1,4 @@
+1. pythom manage.py makemigrations
+2. python manage.py migrate 
+3. python manage importgtfs [gtfs]
+

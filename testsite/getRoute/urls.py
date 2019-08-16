@@ -29,9 +29,11 @@ urlpatterns = [
     url(r'feed/(?P<feed_id>\d+)/stop/$',
         ByFeedListView.as_view(model=Stop),
         name='stop_list'),
+        
     url(r'feed/(?P<feed_id>\d+)/stop/(?P<pk>\d+)/$',
         DetailView.as_view(model=Stop),
         name='stop_detail'),
+
     url(r'feed/(?P<feed_id>\d+)/stop/(?P<stop_id>\d+)/stoptime/$',
         StopTimeByStopListView.as_view(),
         name='stoptime_by_stop_list'),

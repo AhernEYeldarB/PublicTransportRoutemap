@@ -4,12 +4,14 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.measure import D
 from django.views.generic import ListView, DetailView
 from multigtfs.models import *
+from django.forms.models import model_to_dict
 
 # Webpage imports
 from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from getRoute.forms import PostForm
 from json import dumps, loads
 
@@ -18,6 +20,8 @@ from functools import reduce
 from os import getcwd
 from pyroutelib3 import Router, Datastore
 import math
+import geojson as gj
+import json
 
 # Create your views here.
 from django.views.generic import ListView
@@ -392,12 +396,10 @@ class Path(object):
             cursor = connection.cursor()
             cursor.execute(query)
             astops = cursor.fetchall()
-
             query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
                 blon, blat, blon, blat, 1000 / 149838.673031)
             cursor.execute(query)
             bstops = cursor.fetchall()
-            print(astops, bstops)
 
             # Work with graph data to get shortest path
             response_data['shape'] = 'Shortest Route'
@@ -409,6 +411,20 @@ class Path(object):
             response_data['distance'] = dist
             response_data['astops'] = astops
             response_data['bstops'] = bstops
+            
+            # a = [model_to_dict(Trip.objects.get(trip_id=i[0])) for i in trips]
+            # for i in a:
+            #     # print(vars(i['geometry']))
+            #     i['geometry'] = (i['geometry'].wkt)
+            # response_data['trips'] = a
+
+            with open('google_transit_buseireann/route_shapes1.geojson') as file:
+                # f = file.read()
+                # allLines = gj.loads(f)['features']
+                allLines = json.load(file)['features']
+
+            response_data['trips'] = allLines
+
 
             return HttpResponse(dumps(response_data),
                                 content_type="application/json")
@@ -419,7 +435,7 @@ class Path(object):
                                 content_type="application/json")
 
         return render(request, 'default.html', {'form': form})
-
+            
     # SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, trip.trip_id, trip.shape_id FROM stop_time INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') WHERE ST_INTERSECTS();
 
     # WITH alltrips AS (SELECT trip_id, (ST_AsText(trip.geometry)) FROM trip WHERE ST_Intersects(ST_GeomFromEWKT('SRID=4326;POLYGON((-8.491573327191873 51.899935131979994,-8.507137298147429 51.891601878352944,-8.499584194942146 51.88712858619483,-8.48356246468029 51.88844707836375,-8.47913742225501 51.89216689307324,-8.486919401184425 51.89889944503624,-8.491573327191873 51.899935131979994))'), trip.geometry)) SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, alltrips.alltrips.id, alltrips.shape_id FROM stop_time INNER JOIN alltrips.ON alltrips.alltrips.id::text LIKE CONCAT(stop_time.alltrips.id, '%') limit 10;
@@ -436,3 +452,7 @@ class Path(object):
     #WITH stopinfo as (SELECT stop.id, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence,stop.stop_id, stop.point, trip.trip_id FROM stop_time INNER JOIN stop ON stop.id = stop_time.stop_id INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') ) SELECT stopinfo.stop_id, ST_X(stopinfo.point), ST_Y(stopinfo.point), stopinfo.trip_id, ST_Distance(stopinfo.point, ST_SetSRID(ST_MakePoint(-8.484096528118245, 51.90451305689584 ), 4326)) AS dist FROM stopinfo WHERE ST_Intersects(stopinfo.point, ST_Buffer(ST_SetSRID(ST_MakePoint(-8.484096528118245, 51.90451305689584 ), 4326), 0.5)) limit 1;
 
     # WITH start AS (SELECT stop.id, stop.stop_id, stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(-8.502101898629919, 51.88897681594591), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(-8.502101898629919, 51.88897681594591), 4326), 1)) ORDER BY dist) SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, trip.trip_id, trip.shape_id , stop.stop_id ,ST_X(stop.point), ST_Y(stop.point) FROM stop_time INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') INNER JOIN stop ON stop.id = stop_time.id INNER JOIN start ON start.id = stop_time.id limit 50;
+    # SELECT trip_id, ST_AsTEXT(trip.geometry) FROM trip WHERE ST_Intersects(trip.geometry, ST_Buffer(ST_SetSRID(ST_MakePoint(-8.48907297416191, 51.8935714442932), 4326), 100/149838.673031));
+    # SELECT trip_id, ST_AsTEXT(trip.geometry) FROM trip WHERE ST_Intersects(trip.geometry, ST_Buffer(ST_SetSRID(ST_MakePoint(-8.5017517466627, 51.8892032418095), 4326), 100/149838.673031));
+    # WITH start AS (SELECT stop.id, stop.stop_id, stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(-8.50166608632273, 51.8893384454823), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(-8.50166608632273, 51.8893384454823), 4326), 149838.673031)) ORDER BY dist) SELECT stop.*, stop_time.*, trip.trip_id FROM stop INNER JOIN stop_time ON stop_time.stop_id = stop.id INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') INNER JOIN start ON start.stop_id = stop.stop_id ORDER BY stop_time.id limit 10;
+    # SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), )) ORDER BY dist;

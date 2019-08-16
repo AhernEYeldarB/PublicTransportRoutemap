@@ -79,7 +79,7 @@ class DrawRoute {
 
 
         coords[0] = coords[0].split(/[ ]+/).map(Number).reverse();
-        if (coords.length > 1 && (coords[1][0] != ' ') ) {
+        if (coords.length > 1 && (coords[1][0] != ' ')) {
             x = 0
         }
         // Remove trailing whitespace
@@ -105,7 +105,6 @@ class DrawRoute {
         else if (fix === 'geojson') {
             coords = this.fixCoordsGEOJSON(coords);
         }
-
 
         var line = L.polyline(coords, {
             color: color,

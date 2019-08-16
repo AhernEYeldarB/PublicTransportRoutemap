@@ -219,6 +219,7 @@ Test to include a Leaflet.js map into a django project
         getPath();
     });
 
+
     // Event Handler to find shortest path
     function getPath() {
         // var vertexA = 534442374;
@@ -232,6 +233,7 @@ Test to include a Leaflet.js map into a django project
             // handle a successful response
             success: function (json) {
                 var response = json;
+                // console.log(response);
                 showShortestPath(response)
             },
 
@@ -241,24 +243,40 @@ Test to include a Leaflet.js map into a django project
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         });
+        // $.ajax({
+        //     url: 'https://data.smartdublin.ie/cgi-bin/rtpi/busstopinformation?stopid',
+        //     type: 'GET',
+
+        //     success: function(json) {
+        //         console.log('Success');
+        //         var response = json;
+        //         console.log(response);
+        //     }
+        // });
     }
 
     function showShortestPath(response) {
         let route = new DrawRoute(baseMap);
-
         // Bind route details to popup
         let path = route.makeLine(response.geom, false, 0.7, route.getColour()).bindPopup(mode + '->' + '\nDistance: ' + response.distance + ' km' + '\nDuration: ' + response.duration + 'mins')
-
         // as WKT
         editableLayers.addLayer(path);
         for (let i = 0; i < (response.astops).length; i++) {
-            let marker = L.circle([response.astops[i][1], response.astops[i][2]], {riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3]*149838.673031 + ' m');
+            let marker = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3] * 149838.673031 + ' m');
             editableLayers.addLayer(marker);
         }
         for (let i = 0; i < (response.bstops).length; i++) {
-            let marker = L.circle([response.bstops[i][1], response.bstops[i][2]], {riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3]*149838.673031 + ' m');
+            let marker = L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3] * 149838.673031 + ' m');
             editableLayers.addLayer(marker);
         }
+        // console.log(trip);
+        for (let x = 0; x < (response.trips).length; x++) {
+            id = response.trips[x].properties.route_id
+            geom = response.trips[x].geometry
+            let line = route.makeLine(geom.coordinates, null , 0.7, route.getColour()).bindPopup(id);
+            editableLayers.addLayer(line);
+        }
+
         //AS GEOJSON
         // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
     };
