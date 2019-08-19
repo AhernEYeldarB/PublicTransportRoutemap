@@ -351,23 +351,6 @@ class Path(object):
                     'cycle': 5.55556,
                     'car': 13.8889,
                 }
-                # def haversine(x, y):
-                #     lon1,lat1=y
-                #     lon2,lat2=x
-
-                #     R=6371000                               # radius of Earth in meters
-                #     phi_1=math.radians(lat1)
-                #     phi_2=math.radians(lat2)
-
-                #     delta_phi=math.radians(lat2-lat1)
-                #     delta_lambda=math.radians(lon2-lon1)
-
-                #     a=math.sin(delta_phi/2.0)**2+\
-                #        math.cos(phi_1)*math.cos(phi_2)*\
-                #        math.sin(delta_lambda/2.0)**2
-                #     c=2*math.atan2(math.sqrt(a),math.sqrt(1-a))
-
-                #     return R*c # distance in metres
 
                 geom = list(map(router.nodeLatLon,
                                 route))  # Get actual route coordinates
@@ -394,8 +377,10 @@ class Path(object):
             query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
                 alon, alat, alon, alat, 1000 / 149838.673031)
             cursor = connection.cursor()
+
             cursor.execute(query)
             astops = cursor.fetchall()
+            
             query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
                 blon, blat, blon, blat, 1000 / 149838.673031)
             cursor.execute(query)
@@ -418,12 +403,28 @@ class Path(object):
             #     i['geometry'] = (i['geometry'].wkt)
             # response_data['trips'] = a
 
-            with open('google_transit_buseireann/route_shapes1.geojson') as file:
+            with open('route_shapes1.geojson') as file:
                 # f = file.read()
                 # allLines = gj.loads(f)['features']
                 allLines = json.load(file)['features']
+                routes = []
+                for line in allLines:
+                    # print(line['geometry'])
+                    # route = line['geometry']['type'] + str(line['geometry']['coordinates']).replace('[','(').replace(']',')')
+                    route = str(line['geometry']).replace('\'', '\"')
+                    routeid = line['properties']['route_id']
+                    
+                    # print(routeid, '\n' ,route)
+                    query = 'SELECT route.short_name FROM route where route_id= \'%s\' AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006);'%(routeid, route, alat, alon, route ,blat, blon)
+                    cursor.execute(query)
+                    routeShortName = cursor.fetchall()
+                    routeShortName
+                    if routeShortName:
+                        line['properties']['route_short_name'] = routeShortName[0][0]
+                        routes.append(line)
+                    
 
-            response_data['trips'] = allLines
+            response_data['trips'] = routes
 
 
             return HttpResponse(dumps(response_data),

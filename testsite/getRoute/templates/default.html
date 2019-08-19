@@ -233,7 +233,7 @@ Test to include a Leaflet.js map into a django project
             // handle a successful response
             success: function (json) {
                 var response = json;
-                // console.log(response);
+                console.log(response);
                 showShortestPath(response)
             },
 
@@ -258,23 +258,66 @@ Test to include a Leaflet.js map into a django project
     function showShortestPath(response) {
         let route = new DrawRoute(baseMap);
         // Bind route details to popup
-        let path = route.makeLine(response.geom, false, 0.7, route.getColour()).bindPopup(mode + '->' + '\nDistance: ' + response.distance + ' km' + '\nDuration: ' + response.duration + 'mins')
+        let path = route.makeLine(response.geom, false, 1.0, route.getColour()).bindPopup(mode + '->' + '\nDistance: ' + response.distance + ' km' + '\nDuration: ' + response.duration + 'mins')
         // as WKT
         editableLayers.addLayer(path);
         for (let i = 0; i < (response.astops).length; i++) {
-            let marker = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3] * 149838.673031 + ' m');
-            editableLayers.addLayer(marker);
+            let stop = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3] * 149838.673031 + ' m');
+            editableLayers.addLayer(stop);
+            stop.on('click', function (e) {
+                $.ajax({
+                    url: 'http://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=' + response.astops[i][4],
+                    type: 'GET',
+
+                    success: function (response) {
+                        console.log(response);
+
+                    },
+                    error: function () {
+                        console.log(error);
+                    }
+
+                })
+            });
         }
         for (let i = 0; i < (response.bstops).length; i++) {
-            let marker = L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3] * 149838.673031 + ' m');
-            editableLayers.addLayer(marker);
+            let stop = L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3] * 149838.673031 + ' m');
+            editableLayers.addLayer(stop);
         }
         // console.log(trip);
         for (let x = 0; x < (response.trips).length; x++) {
             id = response.trips[x].properties.route_id
+            shortName = response.trips[x].properties.route_short_name
+            console.log(shortName)
             geom = response.trips[x].geometry
-            let line = route.makeLine(geom.coordinates, null , 0.7, route.getColour()).bindPopup(id);
+            let line = route.makeLine(geom.coordinates, null, 0.7, route.getColour()).bindPopup(shortName);
             editableLayers.addLayer(line);
+
+            line.on('click', function (e) {
+                $.ajax({
+                    url: 'https://data.smartdublin.ie/cgi-bin/rtpi/routeinformation?routeid=' + e.target.getPopup().getContent() + '&operator=' + 'BE',
+                    // url: 'https://data.smartdublin.ie/cgi-bin/rtpi/operatorinformation?format=json' + id + '&operator=' + '01',
+                    type: 'GET',
+
+                    success: function (response) {
+                        console.log(response);
+                        for (let i = 0; i < response.results.length; i++) {
+                            for (let x = 0; x < response.results[i].stops.length; x++) {
+                                let lat = response.results[i].stops[x].latitude
+                                let lon = response.results[i].stops[x].longitude
+                                let stop = L.circleMarker([lat, lon], { riseOnHover: true, radius: 10, color: 'white' }).bindPopup(response.results[i].stops[x].shortname)
+                                editableLayers.addLayer(stop);
+                                console.log(stop);
+                            }
+                        }
+
+                    },
+                    error: function () {
+                        console.log(error);
+                    }
+
+                })
+            });
         }
 
         //AS GEOJSON
