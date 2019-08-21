@@ -129,5 +129,8 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^getLoc', ContainedPoints.test, name='getlocation'),
-    url(r'^getShortest', Path.path, name='getshortest'),
+    url(r'^getShortestPath', Path.shortestPath, name='getshortest'),
+    url(r'^getNearRoutes', Path.nearBusRoutes, name='getNearBusRoutes'),
+    url(r'^getNearStops', Path.nearBusStops, name='getNearBusStops'),
+    url(r'^getShortestBus', Path.shortestBusPath, name='getShortestBus'),
 ]

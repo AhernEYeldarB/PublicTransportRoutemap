@@ -18,10 +18,12 @@ from json import dumps, loads
 #calculation tools
 from functools import reduce
 from os import getcwd
-from pyroutelib3 import Router, Datastore
+from pyroutelib3 import Router
+
 import math
 import geojson as gj
 import json
+import graph as g
 
 # Create your views here.
 from django.views.generic import ListView
@@ -324,7 +326,7 @@ class ContainedPoints(object):
 
 
 class Path(object):
-    def path(request):
+    def shortestPath(request):
         if request.method == 'POST':
             response_data = {}
 
@@ -338,9 +340,12 @@ class Path(object):
             router = Router(mode)
 
             # Find start and end nodes
-            start = router.findNode(float(alat), float(alon))
-            end = router.findNode(float(blat), float(blon))
-
+            try:
+                start = router.findNode(float(alat), float(alon))
+                end = router.findNode(float(blat), float(blon))
+            except ValueError:
+                return render(request, 'default.html', {'form': form})
+                
             # Find the route - a list of OSM nodes and return status
             status, route = router.doRoute(start, end)
 
@@ -371,20 +376,8 @@ class Path(object):
             #     pass
 
             else:
+                # some error
                 geom = []
-
-            # Get the 5 nearest stops within 1 km
-            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                alon, alat, alon, alat, 1000 / 149838.673031)
-            cursor = connection.cursor()
-
-            cursor.execute(query)
-            astops = cursor.fetchall()
-            
-            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                blon, blat, blon, blat, 1000 / 149838.673031)
-            cursor.execute(query)
-            bstops = cursor.fetchall()
 
             # Work with graph data to get shortest path
             response_data['shape'] = 'Shortest Route'
@@ -394,37 +387,6 @@ class Path(object):
             response_data['destination'] = (blat, blon)
             response_data['duration'] = avgtime
             response_data['distance'] = dist
-            response_data['astops'] = astops
-            response_data['bstops'] = bstops
-            
-            # a = [model_to_dict(Trip.objects.get(trip_id=i[0])) for i in trips]
-            # for i in a:
-            #     # print(vars(i['geometry']))
-            #     i['geometry'] = (i['geometry'].wkt)
-            # response_data['trips'] = a
-
-            with open('route_shapes1.geojson') as file:
-                # f = file.read()
-                # allLines = gj.loads(f)['features']
-                allLines = json.load(file)['features']
-                routes = []
-                for line in allLines:
-                    # print(line['geometry'])
-                    # route = line['geometry']['type'] + str(line['geometry']['coordinates']).replace('[','(').replace(']',')')
-                    route = str(line['geometry']).replace('\'', '\"')
-                    routeid = line['properties']['route_id']
-                    
-                    # print(routeid, '\n' ,route)
-                    query = 'SELECT route.short_name FROM route where route_id= \'%s\' AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006);'%(routeid, route, alat, alon, route ,blat, blon)
-                    cursor.execute(query)
-                    routeShortName = cursor.fetchall()
-                    routeShortName
-                    if routeShortName:
-                        line['properties']['route_short_name'] = routeShortName[0][0]
-                        routes.append(line)
-                    
-
-            response_data['trips'] = routes
 
 
             return HttpResponse(dumps(response_data),
@@ -436,7 +398,112 @@ class Path(object):
                                 content_type="application/json")
 
         return render(request, 'default.html', {'form': form})
+
+    def shortestBusPath(request):
+        if request.method == 'POST':
             
+            alat = request.POST.get('alat')  # end/destination
+            alon = request.POST.get('alon')  # end/destination
+            blat = request.POST.get('blat')  # start/source
+            blon = request.POST.get('blon')  # start/source
+
+            graph = g.DijkstraShortestPath.PathFinder()
+
+            graph.buildFromDB(connection)
+
+            
+            A = [alat, alon]
+            B = [blat, blon]
+
+            # TO FIND APROPRIATE VERTICES
+
+
+            graph(A, B)
+
+            path = graph(2186, 1836)
+            
+            print(type(path))
+            print('latitude, longitude, id, weight')
+            for line in path:
+                print(line[1], ',', line[0], ',', line[2], ',', line[3])
+
+        
+
+    def nearBusRoutes(request):
+        if request.method == 'POST':
+            response_data = {}
+
+            alat = request.POST.get('alat')  # end/destination
+            alon = request.POST.get('alon')  # end/destination
+            blat = request.POST.get('blat')  # start/source
+            blon = request.POST.get('blon')  # start/source
+
+            # Should have try except catch
+            # Should have in database
+            with open('route_shapes1.geojson') as file:
+                allLines = json.load(file)['features']
+                routes = []
+                cursor = connection.cursor()
+                for line in allLines:
+                    route = str(line['geometry']).replace('\'', '\"')
+                    routeid = line['properties']['route_id']
+
+                    query = 'SELECT route.short_name FROM route where route_id= \'%s\' AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006);' % (
+                        routeid, route, alat, alon, route, blat, blon)
+                    cursor.execute(query)
+                    routeShortName = cursor.fetchall()
+                    routeShortName
+                    if routeShortName:
+                        line['properties'][
+                            'route_short_name'] = routeShortName[0][0]
+                        routes.append(line)
+
+            response_data['trips'] = routes
+            return HttpResponse(dumps(response_data),
+                                content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {'form': form})
+
+    def nearBusStops(request):
+        if request.method == 'POST':
+            response_data = {}
+
+            alat = request.POST.get('alat')  # end/destination
+            alon = request.POST.get('alon')  # end/destination
+            blat = request.POST.get('blat')  # start/source
+            blon = request.POST.get('blon')  # start/source
+
+            # Get the 5 nearest stops within 1 km
+            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id, id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+                alon, alat, alon, alat, 1000 / 149838.673031)
+            cursor = connection.cursor()
+
+            cursor.execute(query)
+            astops = cursor.fetchall()
+
+            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id, id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+                blon, blat, blon, blat, 1000 / 149838.673031)
+            cursor.execute(query)
+            bstops = cursor.fetchall()
+
+            response_data['astops'] = astops
+            response_data['bstops'] = bstops
+
+            return HttpResponse(dumps(response_data),
+                                content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {'form': form})
+
     # SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, trip.trip_id, trip.shape_id FROM stop_time INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') WHERE ST_INTERSECTS();
 
     # WITH alltrips AS (SELECT trip_id, (ST_AsText(trip.geometry)) FROM trip WHERE ST_Intersects(ST_GeomFromEWKT('SRID=4326;POLYGON((-8.491573327191873 51.899935131979994,-8.507137298147429 51.891601878352944,-8.499584194942146 51.88712858619483,-8.48356246468029 51.88844707836375,-8.47913742225501 51.89216689307324,-8.486919401184425 51.89889944503624,-8.491573327191873 51.899935131979994))'), trip.geometry)) SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, alltrips.alltrips.id, alltrips.shape_id FROM stop_time INNER JOIN alltrips.ON alltrips.alltrips.id::text LIKE CONCAT(stop_time.alltrips.id, '%') limit 10;
