@@ -6,16 +6,15 @@ from multigtfs.models import (Agency, Block, Fare, FareRule, Feed, FeedInfo,
                               Route, Service, ServiceDate, Shape, ShapePoint,
                               Stop, StopTime, Trip, Zone)
 
-from getRoute.views import (ContainedPoints,Path,
-    getDefaultMap, ByFeedListView, FareRuleByFareListView,
-    FareRuleByRouteListView, FrequencyByTripListView,
+from getRoute.views import (
+    ContainedPoints, Path, getDefaultMap, ByFeedListView,
+    FareRuleByFareListView, FareRuleByRouteListView, FrequencyByTripListView,
     ServiceDateByServiceListView, ShapePointByShapeListView,
     StopTimeByStopListView, StopTimeByTripListView, TripByBlockListView,
     TripByRouteListView, TripByServiceListView, TripByShapeListView)
-    
 
 urlpatterns = [
-    url(r'home/', getDefaultMap.index_map, name="default"),
+    url(r'^home', getDefaultMap.index_map, name="default"),
     url(r'feed/$', ListView.as_view(model=Feed), name='feed_list'),
     url(r'feed/(?P<pk>\d+)/$',
         DetailView.as_view(model=Feed),
@@ -29,11 +28,9 @@ urlpatterns = [
     url(r'feed/(?P<feed_id>\d+)/stop/$',
         ByFeedListView.as_view(model=Stop),
         name='stop_list'),
-        
     url(r'feed/(?P<feed_id>\d+)/stop/(?P<pk>\d+)/$',
         DetailView.as_view(model=Stop),
         name='stop_detail'),
-
     url(r'feed/(?P<feed_id>\d+)/stop/(?P<stop_id>\d+)/stoptime/$',
         StopTimeByStopListView.as_view(),
         name='stoptime_by_stop_list'),
@@ -126,11 +123,11 @@ urlpatterns = [
         name='trip_by_block_list'),
 ]
 
-
 urlpatterns += [
     url(r'^getLoc', ContainedPoints.test, name='getlocation'),
     url(r'^getShortestPath', Path.shortestPath, name='getshortest'),
-    url(r'^getNearRoutes', Path.nearBusRoutes, name='getNearBusRoutes'),
-    url(r'^getNearStops', Path.nearBusStops, name='getNearBusStops'),
-    url(r'^getShortestBus', Path.shortestBusPath, name='getShortestBus'),
+    url(r'^getNearRoutes', Path.nearGTFSRoutes, name='getNearGTFSRoutes'),
+    url(r'^getNearStops', Path.nearGTFSStops, name='getNearGTFSStops'),
+    url(r'^getShortestBus', Path.shortestGTFSPath, name='getShortestGTFS'),
+    url(r'^getCoverage', Path.coverage, name='getCoverage'),
 ]

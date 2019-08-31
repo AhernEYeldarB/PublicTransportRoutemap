@@ -211,10 +211,6 @@ class TripByShapeListView(ListView):
         return Trip.objects.filter(shape=self.kwargs['shape_id'])
 
 
-# class AllRoutesInPolygon(ListVIew):
-#     model =
-
-
 class getDefaultMap(object):
     def index_map(request):
         if request.POST:
@@ -322,7 +318,7 @@ class ContainedPoints(object):
                 {"nothing to see": "this isn't happening"}),
                                 content_type="application/json")
 
-        return render(request, 'default.html', {'form': form})
+        return render(request, 'default.html', {})
 
 
 class Path(object):
@@ -344,8 +340,8 @@ class Path(object):
                 start = router.findNode(float(alat), float(alon))
                 end = router.findNode(float(blat), float(blon))
             except ValueError:
-                return render(request, 'default.html', {'form': form})
-                
+                return render(request, 'default.html', {})
+
             # Find the route - a list of OSM nodes and return status
             status, route = router.doRoute(start, end)
 
@@ -388,6 +384,102 @@ class Path(object):
             response_data['duration'] = avgtime
             response_data['distance'] = dist
 
+            return HttpResponse(dumps(response_data),
+                                content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {})
+
+    def shortestGTFSPath(request):
+        if request.method == 'POST':
+
+            alat = request.POST.get('alat')  # end/destination
+            alon = request.POST.get('alon')  # end/destination
+            blat = request.POST.get('blat')  # start/source
+            blon = request.POST.get('blon')  # start/source
+
+            try:
+                alat = float(alat)
+                alon = float(alon)
+                blat = float(blat)
+                blon = float(blon)
+
+            except ValueError:
+                return render(request, 'default.html', {})
+
+            response_data = {}
+
+            cursor = connection.cursor()
+
+            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+                alon, alat, alon, alat, 1000 / 149838.673031)
+            cursor.execute(query)
+            astops = cursor.fetchall()
+
+            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+                blon, blat, blon, blat, 1000 / 149838.673031)
+            cursor.execute(query)
+            bstops = cursor.fetchall()
+
+            # Reads in every stop in ireland and is not necessary
+            graph = g.DijkstraShortestPath.PathFinder()
+            graph.buildFromDB(connection)
+
+            # TO FIND APROPRIATE VERTICES
+            shortest = [1000000, None, None, None]
+            for start in astops:
+                allPaths = graph(start[0])
+                v = graph._graph.getVertexByLabel(start[0])
+                for end in bstops:
+                    w = graph._graph.getVertexByLabel(end[0])
+
+                    weight, prev = allPaths[w]
+                    totaldist = weight + (start[2] +
+                                          end[2]) * 149838.673031 * 2
+
+                    if totaldist < shortest[0]:
+                        shortest[0] = totaldist
+                        shortest[1] = v
+                        shortest[2] = w
+                        shortest[3] = allPaths
+
+            # Finds the route name from all the stops in the path
+            # Does not factor in transfers
+            # WITH path AS(SELECT * FROM stop WHERE id = '2093' OR id = '2232' OR id = '2320' OR id = '2090') SELECT DISTINCT route.short_name FROM stop_time INNER JOIN path ON path.id = stop_time.stop_id INNER JOIN trip ON trip.id = stop_time.trip_id INNER JOIN route ON route.id = trip.route_id;
+
+            # allPaths = graph(int(shortest[1].element()))
+            print(shortest[1], shortest[2])
+            path = graph.shortestPath(shortest[1], shortest[2], shortest[3])
+            routes = []
+
+            # for i in range(len(path)-1, 1, -1):
+            #     print(i)
+            #     nodea = path[i][2]
+            #     nodeb = path[i-1][2]
+            #     for edge in graph._graph.edges():
+            #         # print(edge)
+            #         vertices = edge._vertices
+            #         print(vertices[0].element())
+            #         print(vertices[1].element())
+            #         print(nodea, nodeb)
+            #         if vertices[0].element() == nodea and vertices[1].element() == nodeb:
+            #             if edge._name not in routes:
+            #                 routes.append(edge._name)
+            #     break
+            # for i in range(len(path)-1, 0, -1):
+            #     A = graph._graph.getVertexByLabel(int(path[i][2]))
+            #     B = graph._graph.getVertexByLabel(int(path[i-1][2]))
+            #     route = graph._graph._inedges[B][A]._name
+            #     print(route)
+            #     if route not in routes:
+            #         routes.append(route)
+            # print(routes)
+
+            response_data['path'] = path
 
             return HttpResponse(dumps(response_data),
                                 content_type="application/json")
@@ -397,39 +489,9 @@ class Path(object):
                 {"nothing to see": "this isn't happening"}),
                                 content_type="application/json")
 
-        return render(request, 'default.html', {'form': form})
+        return render(request, 'default.html', {})
 
-    def shortestBusPath(request):
-        if request.method == 'POST':
-            
-            alat = request.POST.get('alat')  # end/destination
-            alon = request.POST.get('alon')  # end/destination
-            blat = request.POST.get('blat')  # start/source
-            blon = request.POST.get('blon')  # start/source
-
-            graph = g.DijkstraShortestPath.PathFinder()
-
-            graph.buildFromDB(connection)
-
-            
-            A = [alat, alon]
-            B = [blat, blon]
-
-            # TO FIND APROPRIATE VERTICES
-
-
-            graph(A, B)
-
-            path = graph(2186, 1836)
-            
-            print(type(path))
-            print('latitude, longitude, id, weight')
-            for line in path:
-                print(line[1], ',', line[0], ',', line[2], ',', line[3])
-
-        
-
-    def nearBusRoutes(request):
+    def nearGTFSRoutes(request):
         if request.method == 'POST':
             response_data = {}
 
@@ -437,6 +499,9 @@ class Path(object):
             alon = request.POST.get('alon')  # end/destination
             blat = request.POST.get('blat')  # start/source
             blon = request.POST.get('blon')  # start/source
+            mode = request.POST.get('mode')
+
+            modes = {'bus': '1', 'tram': '2'}
 
             # Should have try except catch
             # Should have in database
@@ -448,8 +513,9 @@ class Path(object):
                     route = str(line['geometry']).replace('\'', '\"')
                     routeid = line['properties']['route_id']
 
-                    query = 'SELECT route.short_name FROM route where route_id= \'%s\' AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006);' % (
-                        routeid, route, alat, alon, route, blat, blon)
+                    query = 'SELECT route.short_name FROM route where route_id= \'%s\' AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND ST_DWITHIN(ST_SetSRID(ST_GeomFromGeoJSON(\'%s\'), 4326), ST_SetSRID(ST_MakePoint(%s, %s), 4326), 0.006) AND feed_id = \'%s\';' % (
+                        routeid, route, alat, alon, route, blat, blon,
+                        modes[mode])
                     cursor.execute(query)
                     routeShortName = cursor.fetchall()
                     routeShortName
@@ -469,30 +535,175 @@ class Path(object):
 
         return render(request, 'default.html', {'form': form})
 
-    def nearBusStops(request):
+    def nearGTFSStops(request):
         if request.method == 'POST':
+
             response_data = {}
 
             alat = request.POST.get('alat')  # end/destination
             alon = request.POST.get('alon')  # end/destination
             blat = request.POST.get('blat')  # start/source
             blon = request.POST.get('blon')  # start/source
+            mode = request.POST.get('mode')
+            radius = request.POST.get('radius')
 
-            # Get the 5 nearest stops within 1 km
-            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id, id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                alon, alat, alon, alat, 1000 / 149838.673031)
-            cursor = connection.cursor()
+            if not radius:
+                radius = 1
 
-            cursor.execute(query)
-            astops = cursor.fetchall()
+            radius = float(radius) * 1000
+            # Get Feed ID of the mode
+            modes = {
+                'bus': '1',
+                'tram': '2',
+                'dijk': '3',
+            }
+            if modes[mode] == '3':
+                graph = g.DijkstraShortestPath.PathFinder()
+                graph.buildFromDB(connection)
 
-            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop_id, id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                blon, blat, blon, blat, 1000 / 149838.673031)
-            cursor.execute(query)
-            bstops = cursor.fetchall()
+                startLabel = '1bb1'
+                allpaths = graph(startLabel)
 
-            response_data['astops'] = astops
-            response_data['bstops'] = bstops
+                cursor = connection.cursor()
+                query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                    -8.475218, 51.897479, -8.475218, 51.897479,
+                    10000 / 149838.673031, 1)
+                cursor.execute(query)
+
+                allstops = cursor.fetchall()
+                allpoints = {}
+
+                for i in allstops:
+                    try:
+                        allpoints[i[5]] = graph.shortestPath(
+                            '1bb1', i[5], allpaths)
+                        # print(i)
+                    except KeyError:
+                        print('Key Error -> ', i)
+
+                # print(allpoints)
+                nodes = {}
+                output = []
+                with open('togherNodes.txt') as togher:
+                    line = togher.readline()
+                    line = togher.readline().strip().split(',')
+                    pid = line[0]
+                    longitude = line[1]
+                    latitude = line[2]
+                    weight = 0
+                    query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                        longitude, latitude, longitude, latitude,
+                        100 / 149838.673031, 1)
+                    cursor.execute(query)
+                    nearstops = cursor.fetchall()
+                    # print(nearstops)
+                    # print('-------')
+                    for i in nearstops:
+                        stopid = i[5]
+                        distance = i[3]*149838.673031
+                        try:
+                            tempweight = distance + graph.shortestPath(
+                                '1bb1', i[5], allpaths)[0][3]
+                        except KeyError:
+                            tempweight = 0
+
+                    weight += tempweight
+                    nodes[pid] = [latitude, longitude, weight]
+
+                    while line[0]:
+                        line = togher.readline().strip().split(',')
+                        if not line[0]:
+                            break
+                        else:
+                            pid = line[0]
+                            longitude = line[1]
+                            latitude = line[2]
+                            weight = 0
+
+                            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                                longitude, latitude, longitude, latitude,
+                                1000 / 149838.673031, 1)
+                            cursor.execute(query)
+                            nearstops = cursor.fetchall()
+                            # print(nearstops)
+                            # print('-------')
+                            for i in nearstops:
+                                stopid = i[5]
+                                distance = i[3]*149838.673031
+                                # print(distance)
+                                try:
+                                    tempweight = distance + graph.shortestPath(
+                                        '1bb1', i[5], allpaths)[0][3]
+                                except KeyError:
+                                    tempweight = 0
+
+                            weight += tempweight
+                            nodes[pid] = [float(latitude), float(longitude), weight]
+                            output.append(['temp',float(latitude), float(longitude) ,None, None, None,weight])
+                # print(nodes)
+                # print(output)
+                response_data['astops'] = output
+                response_data['bstops'] = []
+
+            elif modes[mode] == '2':
+                with open('stopsLightRail.txt') as file:
+                    line = file.readline()
+                    astops = []
+                    bstops = []
+
+                    line = file.readline().split(',')
+                    number = 1
+                    line[-1] = line[-1].strip()
+                    # line.append(number)
+                    temp = [
+                        line[1],
+                        float(line[2]),
+                        float(line[3]), 0, line[0], number, 1728
+                    ]  # 288
+                    astops.append(temp)
+                    while line[0]:
+                        line = file.readline().split(',')
+                        if not line[0]:
+                            break
+                        number += 1
+                        line[-1] = line[-1].strip()
+                        temp = [
+                            line[1],
+                            float(line[2]),
+                            float(line[3]), 0, line[0], number, 1728
+                        ]
+                        astops.append(temp)
+                        bstops.append(temp)
+
+                    # print(astops)
+                    # print('--------------')
+                    response_data['astops'] = astops
+                    response_data['bstops'] = bstops
+
+                
+            
+            # Get the n nearest stops within 1 km
+            else:
+                query = 'WITH tripcount AS (SELECT stop.id, COUNT(route.id) as a FROM stop_time INNER JOIN stop on stop_time.stop_id = stop.id INNER JOIN trip ON stop_time.trip_id = trip.id INNER JOIN route ON trip.route_id = route.id GROUP BY stop.id) SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id, tripcount.a FROM stop INNER JOIN tripcount ON tripcount.id = stop.id WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                    alon, alat, alon, alat,
+                    (radius) / 149838.673031, modes[mode])
+                cursor = connection.cursor()
+
+                cursor.execute(query)
+                astops = cursor.fetchall()
+                # print(astops)
+
+                query = 'WITH tripcount AS (SELECT stop.id, COUNT(route.id) as a FROM stop_time INNER JOIN stop on stop_time.stop_id = stop.id INNER JOIN trip ON stop_time.trip_id = trip.id INNER JOIN route ON trip.route_id = route.id GROUP BY stop.id) SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id, tripcount.a FROM stop INNER JOIN tripcount ON tripcount.id = stop.id WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                    blon, blat, blon, blat,
+                    (radius) / 149838.673031, modes[mode])
+                cursor.execute(query)
+                bstops = cursor.fetchall()
+
+                response_data['astops'] = astops
+                # for i in astops:
+                    # print(i[5])
+                response_data['bstops'] = bstops
+
 
             return HttpResponse(dumps(response_data),
                                 content_type="application/json")
@@ -502,7 +713,121 @@ class Path(object):
                 {"nothing to see": "this isn't happening"}),
                                 content_type="application/json")
 
-        return render(request, 'default.html', {'form': form})
+        return render(request, 'default.html', {})
+
+    def coverage(request):
+        if request.method == 'POST':
+
+            response_data = {}
+
+            print('Calculating Coverage')
+            graph = g.DijkstraShortestPath.PathFinder()
+            graph.buildFromDB(connection)
+
+            startLabel = '1bb1'
+            allpaths = graph(startLabel)
+
+            cursor = connection.cursor()
+            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                -8.475218, 51.897479, -8.475218, 51.897479,
+                10000 / 149838.673031, 1)
+            cursor.execute(query)
+
+            allstops = cursor.fetchall()
+            allpoints = {}
+
+            for i in allstops:
+                try:
+                    allpoints[i[5]] = graph.shortestPath(
+                        '1bb1', i[5], allpaths)
+                    # print(i)
+                except KeyError:
+                    print('Key Error -> ', i)
+
+            # print(allpoints)
+            nodes = {}
+            output = []
+            with open('outfile.txt') as togher:
+                maxVal = -10000000
+                minVal = 10000000
+                line = togher.readline()
+                line = togher.readline().strip().split(',')
+                pid = line[0]
+                longitude = line[1]
+                latitude = line[2]
+                weight = 0
+                query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                    longitude, latitude, longitude, latitude,
+                    1000 / 149838.673031, 1)
+                cursor.execute(query)
+                nearstops = cursor.fetchall()
+                # print(nearstops)
+                # print('-------')
+                for i in nearstops:
+                    stopid = i[5]
+                    distance = i[3]*149838.673031
+                    tempweight = 0
+                    try:
+                        tempweight = distance + graph.shortestPath(
+                            '1bb1', i[5], allpaths)[0][3]
+                    except KeyError:
+                        tempweight = 0
+
+                weight += tempweight
+                nodes[pid] = [latitude, longitude, weight]
+
+                while line[0]:
+                    line = togher.readline().strip().split(',')
+                    if not line[0]:
+                        break
+                    else:
+                        pid = line[0]
+                        longitude = line[1]
+                        latitude = line[2]
+                        weight = 0
+
+                        query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+                            longitude, latitude, longitude, latitude,
+                            1000 / 149838.673031, 1)
+                        cursor.execute(query)
+                        nearstops = cursor.fetchall()
+                        # print(nearstops)
+                        # print('-------')
+                        for i in nearstops:
+                            stopid = i[5]
+                            distance = i[3]*149838.673031
+                            # print(distance)
+                            try:
+                                tempweight = distance + graph.shortestPath(
+                                    '1bb1', i[5], allpaths)[0][3]
+                            except KeyError:
+                                tempweight = 0
+
+                        weight += tempweight
+                        if weight > maxVal:
+                            maxVal = weight
+                        elif weight < minVal and weight > 0:
+                            minVal = weight
+                        nodes[pid] = [float(latitude), float(longitude), weight]
+                        output.append(['temp',float(latitude), float(longitude) ,None, None, None,float(weight)])
+
+            # print(nodes)
+            print(output)
+            print(minVal, maxVal)
+            response_data['astops'] = output
+            response_data['bstops'] = []
+
+
+            return HttpResponse(dumps(response_data),
+                        content_type="application/json")
+
+        else:
+            return HttpResponse(dumps(
+                {"nothing to see": "this isn't happening"}),
+                                content_type="application/json")
+
+        return render(request, 'default.html', {})
+
 
     # SELECT stop_time.id, stop_time.shape_dist_traveled, stop_time.arrival_time, stop_time.departure_time, stop_time.stop_sequence, stop_time.stop_id, trip.trip_id, trip.shape_id FROM stop_time INNER JOIN trip ON trip.trip_id::text LIKE CONCAT(stop_time.trip_id, '%') WHERE ST_INTERSECTS();
 

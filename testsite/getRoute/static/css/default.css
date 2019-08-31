@@ -17,9 +17,38 @@ h1, h2{
     font-weight: 300;
     margin-bottom: 15px;
 }
+.containerflex {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: stretch;
+    margin: auto;
+    width: 100%;
+}
 
+.controls {
+    flex: 1 1 auto;
+    order: 2;
+    padding: 1em;
+    border: black;
+    width: auto;
+}
+.forms{
+    order: 3;
+}
+.forms > form{
+    padding: 0.5em;
+}
+
+.mapcontainer {
+    order: 1;
+    padding: 10px;
+    height: 100%;
+    width: 100%;    
+    margin: auto; 
+}
 #map {
-    height: 50em;
+    height: 40em;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
