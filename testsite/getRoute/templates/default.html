@@ -1,81 +1,118 @@
 {% extends "multigtfs/base.html" %}
 {% load staticfiles %}
 {% block head_extra %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-    crossorigin="">
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-    crossorigin="">
-    </script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" crossorigin="">
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/@hpcc-js/common/font-awesome/css/font-awesome.css">
+<script src="{% static 'node_modules/@hpcc-js/util/dist/index.min.js' %}"></script>
+<script src="{% static 'node_modules/@hpcc-js/common/dist/index.min.js' %}"></script>
+<script src="{% static 'node_modules/@hpcc-js/api/dist/index.min.js' %}"></script>
+<script src="{% static 'node_modules/@hpcc-js/map/dist/index.js' %}"></script>
+
+<!-- <script src="https://unpkg.com/@hpcc-js/map-deck"></script> -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="{% static 'javascript/leaflet-heat.js' %}"></script>
 
 <script src="{% static 'javascript/validatecsrf.js' %}"></script>
 <script src="{% static 'javascript/getRoute.js' %}"></script>
+
+
 {% endblock %}
 
-{% block page_title%}Default Map{%endblock%}
+{% block page_title%}{%endblock%}
 
 {% block nav_home_active_class %} class="active"{% endblock %}
 
 {% block page_top_content_elem %}
-Test to include a Leaflet.js map into a django project
 {% endblock %}
 
 {% block page_middle_content %}
-<section class="text-center">
-    <div id="map">
-    </div>
-</section>
+<div class="containerflex">
+    <main class="mapcontainer">
+        <div id="map">
+        </div>
 
-<section class="text-center">
-    <!-- <a href="{% url 'feed_list' %}" class="btn btn-primary" role="button">Feed List</a>
+        <div id="placeholder" style="height: 400px; margin-right: 0;" onresize="doResize()">
+        </div>
+    </main>
+
+    <div id="results" class="controls">
+        <article id="shortestPath">
+        </article>
+        <article id="stopLiveData">
+        </article>
+    </div>
+
+
+    <section class="forms">
+        <!-- <a href="{% url 'feed_list' %}" class="btn btn-primary" role="button">Feed List</a>
     <a href="{% url 'admin:index' %}" class="btn btn-primary" role="button">Admin</a> -->
 
-    <form action="{% url 'getlocation' %}" method="POST" id="post-form">
-        {% csrf_token %}
-        <!-- <div class="fieldWrapper" id="the_post">
+        <form action="{% url 'getlocation' %}" method="POST" id="post-form">
+            {% csrf_token %}
+            <!-- <div class="fieldWrapper" id="the_post">
             {{ form.text }}
         </div> -->
-        <select name="toFind">
-            <option value="stop">stops</option>
-            <option value="shape">shapes</option>
-            <option value="trip">trips</option>
-            <option value="route">routes</option>
-        </select>
-        <input type="submit" value="Display" class="tiny button">
-    </form>
-    <div id="results"></div> <!-- Shape data printed here-->
+            <input type="submit" value="Display" class="tiny button">
+            <select name="toFind">
+                <option value="stop">stops</option>
+                <option value="shape">shapes</option>
+                <option value="trip">trips</option>
+                <option value="route">routes</option>
+            </select>
+        </form>
+        <!-- <div id="results"></div> Shape data printed here -->
 
-    <form action="{% url 'getshortest' %}" method="POST" id="path-form">
-        {% csrf_token %}
-        From<input id='alat' type="text" placeholder="latitude">
-        <input id='alon' type="text" placeholder="longitude"><br />
-        To <input id='blat' type="text" placeholder="latitude">
-        <input id='blon' type="text" placeholder="longitude">
-        <select id="mode" name="mode">
-            <option value="foot">foot</option>
-            <option value="car">car</option>
-            <option value="cycle">cycle</option>
-        </select>
-        <input type="submit" value="Get Path" class="tiny button">
-    </form>
-    <form id="nearBusStops">
-        <input type="submit" value="Show Near Stops" class="tiny button">
-    </form>
-    <form id="nearBusRoutes">
-        <input type="submit" value="Show Near Routes" class="tiny button">
-    </form>
-    <form id="shortestBusRoute">
-        <input type="submit" value="Shortest Bus Route" class="tiny button">
-    </form>
-</section>
+        <form action="{% url 'getshortest' %}" method="POST" id="path-form">
+            {% csrf_token %}
+            From<input id='alat' type="text" placeholder="latitude">
+            <input id='alon' type="text" placeholder="longitude"><br />
+            To <input id='blat' type="text" placeholder="latitude">
+            <input id='blon' type="text" placeholder="longitude">
+            <select id="mode" name="mode">
+                <option value="foot">foot</option>
+                <option value="car">car</option>
+                <option value="cycle">cycle</option>
+            </select>
+            <input type="submit" value="Get Path" class="tiny button">
+        </form>
+
+        <form id="nearStops">
+            <input type="submit" value="Show Near Stops" class="tiny button">
+            <input id='radius' type="number" placeholder="Radius">
+            <select id="stopsMode" name="mode">
+                <option value="bus">Bus</option>
+                <!-- <option value="CokeBike">Coke Bike WIP</option> -->
+                <option value="tram">tram</option>
+                <!-- <option value="dijk">Dijk</option> -->
+            </select>
+        </form>
+        <form id="showCoverage">
+            <input type="submit" value="Show Coverage" class="tiny button">
+        </form>
+
+        <form id="nearRoutes">
+            <input type="submit" value="Show Near Routes" class="tiny button">
+            <select id="routesMode" name="mode">
+                <option value="bus">Bus</option>
+                <!-- <option value="CokeBike">Coke Bike WIP</option> -->
+                <option value="tram">tram</option>
+            </select>
+        </form>
+
+        <form id="shortestBusRoute">
+            <input type="submit" value="Shortest Bus Route" class="tiny button">
+        </form>
+
+    </section>
+</div>
 {% endblock %}
 
 {% block body_script %}
-
 <script>
     // Initialise Leaflet Map
     var startCoords = [51.8983, -8.4726] // Cork City Centre
@@ -94,6 +131,11 @@ Test to include a Leaflet.js map into a django project
     var alon;
     var blat;
     var blon;
+    var hpccMap;
+    var dedup = {};
+    var allStops = [];
+    var allStops1 = [];
+
     // Load map after page
     window.addEventListener('DOMContentLoaded', getLocation(), false);
 
@@ -117,16 +159,16 @@ Test to include a Leaflet.js map into a django project
         baseMap = L.map('map').setView([startCoords[0], startCoords[1]], 14);
 
         // Initialise Tiles
-        // var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     maxZoom: 19,
-        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        // });
-
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-            // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
+
+        // var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+        //     // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     maxZoom: 19,
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // });
 
         OpenStreetMap_Mapnik.addTo(baseMap)
 
@@ -134,6 +176,74 @@ Test to include a Leaflet.js map into a django project
         // Initialise the FeatureGroup to store editable layers
         editableLayers = new L.FeatureGroup();
         pathlayer = new L.FeatureGroup();
+
+        hpccClusterPins = new window["@hpcc-js/map"].Leaflet.ClusterPins()
+            .columns(["latitude", "longtitude"])
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longtitude")
+            .tooltipColumn("tooltip")
+            ;
+
+        hpccHeat = new window["@hpcc-js/map"].Leaflet.HeatLayer()
+            .columns(["latitude", "longtitude", "intensity"])
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longtitude")
+            .weightColumn('intensity')
+            .radius(40)
+            // .gradient({0.3: 'x',...}')
+            ;
+
+        hpccCircleStart = new window["@hpcc-js/map"].Leaflet.Circles()
+            .columns(['latitude', 'longitude'])
+            .radius(15)
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longitude")
+            .fillColor("darkgreen")
+            .strokeColor("darkgreen")
+            ;
+
+        hpccCircleFinish = new window["@hpcc-js/map"].Leaflet.Circles()
+            .columns(['latitude', 'longitude'])
+            .radius(15)
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longitude")
+            .fillColor("darkred")
+            .strokeColor("darkred")
+            ;
+
+        hpccDraw = new window["@hpcc-js/map"].Leaflet.DrawLayer()
+            .enableCircle(false)
+            .enableRectangle(false)
+            .on('changed', function (what, items) {
+                var userShapes = hpccDraw.save()
+
+                if (userShapes.polylines.length >= 2) {
+                    userShapes.polylines = [userShapes.polylines[userShapes.polylines.length - 1]]
+                }
+                let temp = userShapes.polylines[0].pop()
+                userShapes.polylines[0].splice(1)
+                userShapes.polylines[0].push(temp)
+                // userShapes.polylines[0] = [userShapes.polylines[0][userShapes.polylines[1] ] ]
+                hpccDraw.restore(userShapes)
+
+                hpccDraw.lazyRender()
+            })
+            ;
+
+
+        hpccMap = new window["@hpcc-js/map"].Leaflet.Leaflet()
+            .target("placeholder")
+            .mapType("MapBox")
+            .defaultLat(startCoords[0])
+            .defaultLong(startCoords[1])
+            .defaultZoom(10)
+            .layers([
+                hpccHeat,
+                hpccClusterPins,
+                hpccDraw
+            ])
+            .render()
+            ;
 
         baseMap.addLayer(editableLayers);
         baseMap.addLayer(pathlayer);
@@ -211,7 +321,8 @@ Test to include a Leaflet.js map into a django project
                 blat = coords[1].lat
                 blon = coords[1].lng
 
-                start = L.marker([alat, alon], { title: 'start' })
+                // start = L.marker([alat, alon], { title: 'start' })
+                start = L.circle([alat, alon], { title: 'start', radius: 15, color: 'green' })
                 end = L.circle([blat, blon], { title: 'end', radius: 15, color: 'red' })
 
                 pathlayer.addLayer(start)
@@ -243,19 +354,6 @@ Test to include a Leaflet.js map into a django project
     // Submit event caller
     $('#path-form').on('submit', function (event) {
         event.preventDefault();
-        console.log(event);
-        alat = document.getElementById("alat").value;
-        alon = document.getElementById("alon").value;
-        blat = document.getElementById("blat").value;
-        blon = document.getElementById("blon").value;
-        mode = $('#path-form').serializeArray()[1].value;
-
-        console.log(alat, alon, blat, blon, mode);
-        getPath();
-    });
-
-    $('#nearBusStops').on('submit', function (event) {
-        event.preventDefault();
 
         alat = document.getElementById("alat").value;
         alon = document.getElementById("alon").value;
@@ -263,20 +361,36 @@ Test to include a Leaflet.js map into a django project
         blon = document.getElementById("blon").value;
         mode = $('#path-form').serializeArray()[1].value;
 
-        console.log(alat, alon, blat, blon, mode);
-        getNearStops();
+        // console.log(alat, alon, blat, blon, mode);
+        getPath(alat, alon, blat, blon, mode);
     });
 
-    $('#nearBusRoutes').on('submit', function (event) {
+    $('#nearStops').on('submit', function (event) {
         event.preventDefault();
 
         alat = document.getElementById("alat").value;
         alon = document.getElementById("alon").value;
         blat = document.getElementById("blat").value;
         blon = document.getElementById("blon").value;
+        radius = document.getElementById("radius").value;
+        var stopmode = $('#nearStops').serializeArray()[0].value;
 
-        console.log(alat, alon, blat, blon, mode);
-        getNearRoutes();
+        // console.log(alat, alon, blat, blon, mode);
+        getNearStops(alat, alon, blat, blon, stopmode, radius);
+    });
+
+
+    $('#nearRoutes').on('submit', function (event) {
+        event.preventDefault();
+
+        alat = document.getElementById("alat").value;
+        alon = document.getElementById("alon").value;
+        blat = document.getElementById("blat").value;
+        blon = document.getElementById("blon").value;
+        var routemode = $('#nearRoutes').serializeArray()[0].value;
+
+        // console.log(alat, alon, blat, blon, mode);
+        getNearRoutes(alat, alon, blat, blon, routemode);
     });
 
     $('#shortestBusRoute').on('submit', function (event) {
@@ -287,67 +401,90 @@ Test to include a Leaflet.js map into a django project
         blat = document.getElementById("blat").value;
         blon = document.getElementById("blon").value;
 
-        console.log(alat, alon, blat, blon, mode);
-        let stops = getNearStops();
-        getShortestPath(stops);
+        // console.log(alat, alon, blat, blon, mode);
+        getShortestPath(alat, alon, blat, blon);
     });
 
-    function getShortestPath(stops){
+    $('#showCoverage').on('submit', function (event) {
+        event.preventDefault();
+
+        getCoverage();
+    });
+
+    function getShortestPath(alat, alon, blat, blon) {
+        // BUS
         $.ajax({
-            url: "{% url 'getShortestBus' %}", // the endpoint
+            url: "{% url 'getShortestGTFS' %}", // the endpoint
             type: "POST", // http method
-            data: { alat: alat, alon: alon, blat: blat, blon: blon, astops: stops.astops, bstops: stops.bstops }, // data sent with the post request
+            data: { alat: alat, alon: alon, blat: blat, blon: blon }, // data sent with the post request
 
             // handle a successful response
             success: function (json) {
                 var response = json;
-                console.log(response);
-                return response
+                // console.log(response);
+                showShortestGTFSRoute(response)
             },
 
             error: function (xhr, errmsg, err) {
                 // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                 //     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                return null
+            }
+        })
+    }
+    function getCoverage() {
+        $.ajax({
+            url: "{% url 'getCoverage' %}", // the endpoint
+            type: "POST", // http method
+            data: {}, // data sent with the post request
+
+            // handle a successful response
+            success: function (json) {
+                var response = json;
+                // console.log(response);
+                showCoverage(response)
+            },
+
+            error: function (xhr, errmsg, err) {
+                // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                //     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         })
     }
 
-    function getNearStops() {
+    function getNearStops(alat, alon, blat, blon, mode, radius = 100000) {
         $.ajax({
-            url: "{% url 'getNearBusStops' %}", // the endpoint
+            url: "{% url 'getNearGTFSStops' %}", // the endpoint
             type: "POST", // http method
-            data: { alat: alat, alon: alon, blat: blat, blon: blon }, // data sent with the post request
+            data: { alat: alat, alon: alon, blat: blat, blon: blon, mode: mode, radius: radius }, // data sent with the post request
 
             // handle a successful response
             success: function (json) {
                 var response = json;
-                console.log(response);
-                
-                return response
-                // showNearStops(response)
+                // console.log(response);
+                showNearStops(response)
+                // return response.astops.concat(response.bstops);
             },
 
             error: function (xhr, errmsg, err) {
                 // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                 //     " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                return null
             }
         })
     };
 
-    function getNearRoutes() {
+    function getNearRoutes(alat, alon, blat, blon, mode) {
         $.ajax({
-            url: "{% url 'getNearBusRoutes' %}", // the endpoint
+            url: "{% url 'getNearGTFSRoutes' %}", // the endpoint
             type: "POST", // http method
-            data: { alat: alat, alon: alon, blat: blat, blon: blon }, // data sent with the post request
+            data: { alat: alat, alon: alon, blat: blat, blon: blon, mode: mode }, // data sent with the post request
 
             // handle a successful response
             success: function (json) {
                 var response = json;
-                console.log(response);
+                // console.log(response);
                 showNearRoutes(response)
             },
 
@@ -360,10 +497,8 @@ Test to include a Leaflet.js map into a django project
 
     };
 
-    // Event Handler to find shortest path
-    function getPath() {
-        // var vertexA = 534442374;
-        // var vertexB = 534442397;
+    function getPath(alat, alon, blat, blon, mode) {
+        // Event Handler to find shortest path
 
         $.ajax({
             url: "{% url 'getshortest' %}", // the endpoint
@@ -373,7 +508,7 @@ Test to include a Leaflet.js map into a django project
             // handle a successful response
             success: function (json) {
                 var response = json;
-                console.log(response);
+                // console.log(response);
                 showShortestPath(response)
             },
 
@@ -397,38 +532,131 @@ Test to include a Leaflet.js map into a django project
     }
 
     function showNearStops(response) {
+        // Stops near the Start
         for (let i = 0; i < (response.astops).length; i++) {
-            let stop = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.astops[i][0] + '\nDistance: ' + response.astops[i][3] * 149838.673031 + ' m');
+            let id = response.astops[i][4]
+            if (id.length > 5) {
+                id = id.substring(5, id.length - 2) + '1'
+            }
+
+            let stop = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true, color: 'black', opacity: 0.5 }).bindPopup('{ \"Stop\": ' + '\"' + response.astops[i][0] + '\"' + ',' + '\"StopID\": ' + '\"' + id + '\"' + ',' + '\"Distance\": ' + '\"' + response.astops[i][3] * 149838.673031 + ' m' + '\"}');
             editableLayers.addLayer(stop);
-            // stop.on('click', function (e) {
-            //     $.ajax({
-            //         url: 'http://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=' + response.astops[i][4],
-            //         type: 'GET',
 
-            //         success: function (response) {
-            //             console.log(response);
+            stop.on('click', function (e) {
+                $.ajax({
+                    url: 'https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?operator=BE&stopid=' + JSON.parse(stop.getPopup().getContent()).StopID,
+                    type: 'GET',
 
-            //         },
-            //         error: function () {
-            //             console.log(error);
-            //         }
+                    success: function (response) {
+                        console.log(response);
+                        // What to do with live info
+                    },
+                    error: function (xhr, errmsg, err) {
+                        // console.log(xhr.status + ": " + xhr.responseText);
+                        // console.log(xhr.status + ": " + xhr.responseText);
+                    }
 
-            //     })
-            // });
+                })
+            });
+            bindLiveStopData(stop);
+
         }
+
+        // Stops near the Destination
         for (let i = 0; i < (response.bstops).length; i++) {
-            let stop = L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true }).bindPopup('Stop: ' + response.bstops[i][0] + '\nDistance: ' + response.bstops[i][3] * 149838.673031 + ' m');
+            let id = response.bstops[i][4]
+            if (id.length > 5) {
+                id = id.substring(5, id.length - 2) + '1'
+            }
+
+            let stop = L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true, color: 'black', opacity: 0.5 }).bindPopup('{ \"Stop\": ' + '\"' + response.bstops[i][0] + '\"' + ',' + '\"StopID\": ' + '\"' + id + '\"' + ',' + '\"Distance\": ' + '\"' + response.bstops[i][3] * 149838.673031 + ' m' + '\"}');
             editableLayers.addLayer(stop);
+            bindLiveStopData(stop);
         }
+
+
+        // let radius = 30;
+        response.astops.concat(response.bstops).forEach(function (f) {
+            if (!dedup[f[1] + f[2]]) {
+                let inten = ((f[6] - 736.8062310528996) / (161456 - 736.8062310528996));
+                // console.log(inten);
+                if (f[6] === 1728) {
+                    inten = 100
+                    radius = 50
+                };
+                if (inten > 20) {
+                    inten = 0.5
+                }
+                else if (inten < 0) {
+                    inten = 0.5
+                }
+                // allStops.push([f[1], f[2], (((1728 - 1) / (1728 - 1) * (f[6] - 1) + 1) / 2)]);
+                allStops.push([f[1], f[2], inten]);
+                allStops1.push([f[1], f[2], inten]);
+                dedup[f[1] + f[2]] = true;
+            }
+        });
+        // var heatmap = L.heatLayer(allStops1, { radius: radius, opacity: 0.6 })
+
+        // editableLayers.addLayer(heatmap)
+
+        hpccClusterPins.data(allStops);
+
+        // hpccHeat.data(allStops);
+
+        hpccMap.lazyRender();
 
     };
-    function showShortestPath(response) {
 
+    function showCoverage(response) {
+        let radius = 30;
+        let aNodes = [];
+        let bNodes = [];
+        let dedup1 = {};
+
+        response.astops.concat(response.bstops).forEach(function (f) {
+            max = 1
+            console.log(f[6]);
+            if (f[6] > max) {
+                f[6] = max
+            }
+            if (!dedup1[f[1] + f[2]]) {
+                let inten = ((f[6] - 4727) / (9923 - 4727)) * 10;
+                if (f[6] === 1728) {
+                    inten = 100
+                    radius = 50
+                };
+                if (inten > 20) {
+                    inten = 0.0
+                }
+                else if (inten < 0) {
+                    inten = 0.0
+                }
+                // allStops.push([f[1], f[2], (((1728 - 1) / (1728 - 1) * (f[6] - 1) + 1) / 2)]);
+                aNodes.push([f[1], f[2], inten]);
+                bNodes.push([f[1], f[2], inten]);
+                dedup1[f[1] + f[2]] = true;
+            }
+        });
+        console.log(max);
+        var heatmap = L.heatLayer(allStops, { radius: radius, opacity: 0.6 })
+
+        editableLayers.addLayer(heatmap)
+
+        hpccHeat.data(allStops);
+
+        hpccMap.lazyRender();
+
+    };
+
+    function showShortestPath(response) {
         // Bind route details to popup
+
         // as WKT
         let path = route.makeLine(response.geom, false, 1.0, route.getColour()).bindPopup(mode + '->' + '\nDistance: ' + response.distance + ' km' + '\nDuration: ' + response.duration + 'mins')
         pathlayer.addLayer(path);
 
+        showLiveData(path.getPopup().getContent(), 'shortestPath');
         // console.log(trip);
         //AS GEOJSON
         // editableLayers.addLayer(route.makeLine(response.geom[i], 'geojson', 0.7, route.getColour()));
@@ -436,7 +664,6 @@ Test to include a Leaflet.js map into a django project
 
 
     function showNearRoutes(response) {
-
         for (let x = 0; x < (response.trips).length; x++) {
             id = response.trips[x].properties.route_id
             shortName = response.trips[x].properties.route_short_name
@@ -454,8 +681,8 @@ Test to include a Leaflet.js map into a django project
                         for (let i = 0; i < response.results.length; i++) {
                             for (let x = 0; x < response.results[i].stops.length; x++) {
                                 let lat = response.results[i].stops[x].latitude
+                                let stop = L.circleMarker([lat, lon], { riseOnHover: true, radius: 10, color: 'purple' }).bindPopup(response.results[i].stops[x].shortname)
                                 let lon = response.results[i].stops[x].longitude
-                                let stop = L.circleMarker([lat, lon], { riseOnHover: true, radius: 10, color: 'white' }).bindPopup(response.results[i].stops[x].shortname)
                                 editableLayers.addLayer(stop);
                             }
                         }
@@ -471,6 +698,45 @@ Test to include a Leaflet.js map into a django project
 
     }
 
+    function showShortestGTFSRoute(response) {
+        console.log(response.path);
+        for (let i = 0; i < response.path.length; i++) {
+            let stop = L.circleMarker([response.path[i][0], response.path[i][1]], { riseOnHover: true, radius: 10, color: 'white' }).bindPopup(response.path[i][2])
+            editableLayers.addLayer(stop);
+            bindLiveStopData(stop);
+        }
+    }
+
+    function bindLiveStopData(stop) {
+        stop.on('click', function (e) {
+            $.ajax({
+                url: 'https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?operator=BE&stopid=' + JSON.parse(stop.getPopup().getContent()).StopID,
+                type: 'GET',
+
+                success: function (response) {
+                    console.log(response);
+                    if (response.errorcode === '1') {
+                        showLiveData('No Live Data For Stop ' + response.stopid, 'stopLiveData');
+                    }
+                    else if (response.errorcode === '0') {
+                        showLiveData('Live Data Present', 'stopLiveData');
+                    }
+                    // What to do with live info
+                },
+                error: function (xhr, errmsg, err) {
+                    // console.log(xhr.status + ": " + xhr.responseText);
+                    // console.log(xhr.status + ": " + xhr.responseText);
+                }
+
+            })
+        });
+    }
+    function showLiveData(textObject, name) {
+        var text = document.createTextNode(textObject);
+        var element = document.getElementById(name);
+        element.innerHTML = '';
+        element.appendChild(text);
+    }
     // Submit event caller
     $('#post-form').on('submit', function (event) {
         event.preventDefault();
@@ -562,4 +828,91 @@ Test to include a Leaflet.js map into a django project
         }
     }
 </script>
+<script>
+    // var widget = new window["@hpcc-js/map"].GMapPinLine()
+    //     .target("placeholder")
+    //     .columns(["name", "lat1", "long1", "lat2", "long2"])
+    //     .data([
+    //         ["Destination A", 40.777, -73.872, 33.64, -84.426],
+    //         ["Destination B", 40.777, -73.872, 39.997, -82.891],
+    //         ["Destination C", 40.777, -73.872, 32.895, -97.037],
+    //         ["Destination D", 40.777, -73.872, 26.072, -80.152],
+    //         ["Destination E", 40.777, -73.872, 34.895, -82.218]
+    //     ])
+    //     .fromLatitudeColumn("lat1")
+    //     .fromLongtitudeColumn("long1")
+    //     .toLatitudeColumn("lat2")
+    //     .toLongtitudeColumn("long2")
+    //     .autoScale(true)
+    //     .render(w => {
+    //         setTimeout(function () {
+    //             w.render();
+    //         }, 500);
+    //     })
+    //     ;
+    // widget.click = function (pinData) {
+    //     console.log("Clicked pin data:", pinData);
+    // }
+
+
+    // var widget = new window["@hpcc-js/map-deck"].CircleLines()
+    //     .columns(columns())
+    //     .data(data())
+    //     .target("placeholder")
+    //     .latitudeColumn("orgin_lat")
+    //     .longtitudeColumn("orgin_long")
+    //     .latitude2Column("dest_lat")
+    //     .longtitude2Column("dest_long")
+    //     .render()
+    //     ;
+
+    // function columns() {
+    //     return ["orgin_state", "orgin_airport", "orgin_iata", "orgin_lat", "orgin_long", "dest_state", "dest_iata", "dest_airport", "dest_lat", "dest_long", "AVE(distance)"];
+    // }
+    // function data() {
+    //     return [
+    //         ["NY", "LaGuardia", "LGA", "50.77724306", "-73.87260917", "GA", "ATL", "William B Hartsfield-Atlanta Intl", "33.64044444", "-84.42694444", "761"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "OH", "CMH", "Port Columbus Intl", "39.99798528", "-82.89188278", "478"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "TX", "DFW", "Dallas-Fort Worth International", "32.89595056", "-97.0372", "1389"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "FLL", "Fort Lauderdale-Hollywood Int'l", "26.07258333", "-80.15275", "1076"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "SC", "GSP", "Greenville-Spartanburg", "34.89566722", "-82.21885833", "610"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "VA", "IAD", "Washington Dulles International", "38.94453194", "-77.45580972", "229"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "TN", "MEM", "Memphis International", "35.04241667", "-89.97666667", "963"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "VA", "ORF", "Norfolk International", "36.89461111", "-76.20122222", "296"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "PA", "PHL", "Philadelphia Intl", "39.87195278", "-75.24114083", "96"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "KY", "SDF", "Louisville International-Standiford", "38.17438889", "-85.736", "658"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "TN", "BNA", "Nashville International", "36.12447667", "-86.67818222", "764"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "MA", "BOS", "Gen Edw L Logan Intl", "42.3643475", "-71.00517917", "185"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "NY", "BUF", "Buffalo Niagara Intl", "42.94052472", "-78.73216667", "292"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "MD", "BWI", "Baltimore-Washington International", "39.17540167", "-76.66819833", "185"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "VA", "DCA", "Ronald Reagan Washington National", "38.85208333", "-77.03772222", "214"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "MIA", "Miami International", "25.79325", "-80.29055556", "1097"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "IL", "ORD", "Chicago O'Hare International", "41.979595", "-87.90446417", "733"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "PBI", "Palm Beach International", "26.68316194", "-80.09559417", "1035"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "NY", "ROC", "Greater Rochester Int'l", "43.11886611", "-77.67238389", "254"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "RSW", "Southwest Florida International", "26.53616667", "-81.75516667", "1080"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "MO", "STL", "Lambert-St Louis International", "38.74768694", "-90.35998972", "887"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "NC", "CLT", "Charlotte/Douglas International", "35.21401111", "-80.94312583", "544"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "KY", "CVG", "Cincinnati Northern Kentucky Intl", "39.04614278", "-84.6621725", "585"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "CO", "DEN", "Denver Intl", "39.85840806", "-104.6670019", "1619"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "TX", "HOU", "William P Hobby", "29.64541861", "-95.27888889", "1428"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "IN", "IND", "Indianapolis International", "39.71732917", "-86.29438417", "659"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "WV", "LWB", "Greenbrier Valley", "37.85830556", "-80.39947222", "403"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "LA", "MSY", "New Orleans International", "29.99338889", "-90.25802778", "1183"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "OH", "CLE", "Cleveland-Hopkins Intl", "41.41089417", "-81.84939667", "418"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "CO", "EGE", "Eagle County Regional", "39.64256778", "-106.9176953", "1739"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "JAX", "Jacksonville International", "30.49405556", "-81.68786111", "834"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "MCO", "Orlando International", "28.42888889", "-81.31602778", "950"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "PA", "PIT", "Pittsburgh International", "40.49146583", "-80.23287083", "335"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "NC", "RDU", "Raleigh-Durham International", "35.87763889", "-78.78747222", "431"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "VA", "RIC", "Richmond International", "37.50516667", "-77.31966667", "292"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "FL", "TPA", "Tampa International", "27.97547222", "-82.53325", "1011"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "MI", "DTW", "Detroit Metropolitan-Wayne County", "42.21205889", "-83.34883583", "501"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "NC", "GSO", "Piedmont Triad International", "36.09774694", "-79.9372975", "461"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "TX", "IAH", "George Bush Intercontinental", "29.98047222", "-95.33972222", "1416"],
+    //         ["NY", "LaGuardia", "LGA", "40.77724306", "-73.87260917", "MN", "MSP", "Minneapolis-St Paul Intl", "44.88054694", "-93.2169225", "1020"]
+    //     ];
+    // }
+</script>
+
 {% endblock %}
