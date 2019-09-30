@@ -10,6 +10,7 @@
 <script src="{% static 'node_modules/@hpcc-js/common/dist/index.min.js' %}"></script>
 <script src="{% static 'node_modules/@hpcc-js/api/dist/index.min.js' %}"></script>
 <script src="{% static 'node_modules/@hpcc-js/map/dist/index.js' %}"></script>
+<!-- <script src="{% static 'node_modules/@hpcc-js/leaflet-shim/dist/index.js' %}"></script> -->
 
 <!-- <script src="https://unpkg.com/@hpcc-js/map-deck"></script> -->
 
@@ -178,38 +179,85 @@
         pathlayer = new L.FeatureGroup();
 
         hpccClusterPins = new window["@hpcc-js/map"].Leaflet.ClusterPins()
-            .columns(["latitude", "longtitude"])
+            .columns(["latitude", "longitude"])
             .latitudeColumn("latitude")
-            .longtitudeColumn("longtitude")
+            .longtitudeColumn("longitude")
             .tooltipColumn("tooltip")
             ;
 
-        hpccHeat = new window["@hpcc-js/map"].Leaflet.HeatLayer()
-            .columns(["latitude", "longtitude", "intensity"])
+        hpccPins = new window["@hpcc-js/map"].Leaflet.Pins()
+            .columns(["latitude", "longitude", "strokeColor", "fillColor"])
             .latitudeColumn("latitude")
-            .longtitudeColumn("longtitude")
+            .longtitudeColumn("longitude")
+            .strokeColor("strokeColor")
+            .fillColor("fillColour")
+            // .tooltipColumn("tooltip")
+            ;
+
+
+        hpccHeat = new window["@hpcc-js/map"].Leaflet.HeatLayer()
+            .columns(["latitude", "longitude", "intensity"])
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longitude")
             .weightColumn('intensity')
-            .radius(40)
+            .radius(2)
             // .gradient({0.3: 'x',...}')
             ;
 
-        hpccCircleStart = new window["@hpcc-js/map"].Leaflet.Circles()
-            .columns(['latitude', 'longitude'])
-            .radius(15)
+
+        hpccCircle = new window["@hpcc-js/map"].Leaflet.Circles(false)
+            .columns(["latitude", "longitude", "color"])
+            .radius(30)
             .latitudeColumn("latitude")
             .longtitudeColumn("longitude")
-            .fillColor("darkgreen")
-            .strokeColor("darkgreen")
+            // .fillColour()
+            // .strokeColor()
             ;
 
-        hpccCircleFinish = new window["@hpcc-js/map"].Leaflet.Circles()
-            .columns(['latitude', 'longitude'])
-            .radius(15)
+        var orig_layer_update = hpccCircle.layerUpdate;
+
+        hpccCircle.layerUpdate = function (map) {
+            // debugger;
+            ClusterLayer = window["@hpcc-js/map"].Leaflet.ClusterLayer;
+
+            ClusterLayer.prototype.layerUpdate.apply(this, map);
+
+            const columns = this.columns();
+            const latIdx = columns.indexOf(this.latitudeColumn());
+            const longIdx = columns.indexOf(this.longtitudeColumn());
+            this.clear();
+            this.data().filter(row => !this.omitNullLatLong() || (!!row[latIdx] && !!row[longIdx])).forEach(row => {
+                this.add(new window["@hpcc-js/map"].Circle([row[latIdx], row[longIdx]], {
+                    color: row[2],
+                    fillColor: row[2],
+                    fillOpacity: this.fillOpacity(),
+                    radius: this.radius(),
+                    origRow: row
+                }).on("click", e => this.clickHandler(e, row)));
+            });
+
+        }
+
+        hpccCircleStart = new window["@hpcc-js/map"].Leaflet.Circles(false)
+            .columns(["latitude", "longitude"])
+            .radius(40)
+            .latitudeColumn("latitude")
+            .longtitudeColumn("longitude")
+            .fillColor("green")
+            .strokeColor("green")
+            ;
+
+        hpccCircleFinish = new window["@hpcc-js/map"].Leaflet.Circles(false)
+            .columns(["latitude", "longitude"])
+            .radius(40)
             .latitudeColumn("latitude")
             .longtitudeColumn("longitude")
             .fillColor("darkred")
             .strokeColor("darkred")
             ;
+
+        hpccPallete = window["@hpcc-js/common"].Palette;
+
 
         hpccDraw = new window["@hpcc-js/map"].Leaflet.DrawLayer()
             .enableCircle(false)
@@ -221,12 +269,23 @@
                     userShapes.polylines = [userShapes.polylines[userShapes.polylines.length - 1]]
                 }
                 let temp = userShapes.polylines[0].pop()
+
                 userShapes.polylines[0].splice(1)
                 userShapes.polylines[0].push(temp)
                 // userShapes.polylines[0] = [userShapes.polylines[0][userShapes.polylines[1] ] ]
                 hpccDraw.restore(userShapes)
 
-                hpccDraw.lazyRender()
+                // hpccCircleStart.data([])
+                // hpccCircleFinish.data([])
+                hpccCircleStart.data([[userShapes.polylines[0][0].lat, userShapes.polylines[0][0].lng]]);
+                hpccCircleFinish.data([[userShapes.polylines[0][1].lat, userShapes.polylines[0][1].lng]]);
+                // console.log(hpccCircleFinish.data(), hpccCircleStart.data());
+
+                // hpccCircleStart.lazyRender()
+                // hpccCircleFinish.lazyRender()
+
+                // hpccDraw.lazyRender();
+                hpccMap.lazyRender();
             })
             ;
 
@@ -239,8 +298,12 @@
             .defaultZoom(10)
             .layers([
                 hpccHeat,
+                hpccCircleFinish,
+                hpccCircleStart,
+                hpccCircle,
+                hpccPins,
                 hpccClusterPins,
-                hpccDraw
+                hpccDraw,
             ])
             .render()
             ;
@@ -539,25 +602,25 @@
                 id = id.substring(5, id.length - 2) + '1'
             }
 
-            let stop = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true, color: 'black', opacity: 0.5 }).bindPopup('{ \"Stop\": ' + '\"' + response.astops[i][0] + '\"' + ',' + '\"StopID\": ' + '\"' + id + '\"' + ',' + '\"Distance\": ' + '\"' + response.astops[i][3] * 149838.673031 + ' m' + '\"}');
+            let stop = L.circle([response.astops[i][1], response.astops[i][2]], { riseOnHover: true, color: 'white', opacity: 0.5 }).bindPopup('{ \"Stop\": ' + '\"' + response.astops[i][0] + '\"' + ',' + '\"StopID\": ' + '\"' + id + '\"' + ',' + '\"Distance\": ' + '\"' + response.astops[i][3] * 149838.673031 + ' m' + '\"}');
             editableLayers.addLayer(stop);
 
-            stop.on('click', function (e) {
-                $.ajax({
-                    url: 'https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?operator=BE&stopid=' + JSON.parse(stop.getPopup().getContent()).StopID,
-                    type: 'GET',
+            // stop.on('click', function (e) {
+            //     $.ajax({
+            //         url: 'https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?operator=BE&stopid=' + JSON.parse(stop.getPopup().getContent()).StopID,
+            //         type: 'GET',
 
-                    success: function (response) {
-                        console.log(response);
-                        // What to do with live info
-                    },
-                    error: function (xhr, errmsg, err) {
-                        // console.log(xhr.status + ": " + xhr.responseText);
-                        // console.log(xhr.status + ": " + xhr.responseText);
-                    }
+            //         success: function (response) {
+            //             console.log(response);
+            //             // What to do with live info
+            //         },
+            //         error: function (xhr, errmsg, err) {
+            //             // console.log(xhr.status + ": " + xhr.responseText);
+            //             // console.log(xhr.status + ": " + xhr.responseText);
+            //         }
 
-                })
-            });
+            //     })
+            // });
             bindLiveStopData(stop);
 
         }
@@ -578,72 +641,68 @@
         // let radius = 30;
         response.astops.concat(response.bstops).forEach(function (f) {
             if (!dedup[f[1] + f[2]]) {
-                let inten = ((f[6] - 736.8062310528996) / (161456 - 736.8062310528996));
-                // console.log(inten);
-                if (f[6] === 1728) {
-                    inten = 100
-                    radius = 50
-                };
-                if (inten > 20) {
-                    inten = 0.5
-                }
-                else if (inten < 0) {
-                    inten = 0.5
-                }
-                // allStops.push([f[1], f[2], (((1728 - 1) / (1728 - 1) * (f[6] - 1) + 1) / 2)]);
-                allStops.push([f[1], f[2], inten]);
-                allStops1.push([f[1], f[2], inten]);
+                allStops.push([f[1], f[2]]);
                 dedup[f[1] + f[2]] = true;
             }
         });
-        // var heatmap = L.heatLayer(allStops1, { radius: radius, opacity: 0.6 })
-
-        // editableLayers.addLayer(heatmap)
 
         hpccClusterPins.data(allStops);
-
-        // hpccHeat.data(allStops);
-
         hpccMap.lazyRender();
 
     };
 
     function showCoverage(response) {
-        let radius = 30;
+        let radius = 10;
         let aNodes = [];
         let bNodes = [];
         let dedup1 = {};
+        let mypal = hpccPallete.rainbow('OrRd')
 
-        response.astops.concat(response.bstops).forEach(function (f) {
-            max = 1
-            console.log(f[6]);
-            if (f[6] > max) {
-                f[6] = max
-            }
+        // console.log(response);
+
+        response.allpoints.concat(response.bstops).forEach(function (f) {
             if (!dedup1[f[1] + f[2]]) {
-                let inten = ((f[6] - 4727) / (9923 - 4727)) * 10;
-                if (f[6] === 1728) {
-                    inten = 100
-                    radius = 50
-                };
-                if (inten > 20) {
-                    inten = 0.0
+                // let inten = ((f[6] - 2) / (351906 - 2));
+                let inten = ((f[6] - 2) / (3000 - 2));
+                // if (f[6] === 1728) {
+                //     inten = 100
+                //     radius = 50
+                // };
+                inten = 1 - inten
+                if (inten > 1) {
+                    inten = 1
                 }
-                else if (inten < 0) {
-                    inten = 0.0
+                else if (inten < 0.0) {
+                    inten = 0.001
                 }
                 // allStops.push([f[1], f[2], (((1728 - 1) / (1728 - 1) * (f[6] - 1) + 1) / 2)]);
+
+                // What the colours should be
+                console.log(inten);
+                // console.log(mypal(inten, 0, 1));
                 aNodes.push([f[1], f[2], inten]);
-                bNodes.push([f[1], f[2], inten]);
+                // aNodes.push([f[1], f[2], mypal(inten, 0, 1)]);
+                bNodes.push([f[1], f[2], inten*1000]);
+                // bNodes.push([f[1], f[2], mypal(inten, 0, 1), mypal(inten, 0, 1)]);
                 dedup1[f[1] + f[2]] = true;
             }
         });
-        console.log(max);
-        var heatmap = L.heatLayer(allStops, { radius: radius, opacity: 0.6 })
+
+        // console.log(aNodes, bNodes)
+        var heatmap = L.heatLayer(bNodes, { radius: radius, opacity: 0.4 })
 
         editableLayers.addLayer(heatmap)
 
-        hpccHeat.data(allStops);
+        // for (let i = 0; i < aNodes.length; i++) {
+        //     // L.circle([response.bstops[i][1], response.bstops[i][2]], { riseOnHover: true, color: 'black', opacity: 0.5 }
+        //     let circ = L.circle([aNodes[i][0], aNodes[i][1]], { riseOnHover: true, color: aNodes[i][2] })
+        //     editableLayers.addLayer(circ);
+        // }
+
+        // hpccHeat.data(bNodes);
+
+        // hpccCircle.data(aNodes);
+        // hpccPins.data(bNodes);
 
         hpccMap.lazyRender();
 
