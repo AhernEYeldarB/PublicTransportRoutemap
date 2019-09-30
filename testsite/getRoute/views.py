@@ -415,13 +415,15 @@ class Path(object):
 
             cursor = connection.cursor()
 
-            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                alon, alat, alon, alat, 1000 / 149838.673031)
+            # query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+            #     alon, alat, alon, alat, 1000 / 149838.673031)
+            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) FROM stop WHERE ST_DWithin(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326), 1609.34) ORDER BY stop.point <-> ST_SetSRID(ST_MakePoint(%s, %s), 4326) limit 10'%(alon, alat, alon, alat, alon, alat)
             cursor.execute(query)
             astops = cursor.fetchall()
 
-            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
-                blon, blat, blon, blat, 1000 / 149838.673031)
+            # query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) ORDER BY dist;' % (
+            #     blon, blat, blon, blat, 1000 / 149838.673031)
+            query = 'SELECT stop.id, stop.stop_id, ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) FROM stop WHERE ST_DWithin(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326), 1609.34) ORDER BY stop.point <-> ST_SetSRID(ST_MakePoint(%s, %s), 4326) limit 10'%(blon, blat, blon, blat, blon, blat)
             cursor.execute(query)
             bstops = cursor.fetchall()
 
@@ -436,8 +438,11 @@ class Path(object):
                 v = graph._graph.getVertexByLabel(start[0])
                 for end in bstops:
                     w = graph._graph.getVertexByLabel(end[0])
+                    try:
+                        weight, prev = allPaths[w]
+                    except KeyError:
+                        print(v, '->', w)
 
-                    weight, prev = allPaths[w]
                     totaldist = weight + (start[2] +
                                           end[2]) * 149838.673031 * 2
 
@@ -451,9 +456,10 @@ class Path(object):
             # Does not factor in transfers
             # WITH path AS(SELECT * FROM stop WHERE id = '2093' OR id = '2232' OR id = '2320' OR id = '2090') SELECT DISTINCT route.short_name FROM stop_time INNER JOIN path ON path.id = stop_time.stop_id INNER JOIN trip ON trip.id = stop_time.trip_id INNER JOIN route ON route.id = trip.route_id;
 
-            # allPaths = graph(int(shortest[1].element()))
+            allPaths = graph(int(shortest[1].element()))
             print(shortest[1], shortest[2])
             path = graph.shortestPath(shortest[1], shortest[2], shortest[3])
+            # print(path)
             routes = []
 
             # for i in range(len(path)-1, 1, -1):
@@ -568,6 +574,9 @@ class Path(object):
                 query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
                     -8.475218, 51.897479, -8.475218, 51.897479,
                     10000 / 149838.673031, 1)
+
+                query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point), stop.stop_id, stop.id, stop.feed_id FROM stop WHERE ST_DWithin(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) ORDER BY stop.point <-> ST_SetSRID(ST_MakePoint(%s, %s), 4326) '%(-8.475218, 51.897479, -8.475218, 51.897479,)
+                print(query)
                 cursor.execute(query)
 
                 allstops = cursor.fetchall()
@@ -721,100 +730,131 @@ class Path(object):
             response_data = {}
 
             print('Calculating Coverage')
+
             graph = g.DijkstraShortestPath.PathFinder()
+
+
+            print('Building from OSM File...\n')
+            # file = 'all.osm'
+            file = 'allCork.osm'
+            graph.buildFromOSM(file)
+
+            print('Building from database...\n')
             graph.buildFromDB(connection)
 
-            startLabel = '1bb1'
+
+            print('Total Vertices: ', graph._graph.numVertices())
+            print('Total Edges: ', graph._graph.numEdges())
+
+            startLabel = 'gParade'
             allpaths = graph(startLabel)
 
             cursor = connection.cursor()
-            query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
-                -8.475218, 51.897479, -8.475218, 51.897479,
-                10000 / 149838.673031, 1)
-            cursor.execute(query)
+            # query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+            #     -8.475218, 51.897479, -8.475218, 51.897479,
+            #     10000 / 149838.673031, 1)
+            # query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point), stop.stop_id, stop.id, stop.feed_id FROM stop WHERE ST_DWithin(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326), 1609.34) ORDER BY stop.point <-> ST_SetSRID(ST_MakePoint(%s, %s), 4326) '%(-8.475218, 51.897479, -8.475218, 51.897479,)
+            # cursor.execute(query)
 
-            allstops = cursor.fetchall()
-            allpoints = {}
+            allstops = graph._graph.vertices()
+
+            output = []
+            # temp = []
 
             for i in allstops:
                 try:
-                    allpoints[i[5]] = graph.shortestPath(
-                        '1bb1', i[5], allpaths)
-                    # print(i)
+                    # tempPath = graph.shortestPath('gParade', i, allpaths)
+
+                    # for j in tempPath:
+                    #     # print(j)
+                    #     output.append(['temp', float(j[0]), float(j[1]), None, None , None, float(j[3])])
+
+                    # temp.append(float(allpaths[i][0]))
+                    output.append(['temp', float(i._cords[1]), float( i._cords[0] ), None, None , None, float(allpaths[i][0]) ])
                 except KeyError:
-                    print('Key Error -> ', i)
+                    # print('Key Error -> ', i)
+                    pass
+            print(len(output))
+            # temp = sorted(temp)
+            # print( sum(temp) / len(temp) )
+            # print(sum(temp[0:1000]) /1000)
+            # print(sum(temp[-1000:]) / 1000)
 
-            # print(allpoints)
-            nodes = {}
-            output = []
-            with open('outfile.txt') as togher:
-                maxVal = -10000000
-                minVal = 10000000
-                line = togher.readline()
-                line = togher.readline().strip().split(',')
-                pid = line[0]
-                longitude = line[1]
-                latitude = line[2]
-                weight = 0
-                query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
-                    longitude, latitude, longitude, latitude,
-                    1000 / 149838.673031, 1)
-                cursor.execute(query)
-                nearstops = cursor.fetchall()
-                # print(nearstops)
-                # print('-------')
-                for i in nearstops:
-                    stopid = i[5]
-                    distance = i[3]*149838.673031
-                    tempweight = 0
-                    try:
-                        tempweight = distance + graph.shortestPath(
-                            '1bb1', i[5], allpaths)[0][3]
-                    except KeyError:
-                        tempweight = 0
 
-                weight += tempweight
-                nodes[pid] = [latitude, longitude, weight]
+            # print( len(graph._graph.vertices()[1]) )
+            # nodes = {}
 
-                while line[0]:
-                    line = togher.readline().strip().split(',')
-                    if not line[0]:
-                        break
-                    else:
-                        pid = line[0]
-                        longitude = line[1]
-                        latitude = line[2]
-                        weight = 0
+            # with open('outfile.txt') as togher:
+            #     # maxVal = -10000000
+            #     # minVal = 10000000
+            #     line = togher.readline()
+            #     line = togher.readline().strip().split(',')
+            #     pid = line[0]
+            #     longitude = line[1]
+            #     latitude = line[2]
+            #     weight = 0
+            #     query = 'SELECT stop.name, ST_Y(stop.point) , ST_X(stop.point), ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+            #         longitude, latitude, longitude, latitude,
+            #         1000 / 149838.673031, 1)
+            #     cursor.execute(query)
+            #     nearstops = cursor.fetchall()
+            #     # print(nearstops)
+            #     # print('-------')
+            #     for i in nearstops:
+            #         stopid = i[5]
+            #         distance = i[3]*149838.673031
+            #         tempweight = 0
+            #         try:
+            #             tempweight = distance + graph.shortestPath(
+            #                 '1bb1', i[5], allpaths)[0][3]
+            #         except Exception: # KeyError
+            #             tempweight = 0
 
-                        query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
-                            longitude, latitude, longitude, latitude,
-                            1000 / 149838.673031, 1)
-                        cursor.execute(query)
-                        nearstops = cursor.fetchall()
-                        # print(nearstops)
-                        # print('-------')
-                        for i in nearstops:
-                            stopid = i[5]
-                            distance = i[3]*149838.673031
-                            # print(distance)
-                            try:
-                                tempweight = distance + graph.shortestPath(
-                                    '1bb1', i[5], allpaths)[0][3]
-                            except KeyError:
-                                tempweight = 0
+            #     weight += tempweight
+            #     nodes[pid] = [latitude, longitude, weight]
 
-                        weight += tempweight
-                        if weight > maxVal:
-                            maxVal = weight
-                        elif weight < minVal and weight > 0:
-                            minVal = weight
-                        nodes[pid] = [float(latitude), float(longitude), weight]
-                        output.append(['temp',float(latitude), float(longitude) ,None, None, None,float(weight)])
+            #     while line[0]:
+            #         line = togher.readline().strip().split(',')
+            #         if not line[0]:
+            #             break
+            #         else:
+            #             pid = line[0]
+            #             longitude = line[1]
+            #             latitude = line[2]
+            #             weight = 0
+
+            #             query = 'SELECT stop.name, ST_Y(stop.point) ,ST_X(stop.point),ST_Distance(stop.point, ST_SetSRID(ST_MakePoint(%s, %s), 4326)) AS dist, stop.stop_id, stop.id FROM stop WHERE ST_Intersects(stop.point, ST_Buffer(ST_SetSRID(ST_MakePoint(%s, %s), 4326), %f)) AND feed_id = \'%s\' ORDER BY dist;' % (
+            #                 longitude, latitude, longitude, latitude,
+            #                 1000 / 149838.673031, 1)
+            #             cursor.execute(query)
+            #             nearstops = cursor.fetchall()
+            #             # print(nearstops)
+            #             # print('-------')
+            #             for i in nearstops:
+            #                 stopid = i[5]
+            #                 distance = i[3]*149838.673031
+            #                 # print(distance)
+            #                 try:
+            #                     tempweight = distance + graph.shortestPath(
+            #                         '1bb1', i[5], allpaths)[0][3]
+            #                 except KeyError:
+            #                     tempweight = 0
+
+            #             weight += tempweight
+            #             # if weight > maxVal:
+            #             #     maxVal = weight
+            #             # elif weight < minVal and weight > 0:
+            #             #     minVal = weight
+            #             nodes[pid] = [float(latitude), float(longitude), weight]
+            #             output.append(['temp',float(latitude), float(longitude) ,None, None, None,float(weight)])
 
             # print(nodes)
-            print(output)
-            print(minVal, maxVal)
-            response_data['astops'] = output
+            # print(output)
+            # print(minVal, maxVal)
+
+
+            # print(output)
+            response_data['allpoints'] = output
             response_data['bstops'] = []
 
 
